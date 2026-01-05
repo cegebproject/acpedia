@@ -12,7 +12,7 @@
                     </h4>
                 </div>
                 <div class="card-body">
-                    <form action="/admin/master/<?= $entity ?>/save" method="post">
+                    <form action="/admin/master/<?= $entity ?>/save" method="post" enctype="multipart/form-data">
                         <?= isset($item) ? '<input type="hidden" name="id" value="' . esc($item['id']) . '">' : '' ?>
 
                         <div class="row">
@@ -30,8 +30,11 @@
                         <?php if ($entity == 'brands'): ?>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="logo_url" class="form-label">Logo URL</label>
-                                    <input type="url" class="form-control" id="logo_url" name="logo_url" value="<?= esc($item['logo_url'] ?? '') ?>">
+                                    <label for="logo_url" class="form-label">Logo</label>
+                                    <input type="file" class="form-control" id="logo_file" name="logo_file" accept="image/*">
+                                    <?php if (!empty($item['logo_url'])): ?>
+                                        <small class="form-text text-muted">Current: <a href="<?= esc($item['logo_url']) ?>" target="_blank">View Logo</a></small>
+                                    <?php endif; ?>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="website_url" class="form-label">Website URL</label>
@@ -59,8 +62,11 @@
                             </div>
                         <?php elseif ($entity == 'actypes'): ?>
                             <div class="mb-3">
-                                <label for="icon_url" class="form-label">Icon URL</label>
-                                <input type="url" class="form-control" id="icon_url" name="icon_url" value="<?= esc($item['icon_url'] ?? '') ?>">
+                                <label for="icon_url" class="form-label">Icon</label>
+                                <input type="file" class="form-control" id="icon_file" name="icon_file" accept="image/*">
+                                <?php if (!empty($item['icon_url'])): ?>
+                                    <small class="form-text text-muted">Current: <a href="<?= esc($item['icon_url']) ?>" target="_blank">View Icon</a></small>
+                                <?php endif; ?>
                             </div>
                         <?php endif; ?>
 

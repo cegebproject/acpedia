@@ -59,6 +59,14 @@ class AdminMasterData extends BaseController
         $model = new \App\Models\BrandModel();
         $data = $this->request->getPost();
 
+        // Handle file upload for logo
+        $logoFile = $this->request->getFile('logo_file');
+        if ($logoFile && $logoFile->isValid() && !$logoFile->hasMoved()) {
+            $newName = $logoFile->getRandomName();
+            $logoFile->move(FCPATH . 'uploads/brands/', $newName);
+            $data['logo_url'] = '/uploads/brands/' . $newName;
+        }
+
         // Generate slug if not provided
         if (empty($data['slug'])) {
             $data['slug'] = url_title($data['name'], '-', true);
@@ -265,6 +273,14 @@ class AdminMasterData extends BaseController
     {
         $model = new \App\Models\AcTypeModel();
         $data = $this->request->getPost();
+
+        // Handle file upload for icon
+        $iconFile = $this->request->getFile('icon_file');
+        if ($iconFile && $iconFile->isValid() && !$iconFile->hasMoved()) {
+            $newName = $iconFile->getRandomName();
+            $iconFile->move(FCPATH . 'uploads/actypes/', $newName);
+            $data['icon_url'] = '/uploads/actypes/' . $newName;
+        }
 
         // Generate slug if not provided
         if (empty($data['slug'])) {
