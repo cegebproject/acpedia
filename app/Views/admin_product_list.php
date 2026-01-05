@@ -94,7 +94,12 @@
                      
                     </td>
                   </tr>
-                    <?php endif; ?>
+                    <?php endforeach; ?>
+                  <?php else: ?>
+                  <tr>
+                    <td colspan="7">No products found.</td>
+                  </tr>
+                  <?php endif; ?>
                 </tbody>
               </table>
             </div>
