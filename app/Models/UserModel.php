@@ -21,7 +21,7 @@ class UserModel extends Model
     ];
 
     // Timestamp fields
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
 
     // Validation rules (critical for unique fields and password security)
     protected $validationRules = [

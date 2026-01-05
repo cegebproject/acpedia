@@ -79,7 +79,7 @@ class AdminUser extends BaseController
 
         // Handle user_id
         $userId = $this->request->getPost('user_id');
-        if (is_array($userId)) $userId = reset($userId);
+        $userId = is_scalar($userId) ? $userId : (is_array($userId) ? $userId[0] : '');
         $userId = (int) $userId;
         unset($data['user_id']);
 
