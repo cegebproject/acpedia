@@ -263,10 +263,3 @@
 
   
   
-<?= $this->endSection() ?>
-
-<?= $this->section('javascript') ?>
-    <script>
-        console.log("Dashboard Loaded");
-    </script>
-<?= $this->endSection() ?>
