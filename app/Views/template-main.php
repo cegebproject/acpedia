@@ -258,7 +258,7 @@
                 </a>
 
                 <nav class="hidden lg:flex items-center gap-8">
-                    <a href="#home" class="text-gray-800 hover:text-[#41B8EA] transition-colors flex items-center gap-2 relative group">
+                    <a href="/" class="text-gray-800 hover:text-[#41B8EA] transition-colors flex items-center gap-2 relative group">
                         <i data-lucide="home" class="h-4 w-4"></i>
                         Beranda
                         <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#41B8EA] transition-all group-hover:w-full"></span>
