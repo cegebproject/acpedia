@@ -64,9 +64,9 @@
                     <th>Product Name</th>
                     <th>Price</th>
                     <th>Category</th>
-                    <th>Brand</th>
+                    <th>Tags</th>
                     <th>Rating</th>
-                    <th>PK</th>
+                    <th>Vendor</th>
                     <th>Date</th>
                     <th>Action</th>
                   </tr>
@@ -81,32 +81,46 @@
                         <td>
                           <div class="d-flex align-items-center gap-3">
                             <div class="product-box">
-                              <img src="<?= esc($p['main_image_url'] ?? '/assets/images/default-product.png') ?>" width="70" height="70" style="object-fit:cover;" class="rounded-3" alt="">
+                              <img src="<?= esc($p['main_image_url'] ?? 'assets/images/default-product.png') ?>" width="70" class="rounded-3" alt="">
                             </div>
                             <div class="product-info">
-                              <a href="<?= site_url('produk/edit/'.($p['id'] ?? '')) ?>" class="product-title"><?= esc($p['name'] ?? '') ?></a>
-                              <p class="mb-0 product-category">Category : <?= esc($p['category_name'] ?? '-') ?></p>
+                              <a href="javascript:;" class="product-title"><?= esc($p['name'] ?? '') ?></a>
+                              <p class="mb-0 product-category">Category : <?= esc($p['category_name'] ?? 'Fashion') ?></p>
                             </div>
                           </div>
                         </td>
-                        <td><?= number_format($p['sale_price'] ?? $p['base_price'] ?? 0, 0, ',', '.') ?></td>
-                        <td><?= esc($p['category_name'] ?? '-') ?></td>
-                        <td><?= esc($p['brand_name'] ?? '-') ?></td>
+                        <td>$<?= number_format($p['sale_price'] ?? $p['base_price'] ?? 0) ?></td>
+                        <td><?= esc($p['category_name'] ?? 'Palazzos') ?></td>
                         <td>
-                          <div class="product-rating">
-                            <i class="bi bi-star-fill text-warning me-2"></i><span><?= esc($p['avg_rating'] ?? '-') ?></span>
+                          <div class="product-tags">
+                            <a href="javascript:;" class="btn-tags">Jeans</a>
+                            <a href="javascript:;" class="btn-tags">iPhone</a>
+                            <a href="javascript:;" class="btn-tags">Laptops</a>
+                            <a href="javascript:;" class="btn-tags">Mobiles</a>
+                            <a href="javascript:;" class="btn-tags">Wallets</a>
                           </div>
                         </td>
-                        <td><?= esc($p['pk_name'] ?? '-') ?></td>
-                        <td><?= isset($p['created_at']) ? date('M d, Y', strtotime($p['created_at'])) : '-' ?></td>
+                        <td>
+                          <div class="product-rating">
+                            <i class="bi bi-star-fill text-warning me-2"></i><span><?= esc($p['avg_rating'] ?? '5.0') ?></span>
+                          </div>
+                        </td>
+                        <td>
+                          <a href="javascript:;"><?= esc($p['brand_name'] ?? 'Michle Shoes England') ?></a>
+                        </td>
+                        <td>
+                          <?= isset($p['created_at']) ? date('M d, h:i A', strtotime($p['created_at'])) : 'Nov 12, 10:45 PM' ?>
+                        </td>
                         <td>
                           <div class="dropdown">
-                            <button class="btn btn-sm btn-filter dropdown-toggle dropdown-toggle-nocaret" type="button" data-bs-toggle="dropdown">
+                            <button class="btn btn-sm btn-filter dropdown-toggle dropdown-toggle-nocaret"
+                              type="button" data-bs-toggle="dropdown">
                               <i class="bi bi-three-dots"></i>
                             </button>
                             <ul class="dropdown-menu">
-                              <li><a class="dropdown-item" href="<?= site_url('produk/edit/'.($p['id'] ?? '')) ?>">Edit</a></li>
-                              <li><a class="dropdown-item" href="<?= site_url('produk/delete/'.($p['id'] ?? '')) ?>">Delete</a></li>
+                              <li><a class="dropdown-item" href="#">Action</a></li>
+                              <li><a class="dropdown-item" href="#">Another action</a></li>
+                              <li><a class="dropdown-item" href="#">Something else here</a></li>
                             </ul>
                           </div>
                         </td>
