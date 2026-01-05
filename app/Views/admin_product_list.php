@@ -81,7 +81,7 @@
                         <td>
                           <div class="d-flex align-items-center gap-3">
                             <div class="product-box">
-                              <img src="<?= esc($p['main_image_url'] ?? '/assets/images/default-product.png') ?>" width="70" class="rounded-3" alt="">
+                              <img src="<?= esc($p['main_image_url'] ?? '/assets/images/default-product.png') ?>" width="70" height="70" style="object-fit:cover;" class="rounded-3" alt="">
                             </div>
                             <div class="product-info">
                               <a href="<?= site_url('produk/edit/'.($p['id'] ?? '')) ?>" class="product-title"><?= esc($p['name'] ?? '') ?></a>
@@ -119,6 +119,10 @@
                   <?php endif; ?>
                 </tbody>
               </table>
+
+              <div class="d-flex justify-content-end mt-3">
+                <?= isset($pager) ? $pager->links() : '' ?>
+              </div>
                   <tr>
                     <td>
                       <input class="form-check-input" type="checkbox">
