@@ -77,8 +77,11 @@ class AdminUser extends BaseController
         // Remove roles from data to avoid saving to user table
         unset($data['roles']);
 
-        // If editing, get existing user_id
+        // Handle user_id
         $userId = $data['user_id'] ?? null;
+        if (is_array($userId)) $userId = $userId[0];
+        $userId = (int) $userId;
+        unset($data['user_id']);
 
         if ($userId) {
             // Update
@@ -86,7 +89,9 @@ class AdminUser extends BaseController
             $rules['email'] = str_replace('{user_id}', $userId, $rules['email']);
             $rules['username'] = str_replace('{user_id}', $userId, $rules['username']);
             $model->setValidationRules($rules);
+            $model->useTimestamps = false; // Disable timestamps for update
             $model->update($userId, $data);
+            $model->useTimestamps = true; // Re-enable
         } else {
             // Insert
             $rules = $model->validationRules;
