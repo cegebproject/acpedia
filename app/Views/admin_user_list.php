@@ -88,7 +88,7 @@
                                     </td>
                                     <td>
                                         <span class="badge bg-info-subtle text-info">
-                                            <?= esc($u['roles'] ?? 'No Roles') ?>
+                                            <?= esc($u['role_name'] ?? 'No Role') ?>
                                         </span>
                                     </td>
                                     <td>

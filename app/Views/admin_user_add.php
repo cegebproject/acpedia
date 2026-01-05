@@ -36,19 +36,15 @@
                 </div>
                 <?php endif; ?>
                 <div class="mb-3">
-                    <label>Roles</label>
-                    <div class="row">
+                    <label>Role</label>
+                    <select name="role_id" class="form-control">
+                        <option value="">Select Role</option>
                         <?php foreach ($roles as $role): ?>
-                            <div class="col-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="roles[]" value="<?= $role['role_id'] ?>" id="role_<?= $role['role_id'] ?>" <?= in_array($role['role_id'], $userRoles ?? []) ? 'checked' : '' ?>>
-                                    <label class="form-check-label" for="role_<?= $role['role_id'] ?>">
-                                        <?= esc($role['role_name']) ?>
-                                    </label>
-                                </div>
-                            </div>
+                            <option value="<?= $role['role_id'] ?>" <?= ($userRole == $role['role_id']) ? 'selected' : '' ?>>
+                                <?= esc($role['role_name']) ?>
+                            </option>
                         <?php endforeach; ?>
-                    </div>
+                    </select>
                 </div>
                 <div class="mb-3">
                     <label>Is Active</label>

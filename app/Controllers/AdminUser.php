@@ -10,10 +10,9 @@ class AdminUser extends BaseController
 
         $perPage = 15;
         $users = $model
-            ->select('user.*, GROUP_CONCAT(r.role_name SEPARATOR ", ") as roles')
+            ->select('user.*, r.role_name')
             ->join('user_role ur', 'ur.user_id = user.user_id', 'left')
             ->join('role r', 'r.role_id = ur.role_id', 'left')
-            ->groupBy('user.user_id')
             ->orderBy('user.created_at', 'DESC')
             ->paginate($perPage);
 
@@ -37,7 +36,7 @@ class AdminUser extends BaseController
             'title' => 'Add New User | ACPedia',
             'roles' => $roles,
             'user' => null,
-            'userRoles' => []
+            'userRole' => null
         ];
         return view('admin_user_add', $data);
     }
@@ -47,7 +46,7 @@ class AdminUser extends BaseController
         $model = new \App\Models\UserModel();
         $user = $model->find($id);
         $userRoles = $model->getUserRoles($id);
-        $userRoleIds = array_column($userRoles, 'role_id');
+        $userRole = !empty($userRoles) ? $userRoles[0]['role_id'] : null;
 
         $roleModel = new \App\Models\RoleModel();
         $roles = $roleModel->findAll();
@@ -56,7 +55,7 @@ class AdminUser extends BaseController
             'title' => 'Edit User | ACPedia',
             'roles' => $roles,
             'user' => $user,
-            'userRoles' => $userRoleIds
+            'userRole' => $userRole
         ];
         return view('admin_user_add', $data);
     }
@@ -72,10 +71,10 @@ class AdminUser extends BaseController
         }
 
         // Handle roles
-        $roleIds = $this->request->getPost('roles') ?? [];
+        $roleId = $this->request->getPost('role_id');
 
-        // Remove roles from data to avoid saving to user table
-        unset($data['roles']);
+        // Remove role_id from data to avoid saving to user table
+        unset($data['role_id']);
 
         // Handle user_id
         $userId = $this->request->getPost('user_id');
@@ -100,7 +99,7 @@ class AdminUser extends BaseController
         }
 
         // Update roles
-        $model->updateUserRoles($userId, $roleIds);
+        $model->updateUserRoles($userId, $roleId ? [$roleId] : []);
 
         return redirect()->to('/admin/user');
     }
