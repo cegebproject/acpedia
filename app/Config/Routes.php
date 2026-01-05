@@ -54,6 +54,9 @@ $routes->group('', ['filter' => 'auth'], function($routes) {
         $routes->post('admin/master/actypes/save', 'AdminMasterData::actypesSave');
         $routes->get('admin/master/actypes/delete/(:num)', 'AdminMasterData::actypesDelete/$1');
 
+        $routes->get('admin/settings', 'AdminSettings::index');
+        $routes->post('admin/settings/save', 'AdminSettings::save');
+
         $routes->get('admin/journal', 'AdminJournal::index');
         $routes->get('admin/pesanan', 'AdminOrder::index');
         $routes->get('admin/inventory', 'AdminInventory::index');

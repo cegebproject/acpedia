@@ -388,7 +388,7 @@
         <li class="menu-label">Site Management</li>
         <li>
           <a href="/admin/settings">
-            <div class="parent-icon"><i class="material-icons-outlined">lock</i>
+            <div class="parent-icon"><i class="material-icons-outlined">settings</i>
             </div>
             <div class="menu-title">Settings</div>
           </a>
