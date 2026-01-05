@@ -2,399 +2,54 @@
 
 <?= $this->section('content') ?>
 
-<!-- Chart.js CDN -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <div class="main-content">
+     
 
-<div class="container-fluid">
-    <!-- Page Header -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <h1 class="h3 mb-0 text-gray-800">ACPedia Dashboard</h1>
-            <p class="text-muted">Air Conditioning Product Database Management</p>
-        </div>
-    </div>
-
-    <!-- Notice Alert -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="alert alert-info alert-dismissible fade show" role="alert">
-                <i class="fas fa-info-circle me-2"></i>
-                <strong>Dashboard Notice:</strong> This dashboard contains placeholder data and charts.
-                Real analytics and statistics will be implemented in future updates.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Statistics Cards -->
-    <div class="row mb-4">
-        <!-- Total Products -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Total Products</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">1,247</div>
-                            <div class="text-xs text-muted">+12% from last month</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-cogs fa-2x text-primary"></i>
-                        </div>
+        <div class="row">
+          <div class="col-12 col-xl-4 d-flex">
+             <div class="card rounded-4 w-100">
+               <div class="card-body">
+                 <div class="d-flex align-items-center gap-3 mb-2">
+                    <div class="">
+                      <h2 class="mb-0">$9,568</h2>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Active Brands -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Active Brands</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">89</div>
-                            <div class="text-xs text-muted">+5% from last month</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-tags fa-2x text-success"></i>
-                        </div>
+                    <div class="">
+                      <p class="dash-lable d-flex align-items-center gap-1 rounded mb-0 bg-danger text-danger bg-opacity-10"><span class="material-icons-outlined fs-6">arrow_downward</span>8.6%</p>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Product Categories -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-info shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                Categories</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">24</div>
-                            <div class="text-xs text-muted">+2 new this month</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-folder fa-2x text-info"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Registered Users -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Registered Users</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">1,543</div>
-                            <div class="text-xs text-muted">+18% from last month</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-users fa-2x text-warning"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Charts Row -->
-    <div class="row mb-4">
-        <!-- Product Categories Distribution -->
-        <div class="col-xl-6 col-lg-6 mb-4">
-            <div class="card shadow">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Products by Category</h6>
-                </div>
-                <div class="card-body">
-                    <canvas id="categoryChart" width="100%" height="300"></canvas>
-                    <div class="text-center mt-3">
-                        <small class="text-muted">Placeholder data - Not functional yet</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Brand Distribution -->
-        <div class="col-xl-6 col-lg-6 mb-4">
-            <div class="card shadow">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-success">Top Brands</h6>
-                </div>
-                <div class="card-body">
-                    <canvas id="brandChart" width="100%" height="300"></canvas>
-                    <div class="text-center mt-3">
-                        <small class="text-muted">Placeholder data - Not functional yet</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Additional Charts Row -->
-    <div class="row mb-4">
-        <!-- Monthly Product Additions -->
-        <div class="col-xl-8 col-lg-7 mb-4">
-            <div class="card shadow">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-info">Monthly Product Additions</h6>
-                </div>
-                <div class="card-body">
-                    <canvas id="monthlyChart" width="100%" height="300"></canvas>
-                    <div class="text-center mt-3">
-                        <small class="text-muted">Placeholder data - Not functional yet</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- AC Types Distribution -->
-        <div class="col-xl-4 col-lg-5 mb-4">
-            <div class="card shadow">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-warning">AC Types Distribution</h6>
-                </div>
-                <div class="card-body">
-                    <canvas id="acTypeChart" width="100%" height="300"></canvas>
-                    <div class="text-center mt-3">
-                        <small class="text-muted">Placeholder data - Not functional yet</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Recent Activity & Quick Actions -->
-    <div class="row">
-        <!-- Recent Activity -->
-        <div class="col-xl-6 col-lg-6 mb-4">
-            <div class="card shadow">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Recent Activity</h6>
-                </div>
-                <div class="card-body">
-                    <div class="timeline">
-                        <div class="timeline-item">
-                            <div class="timeline-marker bg-primary"></div>
-                            <div class="timeline-content">
-                                <h6 class="timeline-title">New Product Added</h6>
-                                <p class="timeline-text">Daikin FTKF35A 1.0 PK Inverter AC added to database</p>
-                                <small class="text-muted">2 hours ago</small>
-                            </div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-marker bg-success"></div>
-                            <div class="timeline-content">
-                                <h6 class="timeline-title">Brand Updated</h6>
-                                <p class="timeline-text">LG Electronics logo and information updated</p>
-                                <small class="text-muted">1 day ago</small>
-                            </div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-marker bg-info"></div>
-                            <div class="timeline-content">
-                                <h6 class="timeline-title">Category Created</h6>
-                                <p class="timeline-text">New "Portable AC" category added</p>
-                                <small class="text-muted">3 days ago</small>
-                            </div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-marker bg-warning"></div>
-                            <div class="timeline-content">
-                                <h6 class="timeline-title">User Registered</h6>
-                                <p class="timeline-text">New admin user account created</p>
-                                <small class="text-muted">1 week ago</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text-center mt-3">
-                        <small class="text-muted">Placeholder activity - Not functional yet</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Quick Actions -->
-        <div class="col-xl-6 col-lg-6 mb-4">
-            <div class="card shadow">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-success">Quick Actions</h6>
-                </div>
-                <div class="card-body">
-                    <div class="row g-3">
-                        <div class="col-6">
-                            <a href="/admin/produk/add" class="btn btn-primary btn-block d-flex align-items-center justify-content-center flex-column py-4">
-                                <i class="fas fa-plus-circle fa-2x mb-2"></i>
-                                <span>Add Product</span>
-                            </a>
-                        </div>
-                        <div class="col-6">
-                            <a href="/admin/master/brands/add" class="btn btn-success btn-block d-flex align-items-center justify-content-center flex-column py-4">
-                                <i class="fas fa-tags fa-2x mb-2"></i>
-                                <span>Add Brand</span>
-                            </a>
-                        </div>
-                        <div class="col-6">
-                            <a href="/admin/master/categories/add" class="btn btn-info btn-block d-flex align-items-center justify-content-center flex-column py-4">
-                                <i class="fas fa-folder fa-2x mb-2"></i>
-                                <span>Add Category</span>
-                            </a>
-                        </div>
-                        <div class="col-6">
-                            <a href="/admin/user/add" class="btn btn-warning btn-block d-flex align-items-center justify-content-center flex-column py-4">
-                                <i class="fas fa-user-plus fa-2x mb-2"></i>
-                                <span>Add User</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="text-center mt-3">
-                        <small class="text-muted">Quick access to common admin tasks</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<?= $this->endSection() ?>
-
-<?= $this->section('javascript') ?>
-<script>
-// Category Distribution Chart
-const categoryCtx = document.getElementById('categoryChart').getContext('2d');
-const categoryChart = new Chart(categoryCtx, {
-    type: 'doughnut',
-    data: {
-        labels: ['Split AC', 'Window AC', 'Portable AC', 'Cassette AC', 'Floor Standing', 'Others'],
-        datasets: [{
-            data: [35, 25, 15, 10, 8, 7],
-            backgroundColor: [
-                '#4e73df',
-                '#1cc88a',
-                '#36b9cc',
-                '#f6c23e',
-                '#e74a3b',
-                '#858796'
-            ],
-            hoverBackgroundColor: [
-                '#2e59d9',
-                '#17a673',
-                '#2c9faf',
-                '#f4b619',
-                '#e02d1b',
-                '#6c757d'
-            ],
-            hoverBorderColor: "rgba(234, 236, 244, 1)",
-        }],
-    },
-    options: {
-        maintainAspectRatio: false,
-        tooltips: {
-            backgroundColor: "rgb(255,255,255)",
-            bodyFontColor: "#858796",
-            borderColor: '#dddfeb',
-            borderWidth: 1,
-            xPadding: 15,
-            yPadding: 15,
-            displayColors: false,
-            caretPadding: 10,
-        },
-        legend: {
-            display: true,
-            position: 'bottom'
-        },
-        cutoutPercentage: 60,
-    },
-});
-
-// Brand Distribution Chart
-const brandCtx = document.getElementById('brandChart').getContext('2d');
-const brandChart = new Chart(brandCtx, {
-    type: 'bar',
-    data: {
-        labels: ['Daikin', 'LG', 'Samsung', 'Sharp', 'Panasonic', 'Mitsubishi'],
-        datasets: [{
-            label: 'Number of Products',
-            data: [245, 189, 156, 98, 87, 76],
-            backgroundColor: '#1cc88a',
-            borderColor: '#1cc88a',
-            borderWidth: 1
-        }]
-    },
-    options: {
-        maintainAspectRatio: false,
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
-        }
-    }
-});
-
-// Monthly Product Additions Chart
-const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
-const monthlyChart = new Chart(monthlyCtx, {
-    type: 'line',
-    data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        datasets: [{
-            label: 'Products Added',
-            data: [12, 19, 15, 25, 22, 30, 28, 35, 32, 29, 24, 18],
-            borderColor: '#36b9cc',
-            backgroundColor: 'rgba(54, 185, 204, 0.1)',
-            borderWidth: 2,
-            fill: true
-        }]
-    },
-    options: {
-        maintainAspectRatio: false,
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
-        }
-    }
-});
-
-// AC Types Distribution Chart
-const acTypeCtx = document.getElementById('acTypeChart').getContext('2d');
-const acTypeChart = new Chart(acTypeCtx, {
-    type: 'pie',
-    data: {
-        labels: ['1 PK', '1.5 PK', '2 PK', '3 PK', '5 PK', 'Others'],
-        datasets: [{
-            data: [28, 35, 20, 10, 5, 2],
-            backgroundColor: [
-                '#e74a3b',
-                '#f6c23e',
-                '#1cc88a',
-                '#36b9cc',
-                '#4e73df',
-                '#858796'
-            ]
-        }]
-    },
-    options: {
-        maintainAspectRatio: false,
-        legend: {
-            display: true,
-            position: 'bottom'
-        }
-    }
-});
-</script>
-<?= $this->endSection() ?>
+                  </div>
+                  <p class="mb-0">Average Weekly Sales</p>
+                   <div id="chart1"></div>
+               </div>
+             </div>
+          </div>
+          <div class="col-12 col-xl-8 d-flex">
+            <div class="card rounded-4 w-100">
+              <div class="card-body">
+                <div class="d-flex align-items-center justify-content-around flex-wrap gap-4 p-4">
+                  <div class="d-flex flex-column align-items-center justify-content-center gap-2">
+                    <a href="javascript:;" class="mb-2 wh-48 bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="material-icons-outlined">shopping_cart</i>
+                    </a>
+                    <h3 class="mb-0">85,246</h3>
+                    <p class="mb-0">Orders</p>
+                  </div>
+                  <div class="vr"></div>
+                  <div class="d-flex flex-column align-items-center justify-content-center gap-2">
+                    <a href="javascript:;" class="mb-2 wh-48 bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="material-icons-outlined">print</i>
+                    </a>
+                    <h3 class="mb-0">$96,147</h3>
+                    <p class="mb-0">Income</p>
+                  </div>
+                  <div class="vr"></div>
+                  <div class="d-flex flex-column align-items-center justify-content-center gap-2">
+                    <a href="javascript:;" class="mb-2 wh-48 bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="material-icons-outlined">notifications</i>
+                    </a>
+                    <h3 class="mb-0">846</h3>
+                    <p class="mb-0">Notifications</p>
+                  </div>
+                  <div class="vr"></div>
                   
                   <div class="d-flex flex-column align-items-center justify-content-center gap-2">
                     <a href="javascript:;" class="mb-2 wh-48 bg-info bg-opacity-10 text-info rounded-circle d-flex align-items-center justify-content-center">
