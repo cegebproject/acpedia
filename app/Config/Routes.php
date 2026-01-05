@@ -23,6 +23,12 @@ $routes->group('', ['filter' => 'auth'], function($routes) {
         $routes->post('admin/produk/save', 'AdminProduct::save');
         $routes->get('admin/produk/delete/(:num)', 'AdminProduct::delete/$1');
 
+        $routes->get('admin/user', 'AdminUser::index');
+        $routes->get('admin/user/add', 'AdminUser::add');
+        $routes->get('admin/user/edit/(:num)', 'AdminUser::edit/$1');
+        $routes->post('admin/user/save', 'AdminUser::save');
+        $routes->get('admin/user/delete/(:num)', 'AdminUser::delete/$1');
+
         $routes->get('admin/journal', 'AdminJournal::index');
         $routes->get('admin/pesanan', 'AdminOrder::index');
         $routes->get('admin/inventory', 'AdminInventory::index');
