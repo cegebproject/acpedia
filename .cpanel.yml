@@ -1,0 +1,10 @@
+---
+deployment:
+  tasks:
+    # 1. Set the deployment path (your test domain's public folder)
+    - export DEPLOYPATH=/home/acpp2118/public_html/dev.acpedia.id/
+    # 2. Copy the files/folders you want to deploy from the repo to the public path
+    - /bin/cp -R * $DEPLOYPATH 
+    # Example for copying specific files/folders:
+    # - /bin/cp index.html $DEPLOYPATH
+    # - /bin/cp -R css $DEPLOYPATH
