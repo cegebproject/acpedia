@@ -395,7 +395,7 @@
          
         </li>
         <li>
-          <a href="user-profile.html">
+          <a href="/admin/user">
             <div class="parent-icon"><i class="material-icons-outlined">person</i>
             </div>
             <div class="menu-title">Users</div>

@@ -81,10 +81,14 @@ class AdminUser extends BaseController
         $userId = $data['user_id'] ?? null;
 
         if ($userId) {
-            // Update user
+            // Update
+            $model->validationRules['email'] = 'required|max_length[100]|valid_email|is_unique[user.email,user_id,' . $userId . ']';
+            $model->validationRules['username'] = 'required|max_length[50]|alpha_dash|is_unique[user.username,user_id,' . $userId . ']';
             $model->update($userId, $data);
         } else {
-            // Insert new user
+            // Insert
+            $model->validationRules['email'] = 'required|max_length[100]|valid_email|is_unique[user.email]';
+            $model->validationRules['username'] = 'required|max_length[50]|alpha_dash|is_unique[user.username]';
             $userId = $model->insert($data);
         }
 
