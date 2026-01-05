@@ -82,13 +82,17 @@ class AdminUser extends BaseController
 
         if ($userId) {
             // Update
-            $model->validationRules['email'] = 'required|max_length[100]|valid_email|is_unique[user.email,user_id,' . $userId . ']';
-            $model->validationRules['username'] = 'required|max_length[50]|alpha_dash|is_unique[user.username,user_id,' . $userId . ']';
+            $rules = $model->validationRules;
+            $rules['email'] = str_replace('{user_id}', $userId, $rules['email']);
+            $rules['username'] = str_replace('{user_id}', $userId, $rules['username']);
+            $model->setValidationRules($rules);
             $model->update($userId, $data);
         } else {
             // Insert
-            $model->validationRules['email'] = 'required|max_length[100]|valid_email|is_unique[user.email]';
-            $model->validationRules['username'] = 'required|max_length[50]|alpha_dash|is_unique[user.username]';
+            $rules = $model->validationRules;
+            $rules['email'] = 'required|max_length[100]|valid_email|is_unique[user.email]';
+            $rules['username'] = 'required|max_length[50]|alpha_dash|is_unique[user.username]';
+            $model->setValidationRules($rules);
             $userId = $model->insert($data);
         }
 
