@@ -22,6 +22,8 @@ class UserModel extends Model
 
     // Timestamp fields
     protected $useTimestamps = true;
+    protected $createdField  = 'created_at'; // Explicitly define the created field
+    protected $updatedField  = 'updated_at'; // Explicitly define the updated field
 
     // Validation rules (critical for unique fields and password security)
     protected $validationRules = [
