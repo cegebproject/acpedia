@@ -263,7 +263,7 @@
                         Beranda
                         <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#41B8EA] transition-all group-hover:w-full"></span>
                     </a>
-                    <a href="#toko-kami" class="text-gray-800 hover:text-[#41B8EA] transition-colors flex items-center gap-2 relative group">
+                    <a href="/toko-kami" class="text-gray-800 hover:text-[#41B8EA] transition-colors flex items-center gap-2 relative group">
                         <i data-lucide="store" class="h-4 w-4"></i>
                         Toko Kami
                         <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#41B8EA] transition-all group-hover:w-full"></span>

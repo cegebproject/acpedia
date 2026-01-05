@@ -11,6 +11,7 @@ use CodeIgniter\Router\RouteCollection;
     $routes->get('/', 'Main::index');
 $routes->get('login', 'Auth::login');
 $routes->post('auth/attemptLogin', 'Auth::attemptLogin');
+$routes->get('toko-kami', 'Toko::index');
 
 // Routes that REQUIRE login
 $routes->group('', ['filter' => 'auth'], function($routes) {
