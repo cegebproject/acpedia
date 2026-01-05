@@ -24,7 +24,7 @@ class UserModel extends Model
     protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
-    protected $updatedField  = null; // No updated_at in the schema for this table
+    protected $updatedField  = 'updated_at';
 
     // Validation rules (critical for unique fields and password security)
     protected $validationRules = [

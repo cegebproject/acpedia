@@ -78,8 +78,8 @@ class AdminUser extends BaseController
         unset($data['roles']);
 
         // Handle user_id
-        $userId = $data['user_id'] ?? null;
-        if (is_array($userId)) $userId = $userId[0];
+        $userId = $this->request->getPost('user_id');
+        if (is_array($userId)) $userId = reset($userId);
         $userId = (int) $userId;
         unset($data['user_id']);
 
@@ -89,9 +89,7 @@ class AdminUser extends BaseController
             $rules['email'] = str_replace('{user_id}', $userId, $rules['email']);
             $rules['username'] = str_replace('{user_id}', $userId, $rules['username']);
             $model->setValidationRules($rules);
-            $model->useTimestamps = false; // Disable timestamps for update
             $model->update($userId, $data);
-            $model->useTimestamps = true; // Re-enable
         } else {
             // Insert
             $rules = $model->validationRules;
