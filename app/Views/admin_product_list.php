@@ -8,22 +8,22 @@
             <?php $productCount = isset($products) ? count($products) : 0; ?>
             <ul class="nav nav-pills product-status-tabs" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" href="javascript:;">
-                        All <span class="badge bg-secondary ms-1"><?= $productCount ?></span>
+                    <a class="nav-link active btn btn-sm btn-primary" href="javascript:;">
+                        All <span class="badge bg-white text-primary ms-1"><?= $productCount ?></span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="javascript:;">
+                    <a class="nav-link btn btn-sm btn-outline-secondary ms-2" href="javascript:;">
                         Published <span class="badge bg-secondary ms-1"><?= $productCount ?></span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="javascript:;">
+                    <a class="nav-link btn btn-sm btn-outline-secondary ms-2" href="javascript:;">
                         Drafts <span class="badge bg-secondary ms-1">0</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="javascript:;">
+                    <a class="nav-link btn btn-sm btn-outline-secondary ms-2" href="javascript:;">
                         On Discount <span class="badge bg-secondary ms-1">0</span>
                     </a>
                 </li>
@@ -37,21 +37,28 @@
             </div>
             
             <div class="btn-group">
-                <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                     Category
                 </button>
                 <ul class="dropdown-menu"><li><a class="dropdown-item" href="#">...</a></li></ul>
             </div>
             <div class="btn-group">
-                <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                     Brand
                 </button>
                 <ul class="dropdown-menu"><li><a class="dropdown-item" href="#">...</a></li></ul>
             </div>
-            <button class="btn btn-outline-primary me-2">
+            <div class="btn-group">
+                <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    AC Type
+                </button>
+                <ul class="dropdown-menu"><li><a class="dropdown-item" href="#">...</a></li></ul>
+            </div>
+
+            <button class="btn btn-outline-primary btn-sm me-2">
                 <i class="bi bi-download me-1"></i> Export
             </button>
-            <a href="produk/add" class="btn btn-success">
+            <a href="produk/add" class="btn btn-success btn-sm">
                 <i class="bi bi-plus-lg me-1"></i> Add Product
             </a>
         </div>
@@ -100,7 +107,9 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="fw-bold text-success">$<?= number_format($p['sale_price'] ?? $p['base_price'] ?? 0) ?></td>
+                                    <td class="fw-bold text-success">
+                                        Rp. <?= number_format($p['sale_price'] ?? $p['base_price'] ?? 0, 0, ',', '.') ?>
+                                    </td>
                                     <td>
                                         <span class="badge bg-info-subtle text-info">
                                             <?= esc($p['category_name'] ?? 'Palazzos') ?>
@@ -122,11 +131,11 @@
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center gap-2">
-                                            <a href="produk/edit/<?= esc($p['id'] ?? '') ?>" class="text-primary" title="Edit Product">
-                                                <i class="bi bi-pencil-square fs-5"></i>
+                                            <a href="produk/edit/<?= esc($p['id'] ?? '') ?>" class="btn btn-sm btn-outline-primary" title="Edit Product">
+                                                <i class="bi bi-pencil"></i>
                                             </a>
-                                            <a href="javascript:;" class="text-danger" title="Delete Product">
-                                                <i class="bi bi-trash fs-5"></i>
+                                            <a href="javascript:;" class="btn btn-sm btn-outline-danger" title="Delete Product">
+                                                <i class="bi bi-trash"></i>
                                             </a>
                                         </div>
                                     </td>
