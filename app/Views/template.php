@@ -395,6 +395,14 @@
          
         </li>
         <li>
+          <a href="/admin/master">
+            <div class="parent-icon"><i class="material-icons-outlined">settings</i>
+            </div>
+            <div class="menu-title">Master Data</div>
+          </a>
+         
+        </li>
+        <li>
           <a href="/admin/user">
             <div class="parent-icon"><i class="material-icons-outlined">person</i>
             </div>
