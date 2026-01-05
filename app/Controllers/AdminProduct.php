@@ -6,10 +6,15 @@ class AdminProduct extends BaseController
 {
     public function index(): string
     {
+        $model = new \App\Models\ProductModel();
+        $products = $model->getProductDetails();
+
         $data = [
-            'title' => 'Product List | ACPedia'
+            'title' => 'Product List | ACPedia',
+            'products' => $products,
         ];
-        return view('admin_product_list');
+
+        return view('admin_product_list', $data);
     }
     
      public function add(): string
