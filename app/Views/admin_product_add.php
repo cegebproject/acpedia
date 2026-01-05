@@ -2,102 +2,92 @@
 
 <?= $this->section('content') ?>
 
+<div class="main-content">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="mb-3"><?= isset($product) ? 'Edit' : 'Add' ?> Product</h5>
+            <form action="/admin/produk/save" method="post">
+                <?= isset($product) ? '<input type="hidden" name="id" value="' . esc($product['id']) . '">' : '' ?>
+                <div class="mb-3">
+                    <label>Name</label>
+                    <input type="text" name="name" class="form-control" value="<?= esc($product['name'] ?? '') ?>" required>
+                </div>
+                <div class="mb-3">
+                    <label>Category</label>
+                    <select name="category_id" class="form-control">
+                        <option value="">Select Category</option>
+                        <?php foreach ($categories as $cat): ?>
+                            <option value="<?= $cat['id'] ?>" <?= ($product['category_id'] ?? '') == $cat['id'] ? 'selected' : '' ?>><?= esc($cat['name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label>Brand</label>
+                    <select name="brand_id" class="form-control">
+                        <option value="">Select Brand</option>
+                        <?php foreach ($brands as $brand): ?>
+                            <option value="<?= $brand['id'] ?>" <?= ($product['brand_id'] ?? '') == $brand['id'] ? 'selected' : '' ?>><?= esc($brand['name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label>AC Type</label>
+                    <select name="ac_type_id" class="form-control">
+                        <option value="">Select AC Type</option>
+                        <?php foreach ($ac_types as $ac): ?>
+                            <option value="<?= $ac['id'] ?>" <?= ($product['ac_type_id'] ?? '') == $ac['id'] ? 'selected' : '' ?>><?= esc($ac['name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label>PK</label>
+                    <select name="pk_id" class="form-control">
+                        <option value="">Select PK</option>
+                        <?php foreach ($pk_list as $pk): ?>
+                            <option value="<?= $pk['id'] ?>" <?= ($product['pk_id'] ?? '') == $pk['id'] ? 'selected' : '' ?>><?= esc($pk['name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label>Series AC</label>
+                    <input type="text" name="series_ac" class="form-control" value="<?= esc($product['series_ac'] ?? '') ?>">
+                </div>
+                <div class="mb-3">
+                    <label>Base Price</label>
+                    <input type="number" name="base_price" class="form-control" value="<?= esc($product['base_price'] ?? '') ?>" required>
+                </div>
+                <div class="mb-3">
+                    <label>Sale Price</label>
+                    <input type="number" name="sale_price" class="form-control" value="<?= esc($product['sale_price'] ?? '') ?>">
+                </div>
+                <div class="mb-3">
+                    <label>Main Image URL</label>
+                    <input type="text" name="main_image_url" class="form-control" value="<?= esc($product['main_image_url'] ?? '') ?>">
+                </div>
+                <div class="mb-3">
+                    <label>Features</label>
+                    <textarea name="features" class="form-control"><?= esc($product['features'] ?? '') ?></textarea>
+                </div>
+                <div class="mb-3">
+                    <label>Warranty Info</label>
+                    <input type="text" name="warranty_info" class="form-control" value="<?= esc($product['warranty_info'] ?? '') ?>">
+                </div>
+                <div class="mb-3">
+                    <label>Is Active</label>
+                    <input type="checkbox" name="is_active" value="1" <?= ($product['is_active'] ?? 0) ? 'checked' : '' ?>>
+                </div>
+                <div class="mb-3">
+                    <label>Is Featured</label>
+                    <input type="checkbox" name="is_featured" value="1" <?= ($product['is_featured'] ?? 0) ? 'checked' : '' ?>>
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a href="/admin/produk" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
 
-    <div class="main-content">
-   
-        <div class="row">
-          <div class="col-12 col-lg-8">
-              <div class="card">
-                 <div class="card-body">
-                   <div class="mb-4">
-                      <h5 class="mb-3">Product Title</h5>
-                      <input type="text" class="form-control" placeholder="write title here....">
-                   </div>
-                   <div class="mb-4">
-                     <h5 class="mb-3">Product Description</h5>
-                     <textarea class="form-control" cols="4" rows="6" placeholder="write a description here.."></textarea>
-                   </div>
-                   <div class="mb-4">
-                    <h5 class="mb-3">Display images</h5>
-                    <input id="fancy-file-upload" type="file" name="files" accept=".jpg, .png, image/jpeg, image/png" multiple>
-                  </div>
-                  <div class="mb-4">
-                    <h5 class="mb-3">Inventory</h5>
-                    
-                    <div class="row g-3">
-                      <div class="col-12 col-lg-3">
-                        <div class="nav flex-column nav-pills border rounded vertical-pills overflow-hidden">
-                          <button class="nav-link px-4 rounded-0" data-bs-toggle="pill" data-bs-target="#Pricing" type="button"><i class="bi bi-tag-fill me-2"></i>Pricing</button>
-                          <button class="nav-link px-4 rounded-0" data-bs-toggle="pill" data-bs-target="#Restock" type="button"><i class="bi bi-box-seam-fill me-2"></i>Restock</button>
-                          <button class="nav-link active px-4 rounded-0" data-bs-toggle="pill" data-bs-target="#Shipping" type="button"><i class="bi bi-truck-front-fill me-2"></i>Shipping</button>
-                          <button class="nav-link px-4 rounded-0" data-bs-toggle="pill" data-bs-target="#GlobalDelivery" type="button"><i class="bi bi-globe me-2"></i>Global Delivery</button>
-                          <button class="nav-link px-4 rounded-0" data-bs-toggle="pill" data-bs-target="#Attributes" type="button"><i class="bi bi-hdd-rack-fill me-2"></i>Attributes</button>
-                          <button class="nav-link px-4 rounded-0" data-bs-toggle="pill" data-bs-target="#Advanced" type="button"><i class="bi bi-handbag-fill me-2"></i>Advanced</button>
-                        </div>
-                      </div>
-                      <div class="col-12 col-lg-9">
-                        <div class="tab-content">
-                          <div class="tab-pane fade" id="Pricing">
-                            <div class="row g-3">
-                              <div class="col-12 col-lg-6">
-                                <h6 class="mb-2">Regular price</h6>
-                                <input class="form-control" type="text" placeholder="$$$">
-                              </div>
-                              <div class="col-12 col-lg-6">
-                                <h6 class="mb-2">Sale price</h6>
-                                <input class="form-control" type="text" placeholder="$$$">
-                              </div>
-                            </div>
-                          </div>
-                          <div class="tab-pane fade" id="Restock">
-                            <h6 class="mb-3">Add to Stock</h6>
-                            <div class="row g-3">
-                              <div class="col-sm-7">
-                                <input class="form-control" type="number" placeholder="Quantity">
-                              </div>
-                              <div class="col-sm">
-                                <button class="btn btn-outline-primary"><i class="bi bi-check2 me-2"></i>Confirm</button>
-                              </div>
-                            </div>
-                            <table class="mt-3">
-                              <thead>
-                                <tr>
-                                  <th style="width: 200px;"></th>
-                                  <th></th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr>
-                                  <td class="text-1000 py-1">Product in stock now:</td>
-                                  <td class="text-700 fw-semi-bold py-1">$2,059<button class="btn p-0 ms-2" type="button"><i class="bi bi-arrow-clockwise"></i></button></td>
-                                </tr>
-                                <tr>
-                                  <td class="text-1000 py-1">Product in transit:</td>
-                                  <td class="text-700 fw-semi-bold py-1">3000</td>
-                                </tr>
-                                <tr>
-                                  <td class="text-1000 py-1">Last time restocked:</td>
-                                  <td class="text-700 fw-semi-bold py-1">25th March, 2020</td>
-                                </tr>
-                                <tr>
-                                  <td class="text-1000 py-1">Total stock over lifetime:</td>
-                                  <td class="text-700 fw-semi-bold py-1">50,000</td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                          <div class="tab-pane fade show active" id="Shipping">
-                            <div class="d-flex flex-column h-100">
-                              <h6 class="mb-3">Shipping Type</h6>
-                              <div class="flex-1">
-                                <div class="mb-4">
-                                  <div class="form-check mb-1">
-                                    <input class="form-check-input" type="radio" name="shippingRadio" id="fullfilledBySeller">
-                                    <label class="form-check-label fw-bold" for="fullfilledBySeller">Fullfilled by Seller</label></div>
-                                  <div class="ps-4">
-                                    <p class="mb-0">You’ll be responsible for product delivery. <br>Any damage or delay during shipping may cost you a Damage fee.</p>
-                                  </div>
-                                </div>
+<?= $this->endSection() ?>
                                 <div class="mb-4">
                                   <div class="form-check mb-1">
                                     <input class="form-check-input" type="radio" name="shippingRadio" id="fullfilledByPhoenix" checked="checked">

@@ -131,10 +131,10 @@
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center gap-2">
-                                            <a href="produk/edit/<?= esc($p['id'] ?? '') ?>" class="btn btn-sm btn-outline-primary" title="Edit Product">
+                                            <a href="/admin/produk/edit/<?= esc($p['id'] ?? '') ?>" class="btn btn-sm btn-outline-primary" title="Edit Product">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
-                                            <a href="javascript:;" class="btn btn-sm btn-outline-danger" title="Delete Product">
+                                            <a href="/admin/produk/delete/<?= esc($p['id'] ?? '') ?>" class="btn btn-sm btn-outline-danger" title="Delete Product" onclick="return confirm('Are you sure you want to delete this product?')">
                                                 <i class="bi bi-trash"></i>
                                             </a>
                                         </div>
