@@ -1,6 +1,8 @@
 <?= $this->extend('template-main') ?>
 <?= $this->section('content') ?>
 
+TEST COMMIT
+
   <!-- Hero Section -->
     <section id="home" class="relative bg-gradient-to-br from-gray-50 via-white to-cyan-50 pt-4 pb-6 md:pt-8 md:pb-10 overflow-hidden">
         <!-- Background Decorative Elements -->
