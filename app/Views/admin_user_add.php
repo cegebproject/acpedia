@@ -37,10 +37,17 @@
                 <?php endif; ?>
                 <div class="mb-3">
                     <label>Role</label>
-                    <select name="role_id" class="form-control">
+                    <select name="role_id" class="form-control" required>
                         <option value="">Select Role</option>
+                        <?php 
+                            // The currently assigned role ID from the controller data
+                            $currentUserRoleId = $user['role_id'] ?? null;
+                        ?>
                         <?php foreach ($roles as $role): ?>
-                            <option value="<?= $role['role_id'] ?>" <?= ($userRole == $role['role_id']) ? 'selected' : '' ?>>
+                            <option 
+                                value="<?= esc($role['role_id']) ?>" 
+                                <?= ($currentUserRoleId == $role['role_id']) ? 'selected' : '' ?>
+                            >
                                 <?= esc($role['role_name']) ?>
                             </option>
                         <?php endforeach; ?>

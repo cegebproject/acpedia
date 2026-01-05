@@ -51,7 +51,7 @@
                             <th>Username</th>
                             <th>Email</th>
                             <th>Full Name</th>
-                            <th>Roles</th>
+                            <th>Role</th>
                             <th>Status</th>
                             <th>Date Added</th>
                             <th style="width: 80px;">Action</th>
@@ -87,9 +87,7 @@
                                         <?= esc($u['first_name'] ?? '') ?> <?= esc($u['last_name'] ?? '') ?>
                                     </td>
                                     <td>
-                                        <span class="badge bg-info-subtle text-info">
-                                            <?= esc($u['role_name'] ?? 'No Role') ?>
-                                        </span>
+                                        <?= esc($u['role_name']) ?>
                                     </td>
                                     <td>
                                         <span class="badge <?= ($u['is_active'] ?? 0) ? 'bg-success' : 'bg-danger' ?>">
