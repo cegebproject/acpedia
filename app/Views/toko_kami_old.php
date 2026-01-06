@@ -1,133 +1,162 @@
-
-
-
-<?php
-// --- Setup Lookup Maps for Hardcoded Filters ---
-$pkMap = [];
-foreach ($pkList as $item) {
-    // Assuming the 'name' field in pk_list contains '1/2 PK', '1 PK', etc.
-    $pkMap[$item['name']] = $item['id'];
-}
-
-$acTypeMap = [];
-foreach ($categories as $item) {
-    // Assuming the 'name' field in ac_types contains 'Inverter', 'Non Inverter', etc.
-    $acTypeMap[$item['name']] = $item['id'];
-}
-
-// Hardcoded lists for display
-$pkDisplayList = ['1/2 PK', '3/4 PK', '1 PK', '1.5 PK', '2 PK', '2.5 PK'];
-$acTypeDisplayList = ['Inverter AC', 'Non-Inverter AC'];
-
-$categoryMap = [];
-foreach ($categories as $item) {
-    $categoryMap[$item['name']] = $item['id'];
-}
-$categoryDisplayList = [
-    'Wall Mounted Split', // Corresponds to $count_wms
-    'Cassette',           // Corresponds to $count_cas
-    'Floor Standing',     // Corresponds to $count_fls
-    'Central AC',         // Corresponds to $count_cls
-    'VRV/VRF',            // Corresponds to $count_vrf
-    'Ducted Split',       // Corresponds to $count_cld (ID 10)
-    'Produk Lainnya'      // Corresponds to $count_etc
-];
-
-// --- Helper data for Product Categories Icons (Same as before) ---
-$categorySVGs = [
-    'Wall Mounted Split' => '<svg class="w-10 h-auto flex-shrink-0 fill-[#222] group-hover:fill-white transition-colors" viewBox="0 0 58.7897 31.2443" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M58.7897 26.9884C58.3228 29.4097 56.8683 30.9353 54.7279 31.1334L16.8184 31.1281C15.3425 30.9336 15.8294 29.1242 16.3607 29.1242H50.8881V27.2543H45.3336C45.1438 27.2543 44.7824 26.4941 44.836 26.1515C44.8896 25.8089 45.4071 25.2522 45.6781 25.2522H50.8881V23.5161H8.05797V25.2522H42.241C43.3816 25.2522 43.2453 27.256 42.5839 27.256H8.05797V29.126H13.6125C13.6554 29.126 13.9998 29.5828 14.0427 29.6952C14.2938 30.3679 13.8131 30.9692 13.2634 31.1209C9.46497 30.4536 0.773395 33.4887 0.171706 26.7707C0.511591 19.5834 -0.328936 11.7216 0.153334 4.61097C0.291125 2.56255 1.64148 0.503418 3.44808 0.175099C4.98216 -0.105042 8.87859 0.00380257 10.5244 0.137628C10.9516 0.171531 11.3542 0.180452 11.4645 0.778206C11.6436 1.75602 11.1384 2.07185 10.4096 2.15215C8.43919 2.36627 5.46749 1.75246 3.67467 2.17713C2.94897 2.34843 2.07476 3.42617 1.92472 4.27551L1.87266 26.5227C1.99055 27.372 2.29982 28.1536 2.93978 28.6175C3.10819 28.7406 3.84921 29.126 3.99159 29.126H6.33864V22.2474C6.33864 21.9423 6.99391 21.3856 7.30624 21.5069H51.6353C51.9476 21.3856 52.6029 21.9423 52.6029 22.2474V29.126H54.9499C55.8486 29.126 57.0949 27.6254 57.0689 26.5227V4.61632C56.9586 3.47256 56.2299 2.62143 55.3541 2.20925L14.179 2.15036C13.0766 2.07721 12.8332 0.451672 13.9463 0.135844L55.2944 0.141197C56.9234 0.34818 58.5692 2.2717 58.7867 4.14883V26.9884H58.7897Z"/></svg>',
-    'Cassette'           => '<svg class="w-10 h-auto flex-shrink-0 fill-[#222] group-hover:fill-white transition-colors" viewBox="0 0 39.6498 46.4001" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M35.4659 46.4001H13.3963C12.8406 46.2299 12.9095 45.0405 13.3575 45.0405H30.1997V41.824C30.1997 41.0057 29.2706 39.8605 28.5335 39.8764L11.0425 39.8855C8.9089 40.3906 9.53542 43.1564 9.44619 45.0405H11.188C11.2074 45.0405 11.4208 45.306 11.4489 45.3685C11.6594 45.8395 11.477 46.1232 11.1492 46.399H4.18193C3.92492 46.2628 3.62718 46.2548 3.3469 46.1527C1.56628 45.5001 0.302588 43.6365 0 41.5062V4.89731C0.359809 2.30508 2.11618 0.256499 4.37589 0.0045398L35.1972 0C37.5588 0.203156 39.4655 2.45603 39.6498 5.21055L39.6459 41.2792C39.4936 43.775 37.5986 46.1334 35.4659 46.4001ZM8.2853 1.36307H4.6843C3.13063 1.36307 1.57016 2.93271 1.25691 4.69188L1.16186 5.48634V9.70041H3.75617C5.30112 9.70041 6.68798 11.2371 6.80533 13.019L6.81794 33.22C6.80048 35.1176 5.39422 36.7951 3.75617 36.7951H1.16186V40.9183C1.16186 42.7365 2.50314 44.5626 4.00639 44.9292L4.68527 45.0405H8.28627V41.6424C8.28627 40.3043 9.65665 38.6371 10.8117 38.5258L28.6169 38.5122C29.8632 38.4668 31.3625 40.2339 31.3625 41.6424V45.0405H34.9635C36.5172 45.0405 38.0777 43.4708 38.3909 41.7116L38.486 40.9172V36.7939H35.8916C34.2536 36.7939 32.8473 35.1165 32.8299 33.2188L32.8425 13.0179C32.9598 11.236 34.3477 9.69927 35.8916 9.69927H38.486V5.48521C38.486 3.66702 37.1447 1.84089 35.6414 1.4743L34.9625 1.36307H31.3615V4.85191C31.3615 6.18888 29.9902 7.86066 28.8351 7.96734C23.2227 7.86066 17.2369 8.45537 11.6497 8.07289C10.4713 7.99231 9.41225 7.60983 8.76343 6.37614C8.60244 6.06971 8.2853 5.17991 8.2853 4.85191V1.36307ZM30.1997 1.36307H9.44716V4.57952C9.44716 5.48748 10.3113 6.59632 11.1133 6.61789L28.3842 6.62243C29.2463 6.70187 30.2007 5.5499 30.2007 4.57952V1.36307H30.1997ZM1.16186 35.3446H4.14313C4.89088 35.3446 5.69487 33.9656 5.65220 33.1235L5.65705 13.5468C5.76470 12.6638 4.92579 11.1497 4.14313 11.1497H1.16186V35.3446ZM38.4850 11.1497H35.5037C34.7220 11.1497 33.8822 12.6638 33.9898 13.5468L33.9947 33.1235C33.9520 33.9668 34.7550 35.3446 35.5037 35.3446H38.4850V11.1497Z"/></svg>',
-    'Floor Standing'     => '<svg class="w-10 h-auto flex-shrink-0 fill-[#222] group-hover:fill-white transition-colors" viewBox="0 0 38.8316 57.9169" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_floor_standing_mobile)"><path d="M0.0127484 32.2289C0.216722 32.2034 0.624671 32.6368 0.624671 32.6878V57.2922H38.0794L38.5384 9.779C38.1177 9.07784 37.8882 9.62602 37.7735 9.62602H0.624671C0.31871 12.4944 0.956129 15.8217 0.624671 18.6519C0.573677 19.1108 0.560929 19.5953 0 19.71V7.02535L0.458942 6.56641H38.3726L38.8316 7.02535V57.4579L38.3726 57.9169H0.47169L0.0127484 57.4579V32.2416V32.2289ZM38.5384 9.00135L37.9392 6.99985C37.289 6.55366 36.7791 7.17833 36.5496 7.17833H0.777651L0.331458 7.67552L0.624671 9.0141H38.5384V9.00135Z" fill="#222" stroke="#222" stroke-width="0.5" class="fill-[#222] stroke-[#222] group-hover:fill-white group-hover:stroke-white transition-colors" /><path d="M3.07304 51.1849H4.29689V46.1365C4.29689 45.2697 5.52073 44.8235 6.27289 44.747C7.48398 44.6195 11.64 44.3773 11.64 46.1365V50.573C11.1045 50.6367 11.3467 49.8846 11.334 49.5021C11.2957 48.342 11.6655 45.8178 10.4161 45.2187C9.42174 44.747 4.60285 44.696 4.60285 46.4425V51.1849H35.7854V10.5303H36.3973V55.6086C36.3973 55.6086 35.9894 56.093 35.7854 56.0675V51.4781H3.07304V56.0675C2.38463 55.8891 2.48662 55.2389 2.44837 54.7035C1.28827 40.642 3.36626 26.0069 2.44837 11.8817L3.07304 10.5176V51.1594V51.1849Z" fill="#222" stroke="#222" stroke-width="0.5" class="fill-[#222] stroke-[#222] group-hover:fill-white group-hover:stroke-white transition-colors" /><path d="M33.0309 1.51706C32.6739 0.254968 30.1752 0.662916 31.2333 1.9505C31.2971 2.02699 33.5408 2.23097 31.2333 2.61342L31.1823 3.952L32.1257 4.27071L31.2078 4.42369V5.95349L30.4557 4.50018L26.4782 4.42369L26.3125 5.95349L25.5603 4.50018L21.4171 4.72965L21.1111 5.95349L20.6649 4.50018L16.5217 4.72965L16.2157 5.9... (SVG path truncated)" /></g></svg>',
-    'Central AC'         => '<svg class="w-10 h-auto flex-shrink-0 fill-[#222] group-hover:fill-white transition-colors" viewBox="0 0 45.42 45.42" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M45.42 22.71C45.42 35.2536 35.2536 45.42 22.71 45.42C10.1664 45.42 0 35.2536 0 22.71C0 10.1664 10.1664 0 22.71 0C35.2536 0 45.42 10.1664 45.42 22.71ZM22.71 3.51346C12.0831 3.51346 3.51346 12.0831 3.51346 22.71C3.51346 33.3369 12.0831 41.9065 22.71 41.9065C33.3369 41.9065 41.9065 33.3369 41.9065 22.71C41.9065 12.0831 33.3369 3.51346 22.71 3.51346Z" fill="#222" class="fill-[#222] group-hover:fill-white transition-colors" /><path d="M22.71 11.2355C23.6393 11.2355 24.3915 11.9877 24.3915 12.917V32.4285C24.3915 33.3578 23.6393 34.11 22.71 34.11C21.7807 34.11 21.0285 33.3578 21.0285 32.4285V12.917C21.0285 11.9877 21.7807 11.2355 22.71 11.2355Z" fill="#222" class="fill-[#222] group-hover:fill-white transition-colors" /><path d="M32.4285 21.0285H12.917C11.9877 21.0285 11.2355 21.7807 11.2355 22.71C11.2355 23.6393 11.9877 24.3915 12.917 24.3915H32.4285C33.3578 24.3915 34.11 23.6393 34.11 22.71C34.11 21.7807 33.3578 21.0285 32.4285 21.0285Z" fill="#222" class="fill-[#222] group-hover:fill-white transition-colors" /></svg>',
-    'VRV/VRF'            => '<svg class="w-10 h-auto flex-shrink-0 fill-[#222] group-hover:fill-white transition-colors" viewBox="0 0 52 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M34 2C35.1046 2 36 2.89543 36 4V16C36 17.1046 35.1046 18 34 18H18C16.8954 18 16 17.1046 16 16V4C16 2.89543 16.8954 2 18 2H34ZM34 4H18V16H34V4Z" fill="#222" class="fill-[#222] group-hover:fill-white transition-colors" /><path d="M48 20C49.1046 20 50 20.8954 50 22V34C50 35.1046 49.1046 36 48 36H4C2.89543 36 2 35.1046 2 34V22C2 20.8954 2.89543 20 4 20H48ZM48 22H4V34H48V22Z" fill="#222" class="fill-[#222] group-hover:fill-white transition-colors" /><path d="M12 24C13.1046 24 14 24.8954 14 26V30C14 31.1046 13.1046 32 12 32H4C2.89543 32 2 31.1046 2 30V26C2 24.8954 2.89543 24 4 24H12Z" fill="#222" class="fill-[#222] group-hover:fill-white transition-colors" /><path d="M48 24C49.1046 24 50 24.8954 50 26V30C50 31.1046 49.1046 32 48 32H40C38.8954 32 38 31.1046 38 30V26C38 24.8954 38.8954 24 40 24H48Z" fill="#222" class="fill-[#222] group-hover:fill-white transition-colors" /><path d="M26 38C27.1046 38 28 38.8954 28 40V46C28 47.1046 27.1046 48 26 48H20C18.8954 48 18 47.1046 18 46V40C18 38.8954 18.8954 38 20 38H26Z" fill="#222" class="fill-[#222] group-hover:fill-white transition-colors" /></svg>',
-    'Ducted Split'       => '<svg class="w-10 h-auto flex-shrink-0 fill-[#222] group-hover:fill-white transition-colors" viewBox="0 0 58.7897 31.2443" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M54.7279 31.1334L16.8184 31.1281C15.3425 30.9336 15.8294 29.1242 16.3607 29.1242H50.8881V27.2543H45.3336C45.1438 27.2543 44.7824 26.4941 44.836 26.1515C44.8896 25.8089 45.4071 25.2522 45.6781 25.2522H50.8881V23.5161H8.05797V25.2522H42.241C43.3816 25.2522 43.2453 27.256 42.5839 27.256H8.05797V29.126H13.6125C13.6554 29.126 13.9998 29.5828 14.0427 29.6952C14.2938 30.3679 13.8131 30.9692 13.2634 31.1209C9.46497 30.4536 0.773395 33.4887 0.171706 26.7707C0.511591 19.5834 -0.328936 11.7216 0.153334 4.61097C0.291125 2.56255 1.64148 0.503418 3.44808 0.175099C4.98216 -0.105042 8.87859 0.00380257 10.5244 0.137628C10.9516 0.171531 11.3542 0.180452 11.4645 0.778206C11.6436 1.75602 11.1384 2.07185 10.4096 2.15215C8.43919 2.36627 5.46749 1.75246 3.67467 2.17713C2.94897 2.34843 2.07476 3.42617 1.92472 4.27551L1.87266 26.5227C1.99055 27.372 2.29982 28.1536 2.93978 28.6175C3.10819 28.7406 3.84921 29.126 3.99159 29.126H6.33864V22.2474C6.33864 21.9423 6.99391 21.3856 7.30624 21.5069H51.6353C51.9476 21.3856 52.6029 21.9423 52.6029 22.2474V29.126H54.9499C55.8486 29.126 57.0949 27.6254 57.0689 26.5227V4.61632C56.9586 3.47256 56.2299 2.62143 55.3541 2.20925L14.179 2.15036C13.0766 2.07721 12.8332 0.451672 13.9463 0.135844L55.2944 0.141197C56.9234 0.34818 58.5692 2.2717 58.7867 4.14883V26.9884H58.7897Z"/></svg>', // Reused Wall Mounted SVG for Ducted Split
-    'Produk Lainnya'     => '<svg class="w-10 h-auto flex-shrink-0 fill-[#222] group-hover:fill-white transition-colors" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" fill="#222" class="fill-[#222] group-hover:fill-white transition-colors"/></svg>'
-];
-
-// Helper function to create URL (to keep the hardcoded HTML cleaner)
-function generateCategoryUrl($categoryMap, $currentFilters, $currentSearch, $categoryName, $baseUrl) {
-    $categoryId = $categoryMap[$categoryName] ?? null;
-    if (is_null($categoryId)) return '#'; // Fallback if category name not found
-
-    $queryData = array_filter($currentFilters); 
-    if (!empty($currentSearch)) {
-        $queryData['search'] = $currentSearch;
-    }
-    $queryData['category_id'] = $categoryId; 
-    
-    return $baseUrl . '?' . http_build_query($queryData);
-}
-
-// Set base URL once
-$baseUrl = url_to('Toko::index');
-
-// Check active state for all categories to be used in hardcoded HTML
-$currentActiveCategory = $currentFilters['category_id'] ?? null;
-
-function getActiveClass($categoryId, $currentActiveCategory) {
-    if ($categoryId && $categoryId == $currentActiveCategory) {
-        return 'border-[#41B8EA] ring-2 ring-[#41B8EA]/30 bg-[#eefaff]';
-    }
-    return 'border-[#ced4da] bg-[#f3f3f3]';
-}
-
-
-?>
-
 <?= $this->extend('template-main') ?>
 <?= $this->section('content') ?>
 
+<!-- Page Header -->
+<div class="bg-gradient-to-r from-[#41B8EA] to-[#3EB48A] py-16">
+    <div class="container mx-auto px-4 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Toko Kami</h1>
+        <p class="text-xl text-white/90 max-w-2xl mx-auto">
+            Temukan berbagai pilihan AC berkualitas dengan teknologi terkini untuk kenyamanan Anda
+        </p>
+    </div>
+</div>
 
+<!-- Products Section -->
+<div class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <!-- Filters (Optional - can be expanded later) -->
+        <div class="mb-8">
+            <div class="flex flex-wrap gap-4 justify-center">
+                <select class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#41B8EA] focus:border-transparent">
+                    <option value="">Semua Brand</option>
+                    <?php foreach ($brands as $brand): ?>
+                        <option value="<?= $brand['id'] ?>"><?= $brand['name'] ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <select class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#41B8EA] focus:border-transparent">
+                    <option value="">Semua Kategori</option>
+                    <?php foreach ($categories as $category): ?>
+                        <option value="<?= $category['id'] ?>"><?= $category['name'] ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        </div>
 
- <!-- Tagline -->
-    <div class="bg-white py-4">
-        <div class="container mx-auto px-4 text-center">
-            <img 
-                src="\assets\quote.png" 
-                alt="every AC holds a journey, we ensure it lasts!"
-                class="mx-auto h-20 md:h-24 lg:h-32"
-            />
+        <!-- Products Grid -->
+        <?php if (!empty($products)): ?>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <?php foreach ($products as $product): ?>
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
+                        <!-- Product Image -->
+                        <div class="aspect-square bg-gray-200 relative">
+                            <?php if (!empty($product['main_image_url'])): ?>
+                                <img src="<?= base_url($product['main_image_url']) ?>"
+                                     alt="<?= esc($product['name']) ?>"
+                                     class="w-full h-full object-cover">
+                            <?php else: ?>
+                                <div class="w-full h-full flex items-center justify-center text-gray-400">
+                                    <i data-lucide="image" class="h-12 w-12"></i>
+                                </div>
+                            <?php endif; ?>
+
+                            <?php if ($product['is_featured']): ?>
+                                <div class="absolute top-2 left-2 bg-[#F99C1C] text-white px-2 py-1 rounded text-xs font-semibold">
+                                    Featured
+                                </div>
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- Product Info -->
+                        <div class="p-4">
+                            <div class="mb-2">
+                                <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                                    <?= esc($product['brand_name'] ?? 'Unknown Brand') ?>
+                                </span>
+                            </div>
+
+                            <h3 class="font-semibold text-gray-900 mb-2 line-clamp-2">
+                                <?= esc($product['name']) ?>
+                            </h3>
+
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-sm text-gray-600">
+                                    <?= esc($product['category_name'] ?? 'Unknown Category') ?>
+                                </span>
+                                <?php if (!empty($product['ac_type_name'])): ?>
+                                    <span class="text-xs text-gray-400">•</span>
+                                    <span class="text-sm text-gray-600">
+                                        <?= esc($product['ac_type_name']) ?>
+                                    </span>
+                                <?php endif; ?>
+                            </div>
+
+                            <!-- Price -->
+                            <div class="mb-3">
+                                <?php if ($product['sale_price'] && $product['sale_price'] < $product['base_price']): ?>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-lg font-bold text-[#41B8EA]">
+                                            Rp <?= number_format($product['sale_price'], 0, ',', '.') ?>
+                                        </span>
+                                        <span class="text-sm text-gray-500 line-through">
+                                            Rp <?= number_format($product['base_price'], 0, ',', '.') ?>
+                                        </span>
+                                    </div>
+                                <?php else: ?>
+                                    <span class="text-lg font-bold text-[#41B8EA]">
+                                        Rp <?= number_format($product['base_price'] ?? 0, 0, ',', '.') ?>
+                                    </span>
+                                <?php endif; ?>
+                            </div>
+
+                            <!-- Rating -->
+                            <?php if ($product['avg_rating']): ?>
+                                <div class="flex items-center gap-1 mb-3">
+                                    <div class="flex">
+                                        <?php for ($i = 1; $i <= 5; $i++): ?>
+                                            <i data-lucide="star" class="h-4 w-4 <?= $i <= $product['avg_rating'] ? 'text-yellow-400 fill-current' : 'text-gray-300' ?>"></i>
+                                        <?php endfor; ?>
+                                    </div>
+                                    <span class="text-sm text-gray-600">
+                                        (<?= $product['review_count'] ?? 0 ?>)
+                                    </span>
+                                </div>
+                            <?php endif; ?>
+
+                            <!-- Action Button -->
+                            <button class="w-full bg-[#41B8EA] hover:bg-[#41B8EA]/90 text-white py-2 px-4 rounded-lg transition-colors duration-200">
+                                Lihat Detail
+                            </button>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <div class="text-center py-16">
+                <i data-lucide="package" class="h-16 w-16 text-gray-300 mx-auto mb-4"></i>
+                <h3 class="text-xl font-semibold text-gray-600 mb-2">Produk Tidak Ditemukan</h3>
+                <p class="text-gray-500">Belum ada produk yang tersedia saat ini.</p>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>
+
+<!-- Call to Action -->
+<div class="bg-[#41B8EA] py-16">
+    <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl font-bold text-white mb-4">Butuh Bantuan Memilih AC?</h2>
+        <p class="text-white/90 mb-8 max-w-2xl mx-auto">
+            Konsultasikan kebutuhan AC Anda dengan tim ahli kami. Kami siap membantu Anda menemukan solusi terbaik.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="https://wa.me/6285810000684" class="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#25D366]/90 text-white px-6 py-3 rounded-lg transition-colors">
+                <i data-lucide="message-circle" class="h-5 w-5"></i>
+                Hubungi via WhatsApp
+            </a>
+            <a href="/contact" class="inline-flex items-center gap-2 bg-white hover:bg-gray-100 text-[#41B8EA] px-6 py-3 rounded-lg transition-colors">
+                <i data-lucide="mail" class="h-5 w-5"></i>
+                Kirim Email
+            </a>
         </div>
     </div>
+</div>
 
-<!-- Services Icons -->
-    <div class="bg-white py-5 border-b">
-        <div class="container mx-auto px-4">
-            <!-- Mobile Dropdown -->
-            <div class="md:hidden">
-                <button id="servicesToggle" class="w-full flex items-center justify-between px-4 py-3 bg-white border border-gray-300 rounded-lg hover:border-[#41B8EA] transition-colors">
-                    <span class="font-semibold text-[#373E51]">Layanan Kami</span>
-                    <i data-lucide="chevron-down" id="servicesChevron" class="h-5 w-5 text-[#41B8EA] transition-transform duration-200"></i>
-                </button>
-                <div id="servicesContent" class="dropdown-content mt-3 space-y-2">
-                    <!-- PK Calculator -->
-                    <button class="service-btn w-full flex items-center gap-3 px-4 py-3 bg-white border border-gray-300 rounded-full hover:shadow-lg hover:border-[#3EB48A] transition-all duration-200">
-                        <div class="flex-shrink-0 w-[42px] h-[42px] rounded-full bg-[#3EB48A] flex items-center justify-center relative">
-                            <img src="C:\Users\Dody\Desktop\ACpedia\ACpedia\assets\pkcal.png" alt="PK Calculator" class="w-5 h-5 object-contain brightness-0 invert">
-                        </div>
-                        <span class="font-semibold text-[#1c1c24]">PK Calculator</span>
-                    </button>
-
-                    <!-- Proyek HVAC -->
-                    <button class="service-btn w-full flex items-center gap-3 px-4 py-3 bg-white border border-gray-300 rounded-full hover:shadow-lg hover:border-[#41B8EA] transition-all duration-200">
-                        <div class="flex-shrink-0 w-[42px] h-[42px] rounded-full bg-[#41B8EA] flex items-center justify-center">
-                            <img src="C:\Users\Dody\Desktop\ACpedia\ACpedia\assets\hvac.png" alt="Proyek HVAC" class="w-5 h-5 object-contain brightness-0 invert">
-                        </div>
-                        <span class="font-semibold text-[#1c1c24]">Proyek HVAC</span>
-                    </button>
-
-                    <!-- Pasang unit -->
-                    <button class="service-btn w-full flex items-center gap-3 px-4 py-3 bg-white border border-gray-300 rounded-full hover:shadow-lg hover:border-[#F99C1C] transition-all duration-200">
-                        <div class="flex-shrink-0 w-[42px] h-[42px] rounded-full bg-[#F99C1C] flex items-center justify-center">
-                            <img src="C:\Users\Dody\Desktop\ACpedia\ACpedia\assets\pasang.png" alt="Pasang Unit" class="w-5 h-5 object-contain brightness-0 invert">
-                        </div>
-                        <span class="font-semibold text-[#1c1c24]">Pasang unit</span>
+<?= $this->endSection() ?>
                     </button>
 
                     <!-- Perawatan -->
                     <button class="service-btn w-full flex items-center gap-3 px-4 py-3 bg-white border border-gray-300 rounded-full hover:shadow-lg hover:border-[#ED2024] transition-all duration-200">
                         <div class="flex-shrink-0 w-[42px] h-[42px] rounded-full bg-[#ED2024] flex items-center justify-center">
-                            <img src="C:\Users\Dody\Desktop\ACpedia\ACpedia\assets\perawatan2.png" alt="Perawatan" class="w-5 h-5 object-contain brightness-0 invert">
+                            <img src="\assets\perawatan2.png" alt="Perawatan" class="w-5 h-5 object-contain brightness-0 invert">
                         </div>
                         <span class="font-semibold text-[#1c1c24]">Perawatan</span>
                     </button>
@@ -135,7 +164,7 @@ function getActiveClass($categoryId, $currentActiveCategory) {
                     <!-- Perbaikan -->
                     <button class="service-btn w-full flex items-center gap-3 px-4 py-3 bg-white border border-gray-300 rounded-full hover:shadow-lg hover:border-[#373E51] transition-all duration-200">
                         <div class="flex-shrink-0 w-[42px] h-[42px] rounded-full bg-[#373E51] flex items-center justify-center">
-                            <img src="C:\Users\Dody\Desktop\ACpedia\ACpedia\assets\perbaikan2.png" alt="Perbaikan" class="w-5 h-5 object-contain brightness-0 invert">
+                            <img src="\assets\perbaikan2.png" alt="Perbaikan" class="w-5 h-5 object-contain brightness-0 invert">
                         </div>
                         <span class="font-semibold text-[#1c1c24]">Perbaikan</span>
                     </button>
@@ -146,31 +175,31 @@ function getActiveClass($categoryId, $currentActiveCategory) {
             <div class="hidden md:flex justify-center items-center gap-4">
                 <button class="service-btn flex items-center gap-3 px-6 py-3 bg-white border border-gray-300 rounded-full hover:shadow-lg hover:border-[#3EB48A]">
                     <div class="w-10 h-10 rounded-full bg-[#3EB48A] flex items-center justify-center">
-                        <img src="C:\Users\Dody\Desktop\ACpedia\ACpedia\assets\pkcal.png" alt="PK Calculator" class="h-5 w-5 object-contain brightness-0 invert">
+                        <img src="\assets\pkcal.png" alt="PK Calculator" class="h-5 w-5 object-contain brightness-0 invert">
                     </div>
                     <span class="font-semibold text-[#1c1c24]">PK Calculator</span>
                 </button>
                 <button class="service-btn flex items-center gap-3 px-6 py-3 bg-white border border-gray-300 rounded-full hover:shadow-lg hover:border-[#41B8EA]">
                     <div class="w-10 h-10 rounded-full bg-[#41B8EA] flex items-center justify-center">
-                        <img src="C:\Users\Dody\Desktop\ACpedia\ACpedia\assets\hvac.png" alt="Proyek HVAC" class="h-5 w-5 object-contain brightness-0 invert">
+                        <img src="\assets\hvac.png" alt="Proyek HVAC" class="h-5 w-5 object-contain brightness-0 invert">
                     </div>
                     <span class="font-semibold text-[#1c1c24]">Proyek HVAC</span>
                 </button>
                 <button class="service-btn flex items-center gap-3 px-6 py-3 bg-white border border-gray-300 rounded-full hover:shadow-lg hover:border-[#F99C1C]">
                     <div class="w-10 h-10 rounded-full bg-[#F99C1C] flex items-center justify-center">
-                        <img src="C:\Users\Dody\Desktop\ACpedia\ACpedia\assets\pasang.png" alt="Pasang Unit" class="h-5 w-5 object-contain brightness-0 invert">
+                        <img src="\assets\pasang.png" alt="Pasang Unit" class="h-5 w-5 object-contain brightness-0 invert">
                     </div>
                     <span class="font-semibold text-[#1c1c24]">Pasang unit</span>
                 </button>
                 <button class="service-btn flex items-center gap-3 px-6 py-3 bg-white border border-gray-300 rounded-full hover:shadow-lg hover:border-[#ED2024]">
                     <div class="w-10 h-10 rounded-full bg-[#ED2024] flex items-center justify-center">
-                        <img src="C:\Users\Dody\Desktop\ACpedia\ACpedia\assets\perawatan2.png" alt="Perawatan" class="h-5 w-5 object-contain brightness-0 invert">
+                        <img src="\assets\perawatan2.png" alt="Perawatan" class="h-5 w-5 object-contain brightness-0 invert">
                     </div>
                     <span class="font-semibold text-[#1c1c24]">Perawatan</span>
                 </button>
                 <button class="service-btn flex items-center gap-3 px-6 py-3 bg-white border border-gray-300 rounded-full hover:shadow-lg hover:border-[#373E51]">
                     <div class="w-10 h-10 rounded-full bg-[#373E51] flex items-center justify-center">
-                        <img src="C:\Users\Dody\Desktop\ACpedia\ACpedia\assets\perbaikan2.png" alt="Perbaikan" class="h-5 w-5 object-contain brightness-0 invert">
+                        <img src="\assets\perbaikan2.png" alt="Perbaikan" class="h-5 w-5 object-contain brightness-0 invert">
                     </div>
                     <span class="font-semibold text-[#1c1c24]">Perbaikan</span>
                 </button>
@@ -178,167 +207,101 @@ function getActiveClass($categoryId, $currentActiveCategory) {
         </div>
     </div>
 
-   <div class="bg-white py-6 border-b">
-    <div class="container mx-auto px-4">
-        <div class="flex justify-center items-center gap-4 md:gap-6 lg:gap-8 flex-wrap">
-            
-            <?php foreach ($brands as $brand): 
-                
-                // 1. Determine the image source: dynamic logo_url or placehold.co fallback
-                $logoPath = $brand['logo_url'] 
-                    ? base_url($brand['logo_url']) 
-                    : 'https://placehold.co/100x30/FFFFFF/373E51?text=' . urlencode($brand['name']);
-
-                // 2. Rebuild the Query Data from the current filter state
-                // Start with filters from the controller (category, ac_type_id, pk_id) and remove empty ones
-                $queryData = array_filter($currentFilters); 
-                
-                // Add search filter if it exists
-                if (!empty($currentSearch)) {
-                    $queryData['search'] = $currentSearch;
-                }
-                
-                // Override the brand filter (this is the one being clicked)
-                $queryData['brand_id'] = $brand['id'];
-                
-                // 3. Build the final URL (Base URL + Query String)
-                $baseUrl = url_to('Toko::index');
-                
-                if (!empty($queryData)) {
-                    // Use http_build_query to create a clean query string
-                    $filterUrl = $baseUrl . '?' . http_build_query($queryData);
-                } else {
-                    $filterUrl = $baseUrl;
-                }
-            ?>
-                
-                <a href="<?= esc($filterUrl) ?>" title="Lihat produk <?= esc($brand['name']) ?>">
-                    <img src="<?= esc($logoPath) ?>" 
-                         alt="<?= esc($brand['name']) ?> Logo" 
-                         class="brand-logo h-6 md:h-7 lg:h-8 w-auto object-contain cursor-pointer">
-                </a>
-            <?php endforeach; ?>
-            
+    <!-- Brand Logos -->
+    <div class="bg-white py-6 border-b">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center items-center gap-4 md:gap-6 lg:gap-8 flex-wrap">
+                <img src="\assets\samsung.png" alt="SAMSUNG" class="brand-logo h-6 md:h-7 lg:h-8 w-auto object-contain cursor-pointer">
+                <img src="\assets\sharp.png" alt="SHARP" class="brand-logo h-6 md:h-7 lg:h-8 w-auto object-contain cursor-pointer">
+                <img src="\assets\changhong.png" alt="CHANGHONG" class="brand-logo h-6 md:h-7 lg:h-8 w-auto object-contain cursor-pointer">
+                <img src="\assets\daikin.png" alt="DAIKIN" class="brand-logo h-6 md:h-7 lg:h-8 w-auto object-contain cursor-pointer">
+                <img src="\assets\flife.png" alt="FLIFE" class="brand-logo h-6 md:h-7 lg:h-8 w-auto object-contain cursor-pointer">
+                <img src="\assets\gree.png" alt="GREE" class="brand-logo h-6 md:h-7 lg:h-8 w-auto object-contain cursor-pointer">
+                <img src="\assets\lg.png" alt="LG" class="brand-logo h-6 md:h-7 lg:h-8 w-auto object-contain cursor-pointer">
+                <img src="\assets\midea.png" alt="MIDEA" class="brand-logo h-6 md:h-7 lg:h-8 w-auto object-contain cursor-pointer">
+                <img src="\assets\panasonic.png" alt="PANASONIC" class="brand-logo h-6 md:h-7 lg:h-8 w-auto object-contain cursor-pointer">
+                <img src="\assets\polytron.png" alt="POLYTRON" class="brand-logo h-6 md:h-7 lg:h-8 w-auto object-contain cursor-pointer">
+            </div>
         </div>
     </div>
-</div>
 
     <!-- PK Categories -->
-  <div class="bg-white py-4 border-b">
-    <div class="container mx-auto px-4">
-        
-        <div class="md:hidden">
-            <div class="mt-3 space-y-3">
-                
-                <div class="grid grid-cols-2 gap-2">
-                    <?php foreach ($pkDisplayList as $pkName): 
-                        
-                        // 1. Get the corresponding ID from the DB list
-                        $pkId = $pkMap[$pkName] ?? null; 
-                        if (is_null($pkId)) continue; // Skip if this hardcoded name is not found in the database list
-                        
-                        // 2. Rebuild Query Data (preserving other filters)
-                        $queryData = array_filter($currentFilters); 
-                        if (!empty($currentSearch)) {
-                            $queryData['search'] = $currentSearch;
-                        }
-                        $queryData['pk_id'] = $pkId; // Apply the new filter
-                        
-                        // 3. Build the final URL
-                        $baseUrl = url_to('Toko::index');
-                        $filterUrl = $baseUrl . '?' . http_build_query($queryData);
-                        
-                        // 4. Check for active state
-                        $activeClass = (isset($currentFilters['pk_id']) && $currentFilters['pk_id'] == $pkId) 
-                                        ? 'border-[#41B8EA] ring-2 ring-[#41B8EA]/30' 
-                                        : 'border-gray-300';
-                    ?>
-                        <a href="<?= esc($filterUrl) ?>" class="pk-btn px-4 py-3 rounded-lg border <?= $activeClass ?> bg-white hover:border-[#41B8EA] hover:shadow-md transition-all duration-200">
-                            <span class="font-semibold text-sm"><?= esc($pkName) ?></span>
-                        </a>
-                    <?php endforeach; ?>
-                </div>
+    <div class="bg-white py-4 border-b">
+        <div class="container mx-auto px-4">
+            <!-- Mobile Dropdown -->
+            <div class="md:hidden">
+                <button id="pkCategoriesToggle" class="w-full flex items-center justify-between px-4 py-3 bg-white border border-gray-300 rounded-lg hover:border-[#41B8EA] transition-colors">
+                    <span class="font-semibold text-[#373E51]">Kapasitas PK</span>
+                    <i data-lucide="chevron-down" id="pkCategoriesChevron" class="h-5 w-5 text-[#41B8EA] transition-transform duration-200"></i>
+                </button>
+                <div id="pkCategoriesContent" class="dropdown-content mt-3 space-y-3">
+                    <!-- PK Categories Grid -->
+                    <div class="grid grid-cols-2 gap-2">
+                        <button class="pk-btn px-4 py-3 rounded-lg border border-gray-300 bg-white hover:border-[#41B8EA] hover:shadow-md transition-all duration-200" data-pk="1/2 PK">
+                            <span class="font-semibold text-sm">1/2 PK</span>
+                        </button>
+                        <button class="pk-btn px-4 py-3 rounded-lg border border-gray-300 bg-white hover:border-[#41B8EA] hover:shadow-md transition-all duration-200" data-pk="3/4 PK">
+                            <span class="font-semibold text-sm">3/4 PK</span>
+                        </button>
+                        <button class="pk-btn px-4 py-3 rounded-lg border border-gray-300 bg-white hover:border-[#41B8EA] hover:shadow-md transition-all duration-200" data-pk="1 PK">
+                            <span class="font-semibold text-sm">1 PK</span>
+                        </button>
+                        <button class="pk-btn px-4 py-3 rounded-lg border border-gray-300 bg-white hover:border-[#41B8EA] hover:shadow-md transition-all duration-200" data-pk="1.5 PK">
+                            <span class="font-semibold text-sm">1.5 PK</span>
+                        </button>
+                        <button class="pk-btn px-4 py-3 rounded-lg border border-gray-300 bg-white hover:border-[#41B8EA] hover:shadow-md transition-all duration-200" data-pk="2 PK">
+                            <span class="font-semibold text-sm">2 PK</span>
+                        </button>
+                        <button class="pk-btn px-4 py-3 rounded-lg border border-gray-300 bg-white hover:border-[#41B8EA] hover:shadow-md transition-all duration-200" data-pk="2.5 PK">
+                            <span class="font-semibold text-sm">2.5 PK</span>
+                        </button>
+                    </div>
 
-                <div class="grid grid-cols-2 gap-2 pt-1">
-                    <?php foreach ($acTypeDisplayList as $acTypeName): 
-                        
-                        // 1. Get the corresponding ID from the DB list
-                        $acTypeId = $acTypeMap[$acTypeName] ?? null; 
-                        if (is_null($acTypeId)) continue; // Skip if not found
-                        
-                        // 2. Rebuild Query Data
-                        $queryData = array_filter($currentFilters); 
-                        if (!empty($currentSearch)) {
-                            $queryData['search'] = $currentSearch;
-                        }
-                        $queryData['ac_type_id'] = $acTypeId; // Apply the new filter
-                        $filterUrl = url_to('Toko::index') . '?' . http_build_query($queryData);
-                        
-                        // 3. Check for active state & custom color class
-                        $colorClass = strtolower($acTypeName) === 'inverter' ? 'hover:border-[#3EB48A]' : 'hover:border-[#F99C1C]';
-                        $activeClass = (isset($currentFilters['ac_type_id']) && $currentFilters['ac_type_id'] == $acTypeId) 
-                                        ? 'border-[#41B8EA] ring-2 ring-[#41B8EA]/30' 
-                                        : 'border-gray-300';
-                    ?>
-                        <a href="<?= esc($filterUrl) ?>" class="type-btn px-4 py-3 rounded-lg border <?= $activeClass ?> bg-white <?= $colorClass ?> hover:shadow-md transition-all duration-200">
-                            <span class="font-semibold text-sm"><?= esc($acTypeName) ?></span>
-                        </a>
-                    <?php endforeach; ?>
+                    <!-- Inverter / Non Inverter Buttons -->
+                    <div class="grid grid-cols-2 gap-2 pt-1">
+                        <button id="inverterBtnMobile" class="type-btn inverter px-4 py-3 rounded-lg border border-gray-300 bg-white hover:border-[#3EB48A] hover:shadow-md transition-all duration-200">
+                            <span class="font-semibold text-sm">Inverter</span>
+                        </button>
+                        <button id="nonInverterBtnMobile" class="type-btn non-inverter px-4 py-3 rounded-lg border border-gray-300 bg-white hover:border-[#F99C1C] hover:shadow-md transition-all duration-200">
+                            <span class="font-semibold text-sm">Non Inverter</span>
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="hidden md:block">
-            <div class="flex justify-center items-center overflow-x-auto scrollbar-hide">
-                <div class="w-full max-w-[1035px] h-[50px] flex flex-nowrap justify-center items-center gap-[10.88px]">
-                    
-                    <?php foreach ($pkDisplayList as $pkName): 
-                        $pkId = $pkMap[$pkName] ?? null; 
-                        if (is_null($pkId)) continue; 
-                        
-                        $queryData = array_filter($currentFilters); 
-                        if (!empty($currentSearch)) {
-                            $queryData['search'] = $currentSearch;
-                        }
-                        $queryData['pk_id'] = $pkId;
-                        $baseUrl = url_to('Toko::index');
-                        $filterUrl = $baseUrl . '?' . http_build_query($queryData);
-                        
-                        $activeClass = (isset($currentFilters['pk_id']) && $currentFilters['pk_id'] == $pkId) 
-                                        ? 'ring-2 ring-offset-2 ring-[#41B8EA]' 
-                                        : 'border-[#ced4da]';
-                    ?>
-                        <a href="<?= esc($filterUrl) ?>" class="pk-btn relative bg-white border <?= $activeClass ?> h-[45.862px] overflow-hidden rounded-[100px] w-[134.478px] flex-shrink-0 cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105 hover:border-[#41B8EA] flex items-center justify-center">
-                            <span class="font-semibold text-[#373E51] text-[16px]"><?= esc($pkName) ?></span>
-                        </a>
-                    <?php endforeach; ?>
-                    
-                    <?php foreach ($acTypeDisplayList as $acTypeName): 
-                        $acTypeId = $acTypeMap[$acTypeName] ?? null; 
-                        if (is_null($acTypeId)) continue; 
-                        
-                        $queryData = array_filter($currentFilters); 
-                        if (!empty($currentSearch)) {
-                            $queryData['search'] = $currentSearch;
-                        }
-                        $queryData['ac_type_id'] = $acTypeId;
-                        $filterUrl = url_to('Toko::index') . '?' . http_build_query($queryData);
-                        
-                        $textColor = strtolower($acTypeName) === 'inverter' ? 'text-[#3EB48A]' : 'text-[#F99C1C]';
-                        $activeClass = (isset($currentFilters['ac_type_id']) && $currentFilters['ac_type_id'] == $acTypeId) 
-                                        ? 'ring-2 ring-offset-2 ring-[#41B8EA]' 
-                                        : 'border-[#ced4da]';
-                    ?>
-                        <a href="<?= esc($filterUrl) ?>" class="type-btn relative bg-white border <?= $activeClass ?> h-[45.862px] overflow-hidden rounded-[100px] w-[134.478px] flex-shrink-0 cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105 flex items-center justify-center">
-                            <span class="font-semibold <?= $textColor ?> text-[16px]"><?= esc(strtoupper($acTypeName)) ?></span>
-                        </a>
-                    <?php endforeach; ?>
-                    
+            <!-- Desktop Horizontal Scroll -->
+            <div class="hidden md:block">
+                <div id="pkScrollContainer" class="flex justify-center items-center overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-hide cursor-grab">
+                    <div class="w-full max-w-[1035px] h-[50px] min-w-[700px] md:min-w-0 snap-center flex flex-nowrap justify-center items-center gap-[10.88px]">
+                        <button class="pk-btn relative bg-white border border-[#ced4da] h-[45.862px] overflow-hidden rounded-[100px] w-[134.478px] flex-shrink-0 cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105 hover:border-[#41B8EA] flex items-center justify-center" data-pk="1/2 PK">
+                            <span class="font-semibold text-[#373E51] text-[16px]">1/2 PK</span>
+                        </button>
+                        <button class="pk-btn relative bg-white border border-[#ced4da] h-[45.862px] overflow-hidden rounded-[100px] w-[134.478px] flex-shrink-0 cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105 hover:border-[#41B8EA] flex items-center justify-center" data-pk="3/4 PK">
+                            <span class="font-semibold text-[#373E51] text-[16px]">3/4 PK</span>
+                        </button>
+                        <button class="pk-btn relative bg-white border border-[#ced4da] h-[45.862px] overflow-hidden rounded-[100px] w-[134.478px] flex-shrink-0 cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105 hover:border-[#41B8EA] flex items-center justify-center" data-pk="1 PK">
+                            <span class="font-semibold text-[#373E51] text-[16px]">1 PK</span>
+                        </button>
+                        <button class="pk-btn relative bg-white border border-[#ced4da] h-[45.862px] overflow-hidden rounded-[100px] w-[134.478px] flex-shrink-0 cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105 hover:border-[#41B8EA] flex items-center justify-center" data-pk="1.5 PK">
+                            <span class="font-semibold text-[#373E51] text-[16px]">1.5 PK</span>
+                        </button>
+                        <button class="pk-btn relative bg-white border border-[#ced4da] h-[45.862px] overflow-hidden rounded-[100px] w-[134.478px] flex-shrink-0 cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105 hover:border-[#41B8EA] flex items-center justify-center" data-pk="2 PK">
+                            <span class="font-semibold text-[#373E51] text-[16px]">2 PK</span>
+                        </button>
+                        <button class="pk-btn relative bg-white border border-[#ced4da] h-[45.862px] overflow-hidden rounded-[100px] w-[134.478px] flex-shrink-0 cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105 hover:border-[#41B8EA] flex items-center justify-center" data-pk="2.5 PK">
+                            <span class="font-semibold text-[#373E51] text-[16px]">2.5 PK</span>
+                        </button>
+                        <button id="inverterBtn" class="type-btn inverter relative bg-white border border-[#ced4da] h-[45.862px] overflow-hidden rounded-[100px] w-[134.478px] flex-shrink-0 cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105 hover:border-[#3EB48A] flex items-center justify-center">
+                            <span class="font-semibold text-[#41B8EA] text-[16px]">INVERTER</span>
+                        </button>
+                        <button id="nonInverterBtn" class="type-btn non-inverter relative bg-white border border-[#ced4da] h-[45.862px] overflow-hidden rounded-[100px] w-[134.478px] flex-shrink-0 cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105 hover:border-[#F99C1C] flex items-center justify-center">
+                            <span class="font-semibold text-[#41B8EA] text-[16px]">NON INVERTER</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
     <!-- Product Categories -->
     <div class="bg-white py-6 border-b">
@@ -357,7 +320,7 @@ function getActiveClass($categoryId, $currentActiveCategory) {
                         </svg>
                         <div class="flex-1 text-left">
                             <div class="font-semibold text-sm">Wall Mounted Split</div>
-                            <p class="text-xs opacity-75 mt-0.5"><?= $count_wms ?> Items Available</p>
+                            <p class="text-xs opacity-75 mt-0.5">88 Items Available</p>
                         </div>
                     </button>
 
@@ -368,7 +331,7 @@ function getActiveClass($categoryId, $currentActiveCategory) {
                         </svg>
                         <div class="flex-1 text-left">
                             <div class="font-semibold text-sm">Cassette</div>
-                            <p class="text-xs opacity-75 mt-0.5"><?= $count_cas ?> Items Available</p>
+                            <p class="text-xs opacity-75 mt-0.5">64 Items Available</p>
                         </div>
                     </button>
 
@@ -399,7 +362,7 @@ function getActiveClass($categoryId, $currentActiveCategory) {
                         </svg>
                         <div class="flex-1 text-left">
                             <div class="font-semibold text-sm">Floor Standing</div>
-                            <p class="text-xs opacity-75 mt-0.5"><?= $count_fls ?> Items Available</p>
+                            <p class="text-xs opacity-75 mt-0.5">24 Items Available</p>
                         </div>
                     </button>
 
@@ -424,7 +387,7 @@ function getActiveClass($categoryId, $currentActiveCategory) {
                         </svg>
                         <div class="flex-1 text-left">
                             <div class="font-semibold text-sm">Ceiling Suspended</div>
-                            <p class="text-xs opacity-75 mt-0.5"><?= $count_cls ?> Items Available</p>
+                            <p class="text-xs opacity-75 mt-0.5">24 Items Available</p>
                         </div>
                     </button>
 
@@ -454,7 +417,7 @@ function getActiveClass($categoryId, $currentActiveCategory) {
                         </svg>
                         <div class="flex-1 text-left">
                             <div class="font-semibold text-sm">Ceiling Duct</div>
-                            <p class="text-xs opacity-75 mt-0.5"><?= $count_cld ?> Items Available</p>
+                            <p class="text-xs opacity-75 mt-0.5">64 Items Available</p>
                         </div>
                     </button>
 
@@ -516,7 +479,7 @@ function getActiveClass($categoryId, $currentActiveCategory) {
                                 </div>
                                 <div class="text-center mt-12">
                                     <div class="font-semibold text-sm text-[#222] group-hover:text-white transition-colors">Wall Mounted Split</div>
-                                    <p class="text-xs text-[#555] group-hover:text-white/90 mt-1 transition-colors"><?= $count_wms ?> Items Available</p>
+                                    <p class="text-xs text-[#555] group-hover:text-white/90 mt-1 transition-colors">88 Items Available</p>
                                 </div>
                                 <div class="absolute right-0 top-1/2 -translate-y-1/2 h-[100px] w-px bg-[#ededed]"></div>
                             </button>
@@ -529,7 +492,7 @@ function getActiveClass($categoryId, $currentActiveCategory) {
                                 </div>
                                 <div class="text-center mt-12">
                                     <div class="font-semibold text-sm text-[#222] group-hover:text-white transition-colors">Cassette</div>
-                                    <p class="text-xs text-[#555] group-hover:text-white/90 mt-1 transition-colors"><?= $count_cas ?> Items Available</p>
+                                    <p class="text-xs text-[#555] group-hover:text-white/90 mt-1 transition-colors">64 Items Available</p>
                                 </div>
                                 <div class="absolute right-0 top-1/2 -translate-y-1/2 h-[100px] w-px bg-[#ededed]"></div>
                             </button>
@@ -553,7 +516,7 @@ function getActiveClass($categoryId, $currentActiveCategory) {
                                 </div>
                                 <div class="text-center mt-12">
                                     <div class="font-semibold text-sm text-[#222] group-hover:text-white transition-colors">Floor Standing</div>
-                                    <p class="text-xs text-[#555] group-hover:text-white/90 mt-1 transition-colors"><?= $count_fls ?> Items Available</p>
+                                    <p class="text-xs text-[#555] group-hover:text-white/90 mt-1 transition-colors">24 Items Available</p>
                                 </div>
                                 <div class="absolute right-0 top-1/2 -translate-y-1/2 h-[100px] w-px bg-[#ededed]"></div>
                             </button>
@@ -582,7 +545,7 @@ function getActiveClass($categoryId, $currentActiveCategory) {
                                 </div>
                                 <div class="text-center mt-12">
                                     <div class="font-semibold text-sm text-[#222] group-hover:text-white transition-colors">Ceiling Suspended</div>
-                                    <p class="text-xs text-[#555] group-hover:text-white/90 mt-1 transition-colors"><?= $count_cls ?> Items Available</p>
+                                    <p class="text-xs text-[#555] group-hover:text-white/90 mt-1 transition-colors">24 Items Available</p>
                                 </div>
                                 <div class="absolute right-0 top-1/2 -translate-y-1/2 h-[100px] w-px bg-[#ededed]"></div>
                             </button>
@@ -616,7 +579,7 @@ function getActiveClass($categoryId, $currentActiveCategory) {
                                 </div>
                                 <div class="text-center mt-12">
                                     <div class="font-semibold text-sm text-[#222] group-hover:text-white transition-colors">Ceiling Duct</div>
-                                    <p class="text-xs text-[#555] group-hover:text-white/90 mt-1 transition-colors"><?= $count_cld ?> Items Available</p>
+                                    <p class="text-xs text-[#555] group-hover:text-white/90 mt-1 transition-colors">64 Items Available</p>
                                 </div>
                                 <div class="absolute right-0 top-1/2 -translate-y-1/2 h-[100px] w-px bg-[#ededed]"></div>
                             </button>
@@ -767,9 +730,8 @@ function getActiveClass($categoryId, $currentActiveCategory) {
         </div>
     </div>
 
-
-
-<div class="container mx-auto px-4 py-8">
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8">
         <div class="flex flex-col lg:flex-row gap-6">
             
             <!-- Sidebar -->
@@ -1050,110 +1012,7 @@ function getActiveClass($categoryId, $currentActiveCategory) {
 
                 <!-- Products Grid -->
                 <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
-                    
-                     <?php foreach ($products as $product): ?>
-                    
-                   <div class="product-card bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden">
-                    <div class="relative">
-<?php
-$imageUrl = $product['main_image_url'] ?? '';
-
-$isAbsoluteUrl = preg_match('/^https?:\/\//i', $imageUrl);
-?>
-
-<?php if (!empty($imageUrl)): ?>
-    <img
-        src="<?= $isAbsoluteUrl ? $imageUrl : base_url($imageUrl) ?>"
-        alt="<?= esc($product['name']) ?>"
-        class="w-full h-48 object-cover"
-    >
-<?php else: ?>
-    <div class="w-full h-48 flex items-center justify-center bg-gray-100 text-gray-400">
-        [Image Placeholder]
-    </div>
-<?php endif; ?>
-                       <?php
-$basePrice = $product['base_price'] ?? 0;
-$salePrice = $product['sale_price'] ?? null;
-
-$isOnSale = $salePrice && $salePrice < $basePrice;
-$discountPercent = $isOnSale
-    ? round((($basePrice - $salePrice) / $basePrice) * 100)
-    : 0;
-?>
-
-<?php if ($isOnSale): ?>
-    <div class="absolute top-2 right-2 bg-[#F99C1C] text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-sm">
-        <?= $discountPercent ?>%
-    </div>
-<?php endif; ?>
-
-                    </div>
-                    <div class="p-3">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-xs px-2 py-1 bg-[#41B8EA] text-white rounded"><?= esc($product['category_name'] ?? 'Unknown Category') ?></span>
-                            <span class="text-xs px-2 py-1 bg-[#3EB48A] text-white rounded"><?= esc($product['pk_name'] ?? 'Unknown PK') ?></span>
-                        </div>
-                        <h3 class="font-semibold text-sm mb-2 line-clamp-2"><?= esc($product['name']) ?></h3>
-                        <div class="flex items-center gap-1 mb-2">
-                              <?php
-$rating = (float) $product['avg_rating'];
-$fullStars = floor($rating);
-$hasHalfStar = ($rating - $fullStars) >= 0.5;
-?>
-<div class="flex gap-1">
-    <?php for ($i = 1; $i <= 5; $i++): ?>
-        <?php if ($i <= $fullStars): ?>
-            <!-- Full star -->
-            <i data-lucide="star" class="h-3 w-3 fill-yellow-400 text-yellow-400"></i>
-
-        <?php elseif ($i === $fullStars + 1 && $hasHalfStar): ?>
-            <!-- Half star -->
-            <i data-lucide="star-half" class="h-3 w-3 fill-yellow-400 text-yellow-400"></i>
-
-        <?php else: ?>
-            <!-- Empty star -->
-            <i data-lucide="star" class="h-3 w-3 text-gray-300"></i>
-        <?php endif; ?>
-    <?php endfor; ?>
-</div>
-
-                            <span class="text-xs text-gray-500 ml-1"><?= $product['review_count'] ?? 0 ?></span>
-                        </div>
-                        <div class="mb-3">
-                            <?php
-$basePrice = $product['base_price'] ?? 0;
-$salePrice = $product['sale_price'] ?? null;
-$isOnSale  = $salePrice && $salePrice < $basePrice;
-?>
-
-<div>
-    <?php if ($isOnSale): ?>
-        <!-- Before discount (ONLY show when on sale) -->
-        <div class="text-xs text-gray-400 line-through">
-            Rp <?= number_format($basePrice, 0, ',', '.') ?>
-        </div>
-    <?php endif; ?>
-
-    <!-- Final price (always shown) -->
-    <div class="text-lg font-bold text-[#ED2024]">
-        Rp <?= number_format($isOnSale ? $salePrice : $basePrice, 0, ',', '.') ?>
-    </div>
-</div>
-
-                        </div>
-                        <div class="flex gap-2">
-                            <button class="flex-1 text-xs border border-[#41B8EA] text-[#41B8EA] hover:bg-[#41B8EA] hover:text-white py-2 px-3 rounded transition-colors">
-                                Komparasi
-                            </button>
-                            <button class="flex-1 text-xs bg-[#F99C1C] hover:bg-[#F99C1C]/90 text-white py-2 px-3 rounded transition-colors">
-                                Pesan
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <?php endforeach; ?>
+                    <!-- Products will be dynamically inserted here -->
                 </div>
 
                 <!-- Pagination -->
@@ -1175,377 +1034,544 @@ $isOnSale  = $salePrice && $salePrice < $basePrice;
     </div>
 
 
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/6285810000684" 
+       target="_blank" 
+       rel="noopener noreferrer"
+       class="fixed bottom-6 right-6 z-50 bg-[#25D366] hover:bg-[#20BA5A] text-white rounded-full p-4 shadow-2xl transition-all duration-300">
+        <i data-lucide="message-circle" class="h-7 w-7 relative z-10"></i>
+    </a>
 
+    <!-- JavaScript -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
 
+        // Mock Products Data
+        const products = Array.from({ length: 16 }, (_, i) => ({
+            id: i + 1,
+            brand: ['Daikin', 'Panasonic', 'Midea', 'Sharp'][i % 4],
+            model: 'AC MULTI S 1/2 PK x 1/2 PK 2 Indoor',
+            pk: ['1/2 PK', '3/4 PK', '1 PK', '1.5 PK'][i % 4],
+            type: i % 3 === 0 ? 'Inverter' : 'Non Inverter',
+            rating: 4.5 + (i % 3) * 0.2,
+            reviews: 137,
+            originalPrice: 11649000,
+            price: 10019000,
+            discount: 14 + (i % 3) * 2,
+            image: 'https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=300&h=300&fit=crop',
+            features: ['midea Pionner 10', 'WALA 09/10']
+        }));
 
+        let filteredProducts = [...products];
+        let currentPage = 1;
+        const productsPerPage = 12;
+        let selectedPK = null;
+        let selectedType = null;
+        let selectedCategory = null;
+        let selectedBrands = [];
+        let selectedOtherProducts = [];
+        let currentTab = 'terbaru';
 
+        // Mobile Menu Toggle
+        // Dropdown Toggles
+        function setupDropdown(toggleId, contentId, chevronId) {
+            const toggle = document.getElementById(toggleId);
+            const content = document.getElementById(contentId);
+            const chevron = document.getElementById(chevronId);
 
+            toggle.addEventListener('click', () => {
+                content.classList.toggle('open');
+                chevron.classList.toggle('rotate-180');
+            });
+        }
 
+        setupDropdown('servicesToggle', 'servicesContent', 'servicesChevron');
+        setupDropdown('pkCategoriesToggle', 'pkCategoriesContent', 'pkCategoriesChevron');
+        setupDropdown('productCategoriesToggle', 'productCategoriesContent', 'productCategoriesChevron');
+        setupDropdown('brandsFilterToggle', 'brandsFilterContent', 'brandsFilterChevron');
+        setupDropdown('pkFilterToggle', 'pkFilterContent', 'pkFilterChevron');
+        setupDropdown('typeFilterToggle', 'typeFilterContent', 'typeFilterChevron');
+        setupDropdown('otherProductsToggle', 'otherProductsContent', 'otherProductsChevron');
 
-
-<form id="filterForm" action="<?= url_to('Toko::index') ?>" method="GET">
-    <input type="hidden" name="search" id="input_search" value="<?= esc($currentSearch ?? '') ?>">
-    <input type="hidden" name="brand_id" id="input_brand_id" value="<?= esc($currentFilters['brand_id'] ?? '') ?>">
-    <input type="hidden" name="category_id" id="input_category_id" value="<?= esc($currentFilters['category_id'] ?? '') ?>">
-    <input type="hidden" name="ac_type_id" id="input_ac_type_id" value="<?= esc($currentFilters['ac_type_id'] ?? '') ?>">
-    <input type="hidden" name="pk_id" id="input_pk_id" value="<?= esc($currentFilters['pk_id'] ?? '') ?>">
-    
-    <button type="submit" id="submitFormButton"></button>
-</form>
-
-<div>
-    <div>
-        <h1>Toko Kami</h1>
-        <p>Temukan berbagai pilihan AC berkualitas dengan teknologi terkini untuk kenyamanan Anda</p>
-    </div>
-</div>
-
-<div>
-    <div>
-        <div>
-            <div>
-                <a href="#">
-                    <div>
-                        </div>
-                    <span>PK Calculator</span>
-                </a>
-                </div>
-        </div>
-        <div>
-            <button>PK Calculator</button>
-            <button>Proyek HVAC</button>
-            <button>Pasang unit</button>
-            <button>Perawatan</button>
-            <button>Perbaikan</button>
-        </div>
-    </div>
-</div>
-
-<div>
-    <div>
-        <img src="path/to/samsung.png" alt="SAMSUNG">
-        </div>
-</div>
-
-<div>
-    <div>
-        <div>
-            <div>
-                <span>Kapasitas PK</span>
-            </div>
-            <div>
-                <div>
-                    <?php foreach ($pkList as $pk): 
-                        // Generates the filtering URL (preserves other filters, resets page)
-                        $filterUrl = current_url(true)->setQuery('pk_id', $pk['id'])->setQuery('page', null);
-                        $isActive = (isset($currentFilters['pk_id']) && $currentFilters['pk_id'] == $pk['id']);
-                    ?>
-                        <a href="<?= esc($filterUrl) ?>">
-                            <span style="font-weight: <?= $isActive ? 'bold' : 'normal' ?>"><?= esc($pk['name']) ?></span>
-                        </a>
-                    <?php endforeach; ?>
-                </div>
-
-                <div>
-                    <?php foreach ($acTypes as $acType): 
-                        $filterUrl = current_url(true)->setQuery('ac_type_id', $acType['id'])->setQuery('page', null);
-                        $isActive = (isset($currentFilters['ac_type_id']) && $currentFilters['ac_type_id'] == $acType['id']);
-                    ?>
-                        <a href="<?= esc($filterUrl) ?>">
-                            <span style="font-weight: <?= $isActive ? 'bold' : 'normal' ?>"><?= esc($acType['name']) ?></span>
-                        </a>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-        </div>
-
-        <div>
-            <div>
-                <div>
-                    <?php foreach ($pkList as $pk): 
-                        $filterUrl = current_url(true)->setQuery('pk_id', $pk['id'])->setQuery('page', null);
-                        $isActive = (isset($currentFilters['pk_id']) && $currentFilters['pk_id'] == $pk['id']);
-                    ?>
-                        <a href="<?= esc($filterUrl) ?>">
-                            <span style="font-weight: <?= $isActive ? 'bold' : 'normal' ?>"><?= esc($pk['name']) ?></span>
-                        </a>
-                    <?php endforeach; ?>
-                    
-                    <?php foreach ($acTypes as $acType): 
-                        $filterUrl = current_url(true)->setQuery('ac_type_id', $acType['id'])->setQuery('page', null);
-                        $isActive = (isset($currentFilters['ac_type_id']) && $currentFilters['ac_type_id'] == $acType['id']);
-                    ?>
-                        <a href="<?= esc($filterUrl) ?>">
-                            <span style="font-weight: <?= $isActive ? 'bold' : 'normal' ?>"><?= esc(strtoupper($acType['name'])) ?></span>
-                        </a>
-                    <?php endforeach; ?>
-                    
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div>
-    <div>
-        <?php if (!empty($categories)): ?>
-            <div>
-                <div>
-                    <span>Kategori Produk</span>
-                </div>
-                <div>
-                    <?php foreach ($categories as $category): 
-                        $filterUrl = current_url(true)->setQuery('category_id', $category['id'])->setQuery('page', null);
-                        $isActive = (isset($currentFilters['category_id']) && $currentFilters['category_id'] == $category['id']);
-                    ?>
-                        <a href="<?= esc($filterUrl) ?>">
-                            <span style="font-weight: <?= $isActive ? 'bold' : 'normal' ?>"><?= esc($category['name']) ?></span>
-                        </a>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-            
-            <div>
-                <h4>Kategori Utama:</h4>
-                <?php foreach ($categories as $category): 
-                    $filterUrl = current_url(true)->setQuery('category_id', $category['id'])->setQuery('page', null);
-                    $isActive = (isset($currentFilters['category_id']) && $currentFilters['category_id'] == $category['id']);
-                ?>
-                    <a href="<?= esc($filterUrl) ?>">
-                        <span style="font-weight: <?= $isActive ? 'bold' : 'normal' ?>"><?= esc($category['name']) ?></span>
-                    </a>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
-    </div>
-</div>
-
-
-<div>
-    <div>
+        // Mobile Menu Toggle
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
         
-        <div>
-            <div>
+        if (mobileMenuToggle && mobileMenu) {
+            mobileMenuToggle.addEventListener('click', () => {
+                mobileMenu.classList.toggle('active');
+            });
+        }
+
+        // PK Slider
+        const m2Slider = document.getElementById('m2Slider');
+        const m2Display = document.getElementById('m2Display');
+        const sliderHandle = document.getElementById('sliderHandle');
+
+        m2Slider.addEventListener('input', function() {
+            const value = this.value;
+            m2Display.textContent = value;
+            
+            // Calculate handle position (max width - handle width)
+            const maxWidth = this.offsetWidth - 20; // 20px is handle width
+            const position = (value / 250) * maxWidth;
+            sliderHandle.style.left = position + 'px';
+        });
+
+        // PK Calculator
+        const calculateBtn = document.getElementById('calculateBtn');
+        const roomCondition = document.getElementById('roomCondition');
+        const calculationResult = document.getElementById('calculationResult');
+        const btuResult = document.getElementById('btuResult');
+        const pkResult = document.getElementById('pkResult');
+
+        calculateBtn.addEventListener('click', function() {
+            const m2 = parseInt(m2Slider.value);
+            const condition = roomCondition.value;
+
+            if (m2 === 0 || !condition) {
+                alert('Silakan pilih kondisi ruangan dan geser slider ukuran ruangan!');
+                return;
+            }
+
+            const btuPerM2 = condition === 'terkena-matahari' ? 500 : 400;
+            const btuMin = m2 * btuPerM2;
+            const btuMax = m2 * 500;
+
+            const btuToPK = (btu) => {
+                if (btu <= 5000) return '1/2';
+                if (btu <= 7000) return '3/4';
+                if (btu <= 9000) return '1';
+                if (btu <= 12000) return '1.5';
+                if (btu <= 18000) return '2';
+                return '2.5';
+            };
+
+            const pkMin = btuToPK(btuMin);
+            const pkMax = btuToPK(btuMax);
+
+            btuResult.textContent = `${btuMin.toLocaleString('id-ID')} - ${btuMax.toLocaleString('id-ID')}`;
+            pkResult.textContent = pkMin === pkMax ? `${pkMin}` : `${pkMin} s/d ${pkMax}`;
+            
+            calculationResult.classList.remove('hidden');
+        });
+
+        // Lihat Rekomendasi Button - Auto filter berdasarkan hasil PK Calculator
+        const lihatRekomendasiBtn = calculationResult?.querySelector('button');
+        if (lihatRekomendasiBtn) {
+            lihatRekomendasiBtn.addEventListener('click', function() {
+                // Ambil nilai PK dari hasil perhitungan
+                const pkText = pkResult.textContent.trim();
                 
-                <input type="text" 
-                       id="search_input"
-                       placeholder="Cari nama produk..."
-                       value="<?= esc($currentSearch ?? '') ?>"
-                       onchange="document.getElementById('input_search').value = this.value; document.getElementById('submitFormButton').click();"
-                >
+                // Parse PK value - ambil nilai maksimum untuk rekomendasi
+                let recommendedPK = '';
+                if (pkText.includes('s/d')) {
+                    // Jika range, ambil nilai maksimum
+                    const pkValues = pkText.split('s/d');
+                    recommendedPK = pkValues[1].trim() + ' PK';
+                } else {
+                    // Jika single value
+                    recommendedPK = pkText + ' PK';
+                }
                 
-                <select id="brand_select"
-                        onchange="document.getElementById('input_brand_id').value = this.value; document.getElementById('submitFormButton').click();"
-                >
-                    <option value="">Semua Brand</option>
-                    <?php foreach ($brands as $brand): ?>
-                        <option value="<?= esc($brand['id']) ?>" 
-                            <?= (isset($currentFilters['brand_id']) && $currentFilters['brand_id'] == $brand['id']) ? 'selected' : '' ?>>
-                            <?= esc($brand['name']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
+                // Set selected PK
+                selectedPK = recommendedPK;
                 
-                <select id="category_select"
-                        onchange="document.getElementById('input_category_id').value = this.value; document.getElementById('submitFormButton').click();"
-                >
-                    <option value="">Semua Kategori</option>
-                    <?php foreach ($categories as $category): ?>
-                        <option value="<?= esc($category['id']) ?>"
-                            <?= (isset($currentFilters['category_id']) && $currentFilters['category_id'] == $category['id']) ? 'selected' : '' ?>>
-                            <?= esc($category['name']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-
-                <?php if (!empty($currentSearch) || array_filter($currentFilters)): ?>
-                    <a href="<?= url_to('Toko::index') ?>">
-                        Clear Filters
-                    </a>
-                <?php endif; ?>
-
-            </div>
-        </div>
-
-        <?php if (!empty($products)): ?>
-            <div>
+                // Update UI - highlight button PK yang sesuai
+                document.querySelectorAll('.pk-btn').forEach(b => {
+                    b.classList.remove('active');
+                    if (b.dataset.pk === recommendedPK) {
+                        b.classList.add('active');
+                    }
+                });
                 
-                <?php foreach ($products as $product): ?>
-                    <div>
-                        
-                        <a href="/product/<?= esc($product['slug']) ?>">
-                            <div>
-                                <?php if (!empty($product['main_image_url'])): ?>
-                                    <img src="<?= base_url($product['main_image_url']) ?>"
-                                         alt="<?= esc($product['name']) ?>">
-                                <?php else: ?>
-                                    <div>[Image Placeholder]</div>
-                                <?php endif; ?>
+                // Update sidebar PK filter juga
+                document.querySelectorAll('.pk-filter-btn').forEach(b => {
+                    b.classList.remove('bg-[#41B8EA]', 'text-white', 'border-[#41B8EA]');
+                    b.classList.add('bg-white', 'border-gray-300');
+                    if (b.dataset.pk === recommendedPK) {
+                        b.classList.add('bg-[#41B8EA]', 'text-white', 'border-[#41B8EA]');
+                        b.classList.remove('bg-white', 'border-gray-300');
+                    }
+                });
+                
+                // Filter products
+                filterProducts();
+                
+                // Scroll ke product grid dengan smooth behavior
+                const productsGrid = document.getElementById('productsGrid');
+                if (productsGrid) {
+                    productsGrid.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'start' 
+                    });
+                }
+                
+                // Optional: Scroll sedikit ke atas untuk show filter tabs
+                setTimeout(() => {
+                    window.scrollBy({
+                        top: -100,
+                        behavior: 'smooth'
+                    });
+                }, 300);
+            });
+        }
 
-                                <?php if ($product['is_featured']): ?>
-                                    <div>Featured Tag</div>
-                                <?php endif; ?>
-                            </div>
-                        </a>
+        // PK Button Filter
+        document.querySelectorAll('.pk-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const pk = this.dataset.pk;
+                
+                if (selectedPK === pk) {
+                    selectedPK = null;
+                    this.classList.remove('active');
+                } else {
+                    document.querySelectorAll('.pk-btn').forEach(b => b.classList.remove('active'));
+                    selectedPK = pk;
+                    this.classList.add('active');
+                }
+                
+                filterProducts();
+            });
+        });
 
-                        <div>
-                            <div>
-                                <span><?= esc($product['brand_name'] ?? 'Unknown Brand') ?></span>
-                            </div>
+        // Type Filter (Inverter/Non Inverter)
+        function setupTypeBtn(btnId, type, className) {
+            const btn = document.getElementById(btnId);
+            if (btn) {
+                btn.addEventListener('click', function() {
+                    if (selectedType === type) {
+                        selectedType = null;
+                        this.classList.remove('active', className);
+                    } else {
+                        document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active', 'inverter', 'non-inverter'));
+                        selectedType = type;
+                        this.classList.add('active', className);
+                    }
+                    filterProducts();
+                });
+            }
+        }
 
-                            <h3>
-                                <a href="/product/<?= esc($product['slug']) ?>">
-                                    <?= esc($product['name']) ?>
-                                </a>
-                            </h3>
+        setupTypeBtn('inverterBtn', 'Inverter', 'inverter');
+        setupTypeBtn('nonInverterBtn', 'Non Inverter', 'non-inverter');
+        setupTypeBtn('inverterBtnMobile', 'Inverter', 'inverter');
+        setupTypeBtn('nonInverterBtnMobile', 'Non Inverter', 'non-inverter');
 
-                            <div>
-                                <span><?= esc($product['category_name'] ?? 'Unknown Category') ?></span>
-                                <?php if (!empty($product['ac_type_name'])): ?>
-                                    <span>•</span>
-                                    <span><?= esc($product['ac_type_name']) ?> (<?= esc($product['pk_name']) ?>)</span>
-                                <?php endif; ?>
-                            </div>
+        // Brand Filter (Sidebar)
+        document.querySelectorAll('.brand-filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const brand = this.dataset.brand;
+                
+                if (selectedBrands.includes(brand)) {
+                    selectedBrands = selectedBrands.filter(b => b !== brand);
+                    this.classList.remove('bg-[#41B8EA]', 'text-white', 'border-[#41B8EA]');
+                    this.classList.add('bg-white', 'border-gray-300');
+                } else {
+                    selectedBrands.push(brand);
+                    this.classList.add('bg-[#41B8EA]', 'text-white', 'border-[#41B8EA]');
+                    this.classList.remove('bg-white', 'border-gray-300');
+                }
+                
+                filterProducts();
+            });
+        });
 
-                            <div>
-                                <?php if ($product['sale_price'] && $product['sale_price'] < $product['base_price']): ?>
-                                    <div>
-                                        <span>Sale Price: Rp <?= number_format($product['sale_price'], 0, ',', '.') ?></span>
-                                        <span style="text-decoration: line-through;">Original Price: Rp <?= number_format($product['base_price'], 0, ',', '.') ?></span>
-                                    </div>
-                                <?php else: ?>
-                                    <span>Price: Rp <?= number_format($product['base_price'] ?? 0, 0, ',', '.') ?></span>
-                                <?php endif; ?>
-                            </div>
+        // PK Filter (Sidebar)
+        document.querySelectorAll('.pk-filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const pk = this.dataset.pk;
+                
+                if (selectedPK === pk) {
+                    selectedPK = null;
+                    this.classList.remove('bg-[#41B8EA]', 'text-white', 'border-[#41B8EA]');
+                    this.classList.add('bg-white', 'border-gray-300');
+                } else {
+                    document.querySelectorAll('.pk-filter-btn').forEach(b => {
+                        b.classList.remove('bg-[#41B8EA]', 'text-white', 'border-[#41B8EA]');
+                        b.classList.add('bg-white', 'border-gray-300');
+                    });
+                    selectedPK = pk;
+                    this.classList.add('bg-[#41B8EA]', 'text-white', 'border-[#41B8EA]');
+                    this.classList.remove('bg-white', 'border-gray-300');
+                }
+                
+                filterProducts();
+            });
+        });
 
-                            <?php if (!empty($product['avg_rating'])): ?>
-                                <div>
-                                    <div style="color: gold;">
-                                        <?php for ($i = 1; $i <= 5; $i++): ?>
-                                            <span><?= $i <= $product['avg_rating'] ? '★' : '☆' ?></span>
-                                        <?php endfor; ?>
-                                    </div>
-                                    <span>(<?= $product['review_count'] ?? 0 ?> reviews)</span>
-                                </div>
-                            <?php endif; ?>
+        // Type Filter (Sidebar)
+        function setupTypFilterBtn(btnId, type) {
+            const btn = document.getElementById(btnId);
+            if (btn) {
+                btn.addEventListener('click', function() {
+                    if (selectedType === type) {
+                        selectedType = null;
+                        this.classList.remove('bg-[#41B8EA]', 'text-white', 'border-[#41B8EA]');
+                        this.classList.add('bg-white', 'border-gray-300');
+                    } else {
+                        document.querySelectorAll('.type-filter-btn').forEach(b => {
+                            b.classList.remove('bg-[#41B8EA]', 'text-white', 'border-[#41B8EA]');
+                            b.classList.add('bg-white', 'border-gray-300');
+                        });
+                        selectedType = type;
+                        this.classList.add('bg-[#41B8EA]', 'text-white', 'border-[#41B8EA]');
+                        this.classList.remove('bg-white', 'border-gray-300');
+                    }
+                    filterProducts();
+                });
+            }
+        }
 
-                            <a href="/product/<?= esc($product['slug']) ?>">
-                                Lihat Detail
-                            </a>
+        setupTypFilterBtn('inverterFilterBtn', 'Inverter');
+        setupTypFilterBtn('nonInverterFilterBtn', 'Non Inverter');
+
+        // Other Products Filter
+        document.querySelectorAll('.other-product-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const product = this.dataset.product;
+                
+                if (selectedOtherProducts.includes(product)) {
+                    selectedOtherProducts = selectedOtherProducts.filter(p => p !== product);
+                    this.classList.remove('bg-[#41B8EA]', 'text-white', 'border-[#41B8EA]');
+                    this.classList.add('bg-white', 'border-gray-300');
+                } else {
+                    selectedOtherProducts.push(product);
+                    this.classList.add('bg-[#41B8EA]', 'text-white', 'border-[#41B8EA]');
+                    this.classList.remove('bg-white', 'border-gray-300');
+                }
+                
+                filterProducts();
+            });
+        });
+
+        // Category Filter
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const category = this.dataset.category;
+                
+                if (selectedCategory === category) {
+                    selectedCategory = null;
+                    this.classList.remove('active');
+                } else {
+                    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                    selectedCategory = category;
+                    this.classList.add('active');
+                }
+                
+                filterProducts();
+            });
+        });
+
+        // Tab Filter
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentTab = this.dataset.tab;
+                filterProducts();
+            });
+        });
+
+        // Search Functionality
+        const searchInput = document.getElementById('searchQuery');
+        let searchQuery = '';
+        
+        searchInput.addEventListener('input', function() {
+            searchQuery = this.value.toLowerCase();
+            filterProducts();
+        });
+
+        // Price Sort Dropdown
+        const priceSortSelect = document.getElementById('priceSort');
+        
+        priceSortSelect.addEventListener('change', function() {
+            const sortValue = this.value;
+            if (sortValue === 'low') {
+                currentTab = 'harga-rendah';
+            } else if (sortValue === 'high') {
+                currentTab = 'harga-tinggi';
+            }
+            filterProducts();
+        });
+
+        // Filter Products
+        function filterProducts() {
+            filteredProducts = products.filter(product => {
+                const brandMatch = selectedBrands.length === 0 || selectedBrands.includes(product.brand);
+                const pkMatch = !selectedPK || product.pk === selectedPK;
+                const typeMatch = !selectedType || product.type === selectedType;
+                const searchMatch = searchQuery === '' || 
+                    product.brand.toLowerCase().includes(searchQuery) ||
+                    product.model.toLowerCase().includes(searchQuery) ||
+                    product.pk.toLowerCase().includes(searchQuery) ||
+                    product.type.toLowerCase().includes(searchQuery);
+                return brandMatch && pkMatch && typeMatch && searchMatch;
+            });
+
+            // Sort based on tab
+            switch(currentTab) {
+                case 'diskon':
+                    filteredProducts.sort((a, b) => b.discount - a.discount);
+                    break;
+                case 'terlaris':
+                    filteredProducts.sort((a, b) => b.reviews - a.reviews);
+                    break;
+                case 'harga-rendah':
+                    filteredProducts.sort((a, b) => a.price - b.price);
+                    break;
+                case 'harga-tinggi':
+                    filteredProducts.sort((a, b) => b.price - a.price);
+                    break;
+                default: // terbaru
+                    filteredProducts.sort((a, b) => b.id - a.id);
+            }
+
+            currentPage = 1;
+            renderProducts();
+        }
+
+        // Render Products
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            const start = (currentPage - 1) * productsPerPage;
+            const end = start + productsPerPage;
+            const pageProducts = filteredProducts.slice(start, end);
+
+            grid.innerHTML = pageProducts.map(product => `
+                <div class="product-card bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden">
+                    <div class="relative">
+                        <img src="${product.image}" alt="${product.model}" class="w-full h-48 object-cover">
+                        <div class="absolute top-2 right-2 bg-[#F99C1C] text-white rounded-full w-12 h-12 flex items-center justify-center font-bold">
+                            ${product.discount}%
                         </div>
                     </div>
-                <?php endforeach; ?>
-            </div>
-            
-            <?php if ($totalProducts > $perPage): ?>
-                <div>
-                    <?= $pagerLinks ?>
+                    <div class="p-3">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs px-2 py-1 bg-[#41B8EA] text-white rounded">${product.type === 'Inverter' ? 'Inverter' : 'Non Inv'}</span>
+                            <span class="text-xs px-2 py-1 bg-[#3EB48A] text-white rounded">${product.pk}</span>
+                        </div>
+                        <h3 class="font-semibold text-sm mb-2 line-clamp-2">${product.brand} ${product.model}</h3>
+                        <div class="flex items-center gap-1 mb-2">
+                            ${Array.from({ length: 5 }).map((_, i) => 
+                                `<i data-lucide="star" class="h-3 w-3 ${i < Math.floor(product.rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}"></i>`
+                            ).join('')}
+                            <span class="text-xs text-gray-500 ml-1">${product.reviews}</span>
+                        </div>
+                        <div class="mb-3">
+                            <div class="text-xs text-gray-400 line-through">Rp ${product.originalPrice.toLocaleString('id-ID')}</div>
+                            <div class="text-lg font-bold text-[#ED2024]">Rp ${product.price.toLocaleString('id-ID')}</div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="flex-1 text-xs border border-[#41B8EA] text-[#41B8EA] hover:bg-[#41B8EA] hover:text-white py-2 px-3 rounded transition-colors">
+                                Komparasi
+                            </button>
+                            <button class="flex-1 text-xs bg-[#F99C1C] hover:bg-[#F99C1C]/90 text-white py-2 px-3 rounded transition-colors">
+                                Pesan
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            <?php endif; ?>
-            
-        <?php else: ?>
-            <div>
-                <div>[Icon Placeholder]</div>
-                <h3>Produk Tidak Ditemukan</h3>
-                <p>Belum ada produk yang tersedia saat ini, atau coba ubah filter Anda.</p>
-                <a href="<?= url_to('Toko::index') ?>">
-                    Reset Filters
-                </a>
-            </div>
-        <?php endif; ?>
-    </div>
-</div>
+            `).join('');
 
-<div>
-    <div>
-        <h2>Butuh Bantuan Memilih AC?</h2>
-        <p>Konsultasikan kebutuhan AC Anda dengan tim ahli kami. Kami siap membantu Anda menemukan solusi terbaik.</p>
-        <div>
-            <a href="https://wa.me/6285810000684">
-                [Icon Placeholder] Hubungi via WhatsApp
-            </a>
-            <a href="/contact">
-                [Icon Placeholder] Kirim Email
-            </a>
-        </div>
-    </div>
-</div>
+            lucide.createIcons();
+        }
 
+        // Pagination
+        document.querySelectorAll('.page-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const page = this.dataset.page;
+                const maxPages = Math.ceil(filteredProducts.length / productsPerPage);
+                
+                if (page === 'prev' && currentPage > 1) {
+                    currentPage--;
+                } else if (page === 'next' && currentPage < maxPages) {
+                    currentPage++;
+                } else if (!isNaN(page)) {
+                    currentPage = parseInt(page);
+                }
 
-<!-- UNDER CONSTRUCTION GATE -->
-<div id="uc-overlay" style="
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.75);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 99999;
-">
-    <div style="
-        background: #ffffff;
-        max-width: 420px;
-        width: 90%;
-        padding: 24px;
-        border-radius: 10px;
-        text-align: center;
-        font-family: system-ui, sans-serif;
-    ">
-        <h2 style="margin-top:0;">This site is under construction</h2>
-        <p style="color:#555; font-size:14px;">
-            Errors may happen. Some functions are not ready yet.
-        </p>
+                document.querySelectorAll('.page-btn').forEach(b => b.classList.remove('active'));
+                const currentBtn = document.querySelector(`.page-btn[data-page="${currentPage}"]`);
+                if (currentBtn) currentBtn.classList.add('active');
 
-        <div style="display:flex; gap:12px; margin-top:20px;">
-            <button onclick="ucAccept()" style="
-                flex:1;
-                padding:10px;
-                border:none;
-                border-radius:6px;
-                background:#16a34a;
-                color:#fff;
-                font-weight:600;
-                cursor:pointer;
-            ">
-                I understand
-            </button>
+                renderProducts();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
 
-            <button onclick="ucDecline()" style="
-                flex:1;
-                padding:10px;
-                border:none;
-                border-radius:6px;
-                background:#ef4444;
-                color:#fff;
-                font-weight:600;
-                cursor:pointer;
-            ">
-                I do not
-            </button>
-        </div>
-    </div>
-</div>
+        // Initial render
+        renderProducts();
 
-<script>
-(function () {
-    // If user already accepted, don't show again
-    if (localStorage.getItem('ucAccepted') === 'yes') {
-        document.getElementById('uc-overlay').style.display = 'none';
-    }
-})();
+        // PK Scroll Container - Drag to Scroll
+        const pkScrollContainer = document.getElementById('pkScrollContainer');
+        let isPKDragging = false;
+        let pkStartX;
+        let pkScrollLeft;
 
-function ucAccept() {
-    localStorage.setItem('ucAccepted', 'yes');
-    document.getElementById('uc-overlay').style.display = 'none';
-}
+        pkScrollContainer.addEventListener('mousedown', (e) => {
+            isPKDragging = true;
+            pkScrollContainer.style.cursor = 'grabbing';
+            pkStartX = e.pageX - pkScrollContainer.offsetLeft;
+            pkScrollLeft = pkScrollContainer.scrollLeft;
+        });
 
-function ucDecline() {
-    if (history.length > 1) {
-        history.back();
-    } else {
-        window.location.href = 'about:blank';
-    }
-}
-</script>
+        pkScrollContainer.addEventListener('mouseleave', () => {
+            isPKDragging = false;
+            pkScrollContainer.style.cursor = 'grab';
+        });
+
+        pkScrollContainer.addEventListener('mouseup', () => {
+            isPKDragging = false;
+            pkScrollContainer.style.cursor = 'grab';
+        });
+
+        pkScrollContainer.addEventListener('mousemove', (e) => {
+            if (!isPKDragging) return;
+            e.preventDefault();
+            const x = e.pageX - pkScrollContainer.offsetLeft;
+            const walk = (x - pkStartX) * 2;
+            pkScrollContainer.scrollLeft = pkScrollLeft - walk;
+        });
+
+        // Products Scroll Container - Drag to Scroll
+        const productsScrollContainer = document.getElementById('productsScrollContainer');
+        let isProductsDragging = false;
+        let productsStartX;
+        let productsScrollLeft;
+
+        productsScrollContainer.addEventListener('mousedown', (e) => {
+            isProductsDragging = true;
+            productsScrollContainer.style.cursor = 'grabbing';
+            productsStartX = e.pageX - productsScrollContainer.offsetLeft;
+            productsScrollLeft = productsScrollContainer.scrollLeft;
+        });
+
+        productsScrollContainer.addEventListener('mouseleave', () => {
+            isProductsDragging = false;
+            productsScrollContainer.style.cursor = 'grab';
+        });
+
+        productsScrollContainer.addEventListener('mouseup', () => {
+            isProductsDragging = false;
+            productsScrollContainer.style.cursor = 'grab';
+        });
+
+        productsScrollContainer.addEventListener('mousemove', (e) => {
+            if (!isProductsDragging) return;
+            e.preventDefault();
+            const x = e.pageX - productsScrollContainer.offsetLeft;
+            const walk = (x - productsStartX) * 2;
+            productsScrollContainer.scrollLeft = productsScrollLeft - walk;
+        });
+
+        // Re-initialize Lucide icons periodically
+        setInterval(() => {
+            lucide.createIcons();
+        }, 1000);
+    </script>
+</body>
+
 
 <?= $this->endSection() ?>

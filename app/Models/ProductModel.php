@@ -10,10 +10,11 @@ class ProductModel extends Model
 
     protected $useAutoIncrement = true;
 
-    protected $returnType     = 'array'; // Can use 'object' or a custom entity class
-    protected $useSoftDeletes = false; // Based on schema, no dedicated deleted_at column
+    protected $returnType     = 'array'; 
+    protected $useSoftDeletes = false; 
 
     // The fields that are allowed to be set by a controller
+    // Note: 'sort_order' is absent here, confirming the column is likely missing from the 'products' table.
     protected $allowedFields = [
         'category_id',
         'ac_type_id',
@@ -81,12 +82,76 @@ class ProductModel extends Model
     protected $validationMessages = [];
     protected $skipValidation     = false;
 
-    // --- Helper Methods for Relationships and Data Retrieval ---
+    // --- NEW: Methods for Filtering and Pagination ---
 
     /**
+     * Fetches products with details, supporting filtering, searching, and pagination.
+     */
+    public function getFilteredProducts(array $filters = [], ?string $search = null, int $limit = 12, int $offset = 0)
+    {
+        $builder = $this->select('products.*, 
+                                  b.name AS brand_name, 
+                                  c.name AS category_name, 
+                                  ac.name AS ac_type_name,
+                                  pk.name AS pk_name')
+                        ->join('brands b', 'b.id = products.brand_id', 'left')
+                        ->join('categories c', 'c.id = products.category_id', 'left')
+                        ->join('ac_types ac', 'ac.id = products.ac_type_id', 'left')
+                        ->join('pk_list pk', 'pk.id = products.pk_id', 'left')
+                        ->where('products.is_active', 1);
+
+        // Apply Filters
+        foreach ($filters as $key => $value) {
+            if (!empty($value)) {
+                if (in_array($key, ['brand_id', 'ac_type_id', 'pk_id', 'category_id'])) {
+                     $builder->where("products." . $key, $value);
+                }
+            }
+        }
+
+        // Apply Search
+        if ($search) {
+            $builder->like('products.name', $search);
+        }
+        
+        // Default Sorting: CRITICAL FIX APPLIED HERE
+        // Removed 'products.sort_order' to resolve DatabaseException #1054
+        $builder->orderBy('products.created_at', 'DESC'); 
+
+        // Apply Pagination
+        return $builder->findAll($limit, $offset);
+    }
+
+    /**
+     * Gets the total count of products based on applied filters/search for pagination links.
+     */
+    public function getFilteredProductCount(array $filters = [], ?string $search = null)
+    {
+        // Start with the base query builder
+        $builder = $this->builder()
+                        ->where('products.is_active', 1); 
+
+        // Apply Filters
+        foreach ($filters as $key => $value) {
+            if (!empty($value)) {
+                if (in_array($key, ['brand_id', 'ac_type_id', 'pk_id', 'category_id'])) {
+                     $builder->where("products." . $key, $value);
+                }
+            }
+        }
+
+        // Apply Search
+        if ($search) {
+            $builder->like('products.name', $search);
+        }
+        
+        return $builder->countAllResults();
+    }
+    
+    // --- Existing Helper Methods ---
+    
+    /**
      * Fetches products and eagerly loads related Brand, Category, and AC Type data.
-     * * @param int|null $id Product ID to find, or null to get all
-     * @return array
      */
     public function getProductDetails(?int $id = null)
     {
@@ -107,20 +172,42 @@ class ProductModel extends Model
         return $builder->findAll();
     }
     
-    /**
-     * Overrides the findAll method to include product details by default.
-     * Only call this if you want the joins every time.
-     */
-    // public function findAll(int $limit = 0, int $offset = 0)
-    // {
-    //     return $this->getProductDetails();
-    // }
+    public function countProductsByCategory(int $categoryId): int
+{
+    // Ensure only active products are counted
+    return $this->where('category_id', $categoryId)
+                ->where('is_active', 1)
+                ->countAllResults();
+}
+
+public function countProductsByAcTypes(array $acTypeIds): int
+{
+    if (empty($acTypeIds)) {
+        return 0;
+    }
+    return $this->whereIn('ac_type_id', $acTypeIds)
+                ->where('is_active', 1)
+                ->countAllResults();
+}
+
+/**
+ * Menghitung jumlah produk aktif yang ID AC Type-nya TIDAK termasuk dalam daftar ID yang dikecualikan.
+ * (Khusus untuk kelompok 'Produk Lainnya')
+ */
+public function countProductsByOtherAcTypes(array $excludedAcTypeIds): int
+{
+    // Menggunakan whereNotIn untuk mengecualikan semua ID yang sudah dihitung sebelumnya
+    return $this->whereNotIn('ac_type_id', $excludedAcTypeIds)
+                ->where('is_active', 1)
+                ->countAllResults();
+}
 
     /**
      * Converts JSON fields to array/object upon retrieval.
      */
     protected function afterFind(array $data)
     {
+        // ... (JSON decoding logic is unchanged)
         if (isset($data['data']['additional_image_urls'])) {
             $data['data']['additional_image_urls'] = json_decode($data['data']['additional_image_urls'], true);
         }
@@ -130,9 +217,7 @@ class ProductModel extends Model
         return $data;
     }
 
-    /**
-     * Converts array/object fields to JSON string before saving.
-     */
+    // --- Existing Before Insert/Update Methods ---
     protected function beforeInsert(array $data)
     {
         $data = $this->handleJsonFields($data);
@@ -150,6 +235,7 @@ class ProductModel extends Model
      */
     private function handleJsonFields(array $data)
     {
+        // ... (JSON encoding and slug generation logic is unchanged)
         if (isset($data['data']['additional_image_urls']) && is_array($data['data']['additional_image_urls'])) {
             $data['data']['additional_image_urls'] = json_encode($data['data']['additional_image_urls']);
         }
@@ -157,7 +243,6 @@ class ProductModel extends Model
             $data['data']['specifications'] = json_encode($data['data']['specifications']);
         }
         
-        // Ensure slug is set and unique before insert/update if name is provided
         if (isset($data['data']['name']) && !isset($data['data']['slug'])) {
             $data['data']['slug'] = url_title($data['data']['name'], '-', true);
         }

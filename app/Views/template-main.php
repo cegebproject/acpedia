@@ -1,3 +1,9 @@
+<?php
+$controller = class_basename(service('router')->controllerName());
+
+// Controllers that should NOT show ecommerce header
+$nonEcommerceControllers = ['Home', 'About'];
+?>
 
 <!DOCTYPE html>
 <html lang="id">
@@ -246,6 +252,77 @@
     </div>
 
     <!-- Header / Navbar -->
+    
+    
+    <?php if (class_basename(service('router')->controllerName()) !== 'Home'): ?>
+    <header class="bg-white border-b sticky top-0 z-50 transition-all duration-300 shadow-sm border-border">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-14 md:h-16 transition-all duration-300">
+                <a href="#top">
+                    <div class="flex items-center gap-3 cursor-pointer">
+                        <img src="acp.png" alt="ACpedia Logo" class="h-6 md:h-7 w-auto">
+                    </div>
+                </a>
+
+                <nav class="hidden lg:flex items-center gap-8">
+                    <a href="/" class="transition-colors relative group flex items-center gap-2 text-[#373E51] hover:text-[#41B8EA]">
+                        <i data-lucide="home" class="h-4 w-4"></i> Beranda
+                    </a>
+                    <a href="#about" class="transition-colors relative group flex items-center gap-2 text-[#373E51] hover:text-[#41B8EA]">
+                        <i data-lucide="wrench" class="h-4 w-4"></i> Layanan Kami
+                    </a>
+                    <a href="/toko-kami" class="transition-colors relative group flex items-center gap-2 text-[#373E51] hover:text-[#41B8EA]">
+                        <i data-lucide="store" class="h-4 w-4"></i> Toko Kami
+                    </a>
+                    <a href="#contact" class="transition-colors relative group flex items-center gap-2 text-[#373E51] hover:text-[#41B8EA]">
+                        <i data-lucide="mail" class="h-4 w-4"></i> Kontak
+                    </a>
+                </nav>
+
+                <div class="flex items-center gap-4">
+                    <div class="hidden lg:block relative w-[115px] h-[16px] cursor-pointer hover:opacity-80 transition-opacity">
+                        <div class="absolute -left-[56px] top-1/2 -translate-y-1/2 flex items-center gap-3">
+                            <i data-lucide="bell" class="w-4 h-4 text-[#373E51] cursor-pointer hover:text-[#41B8EA] transition-colors"></i>
+                            <i data-lucide="shopping-cart" class="w-4 h-4 text-[#373E51] cursor-pointer hover:text-[#41B8EA] transition-colors"></i>
+                        </div>
+                        <div class="absolute flex flex-col font-['Roboto',sans-serif] h-[15px] justify-center leading-[0] not-italic right-0 text-[#373e51] text-[13px] text-right top-[7.5px] translate-y-[-50%] w-[91.01px]">
+                            <p class="leading-[13px]">Login/Register</p>
+                        </div>
+                        <div class="absolute left-0 size-[14px] top-px">
+                            <i data-lucide="user" class="block size-full text-[#373E51]"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Mobile Notification & Cart Icons -->
+                    <div class="flex items-center gap-4 lg:hidden">
+                        <i data-lucide="bell" class="w-5 h-5 text-[#373E51] cursor-pointer hover:text-[#41B8EA] transition-colors"></i>
+                        <i data-lucide="shopping-cart" class="w-5 h-5 text-[#373E51] cursor-pointer hover:text-[#41B8EA] transition-colors"></i>
+                    </div>
+
+                    <button id="mobileMenuToggle" class="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                        <i data-lucide="menu" class="h-6 w-6"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="mobile-menu md:hidden border-t border-gray-100">
+                <div class="flex flex-col py-2">
+                    <a href="/" class="px-4 py-3 text-[#373E51] hover:bg-gray-50 hover:text-[#41B8EA] font-medium transition-colors">Beranda</a>
+                    <a href="#about" class="px-4 py-3 text-[#373E51] hover:bg-gray-50 hover:text-[#41B8EA] font-medium transition-colors">Layanan Kami</a>
+                    <a href="/toko-kami" class="px-4 py-3 text-[#373E51] hover:bg-gray-50 hover:text-[#41B8EA] font-medium transition-colors">Toko Kami</a>
+                    <a href="#contact" class="px-4 py-3 text-[#373E51] hover:bg-gray-50 hover:text-[#41B8EA] font-medium transition-colors">Kontak</a>
+                    <div class="px-4 py-3 border-t border-gray-100 mt-2">
+                        <div class="flex items-center gap-3 text-sm text-gray-600 mb-3">
+                            <a href="#" class="flex items-center gap-2 hover:text-[#41B8EA]">
+                                <i data-lucide="user" class="h-4 w-4"></i> Login / Register
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+<?php else: ?>
     <header id="header" class="bg-white border-b sticky top-0 z-50 shadow-sm transition-all duration-300">
         <div class="container mx-auto px-4">
             <div class="flex items-center justify-between h-14 md:h-16">
@@ -295,7 +372,7 @@
             <!-- Mobile Menu -->
             <div id="mobileMenu" class="mobile-menu lg:hidden border-t border-gray-200">
                 <div class="py-3 space-y-2">
-                    <a href="#home" class="flex items-center gap-2 py-2 px-2 rounded hover:bg-blue-50 text-gray-800 hover:text-[#41B8EA] transition-colors mobile-link">
+                    <a href="/" class="flex items-center gap-2 py-2 px-2 rounded hover:bg-blue-50 text-gray-800 hover:text-[#41B8EA] transition-colors mobile-link">
                         <i data-lucide="home" class="h-4 w-4"></i>
                         Beranda
                     </a>
@@ -318,6 +395,8 @@
             </div>
         </div>
     </header>
+<?php endif; ?>
+
 
   <?= $this->renderSection('content') ?>
 
