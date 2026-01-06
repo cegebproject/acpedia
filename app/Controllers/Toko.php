@@ -13,142 +13,163 @@ class Toko extends Controller
   /**
   * Loads the Toko Kami page view with product data, filters, and pagination.
   */
-  public function index()
-  {
-    // 1. --- Configuration & Instantiation ---
-    $limit = 12; // Products per page
-   
-    // FIX: Ensure currentPage is at least 1, preventing a negative offset.
+public function index()
+{
+    // --- 1. Configuration & Instantiation ---
+    $limit = 16; // Products per page
+
+    // Use the model() helper for instantiation
+    $productModel  = model('ProductModel');
+    $brandModel    = model('BrandModel');
+    $acTypeModel   = model('AcTypeModel');
+    $pkListModel   = model('PkListModel');
+    $categoryModel = model('CategoryModel');
+
+
+    // --- 2. Retrieve & Sanitize Filters and Search/Sort ---
+    
+    // Paging: Calculate Current Page and Offset manually
     $currentPage = (int)($this->request->getGet('page') ?? 1);
-    if ($currentPage < 1) {
-      $currentPage = 1;
-    }
-   
+    $currentPage = max(1, $currentPage); // Ensure page is at least 1
     $offset = ($currentPage - 1) * $limit;
 
-    // Instantiate models
-    $productModel = new ProductModel();
-    $brandModel = new BrandModel();
-    $acTypeModel = new AcTypeModel();
-    $pkListModel = new PkListModel();
-    $categoryModel = new CategoryModel();
-   
-   
-    // 2. --- Retrieve Filters, Search, and Sort from GET request ---
-   
-    // Ensure ID parameters are cast to (int) for correct database matching
-    $brand_id = $this->request->getGet('brand_id');
-    $brand_id = $brand_id ? (int)$brand_id : null;
-   
-    $ac_type_id = $this->request->getGet('ac_type_id');
-    $ac_type_id = $ac_type_id ? (int)$ac_type_id : null;
-   
-    $pk_id = $this->request->getGet('pk_id');
-    $pk_id = $pk_id ? (int)$pk_id : null;
-   
-    $category_id = $this->request->getGet('category_id');
-    $category_id = $category_id ? (int)$category_id : null;
-   
     $search = $this->request->getGet('search');
     $sort = $this->request->getGet('sort');
 
-    // Define the list of active filters to be applied to the query
+    // Consolidate filter retrieval and sanitation.
     $filters = [
-      'brand_id' => $brand_id,
-      'ac_type_id' => $ac_type_id,
-      'pk_id' => $pk_id,
-      'category_id' => $category_id,
+        'brand_id'    => (int)($this->request->getGet('brand_id') ?? 0) ?: null,
+        'ac_type_id'  => (int)($this->request->getGet('ac_type_id') ?? 0) ?: null,
+        'pk_id'       => (int)($this->request->getGet('pk_id') ?? 0) ?: null,
+        'category_id' => (int)($this->request->getGet('category_id') ?? 0) ?: null,
     ];
-   
-    // 3. --- Fetch Data ---
-   
-    // Fetch products for the current page
-    $products = $productModel->getFilteredProducts($filters, $search, $limit, $offset);
-   
-    // Fetch the total count of products matching the criteria
-    $totalProducts = $productModel->getFilteredProductCount($filters, $search);
+    $activeFilters = array_filter($filters);
 
-    // Fetch list data for sidebar filters (Dropdown/Quick Links)
-    $brands = $brandModel->where('is_active', 1)->orderBy('sort_order', 'ASC')->findAll();
-    $acTypes = $acTypeModel->where('is_active', 1)->orderBy('sort_order', 'ASC')->findAll();
-    $pkList = $pkListModel->orderBy('sort_order', 'ASC')->findAll();
+
+    // --- 3. Fetch Product Data and Total Count ---
+
+    $products      = $productModel->getFilteredProducts($activeFilters, $search, $limit, $offset, $sort);
+    $totalProducts = $productModel->getFilteredProductCount($activeFilters, $search);
+
+    if ($totalProducts === 0) {
+        $currentPage = 1;
+    }
+
+
+    // --- 4. Fetch Filter Lists (Sidebar Data) ---
+
+    $brands     = $brandModel->where('is_active', 1)->orderBy('sort_order', 'ASC')->findAll();
+    $acTypes    = $acTypeModel->where('is_active', 1)->orderBy('sort_order', 'ASC')->findAll();
+    $pkList     = $pkListModel->orderBy('sort_order', 'ASC')->findAll();
     $categories = $categoryModel->where('is_active', 1)->orderBy('sort_order', 'ASC')->findAll();
-   
-        // --- 4. Calculate Static AC Type Counts using Direct Query Builder ---
-        $trackedIds = []; // Array untuk melacak semua ID AC Type yang sudah dihitung
 
-        // 1. Wall Mounted Split (ID 2) -> $count_wms
-        $wms_ids = [2];
-        $count_wms = $productModel->where('is_active', 1)->where('ac_type_id', 2)->countAllResults();
-        $trackedIds = array_merge($trackedIds, $wms_ids);
 
-        // 2. Cassette (IDs 6, 7) -> $count_cas
-        $cas_ids = [6, 7];
-        $count_cas = $productModel->where('is_active', 1)->whereIn('ac_type_id', $cas_ids)->countAllResults();
-        $trackedIds = array_merge($trackedIds, $cas_ids);
-
-        // 3. Floor Standing (IDs 3, 4) -> $count_fls
-        $fls_ids = [3, 4];
-        $count_fls = $productModel->where('is_active', 1)->whereIn('ac_type_id', $fls_ids)->countAllResults();
-        $trackedIds = array_merge($trackedIds, $fls_ids);
-
-        // 4. Central AC (ID 5) -> $count_cls
-        $cls_ids = [5];
-        $count_cls = $productModel->where('is_active', 1)->where('ac_type_id', 5)->countAllResults();
-        $trackedIds = array_merge($trackedIds, $cls_ids);
-
-        // 5. VRV/VRF (IDs 8, 9) -> $count_vrf
-        $vrf_ids = [8, 9];
-        $count_vrf = $productModel->where('is_active', 1)->whereIn('ac_type_id', $vrf_ids)->countAllResults();
-        $trackedIds = array_merge($trackedIds, $vrf_ids);
-
-        // 6. AC Type ID 10 -> $count_cld
-        $cld_ids = [10];
-        $count_cld = $productModel->where('is_active', 1)->where('ac_type_id', 10)->countAllResults();
-        $trackedIds = array_merge($trackedIds, $cld_ids);
-
-        // 7. Produk Lainnya (Any ID Other than above mentioned) -> $count_etc
-        $trackedIds = array_unique($trackedIds); // Pastikan tidak ada duplikasi
-        $count_etc = $productModel->where('is_active', 1)->whereNotIn('ac_type_id', $trackedIds)->countAllResults();
-
-    // 5. --- Pagination Setup ---
-    $pager = service('pager');
-    // The makeLinks function handles generating the URLs for pagination
-    $paginationLinks = $pager->makeLinks($currentPage, $limit, $totalProducts, 'default_full');
-   
-    // 6. --- Pass Data to View ---
-    $data = [
-      'products' => $products,
-     
-      // Filter Data for view loops
-      'brands' => $brands,
-      'acTypes' => $acTypes,
-      'pkList' => $pkList,
-      'categories' => $categories,
-     
-      // STATIC AC TYPE COUNTS
-      'count_wms' => $count_wms, // Wall Mounted Split (ID 2)
-           'count_cas' => $count_cas, // Cassette (IDs 6, 7)
-           'count_fls' => $count_fls, // Floor Standing (IDs 3, 4)
-           'count_cls' => $count_cls, // Central AC (ID 5)
-           'count_vrf' => $count_vrf, // VRV/VRF (IDs 8, 9)
-           'count_cld' => $count_cld, // AC Type ID 10
-           'count_etc' => $count_etc, // Any ID Other than above mentioned
-     
-      // Current State (for sticky filter forms)
-      'currentFilters' => $filters,
-      'currentSearch' => $search,
-      'currentSort' => $sort,
-
-      // Pagination Data
-      'pagerLinks' => $paginationLinks,
-      'totalProducts' => $totalProducts,
-      'currentPage' => $currentPage,
-      'perPage' => $limit,
+    // --- 5. Calculate Static AC Type Counts (Optimized Loop) ---
+    
+    $acTypeGroups = [
+        'count_wms' => [2], 'count_cas' => [6, 7], 'count_fls' => [3, 4], 
+        'count_cls' => [5], 'count_vrf' => [8, 9], 'count_cld' => [10],
     ];
+
+    $staticCounts = [];
+    $trackedIds = [];
+    $productBuilder = $productModel->builder()->where('is_active', 1);
+
+    foreach ($acTypeGroups as $key => $ids) {
+        $staticCounts[$key] = $productBuilder->resetQuery()->whereIn('ac_type_id', $ids)->countAllResults();
+        $trackedIds = array_merge($trackedIds, $ids);
+    }
+
+    $trackedIds = array_unique($trackedIds);
+    $staticCounts['count_etc'] = $productBuilder->resetQuery()->whereNotIn('ac_type_id', $trackedIds)->countAllResults();
+
+
+    // --- 6. Manual Pagination HTML Generation ---
     
-    
+    $totalPages = (int)ceil($totalProducts / $limit);
+    $paginationLinks = '';
+
+    if ($totalPages > 1) {
+        
+        // 6a. Generate Base URL (Preserves all current filters/search/sort)
+        $currentQueryParams = $this->request->getGet();
+        unset($currentQueryParams['page']); // Exclude 'page' so we can append it cleanly
+        $queryString = http_build_query($currentQueryParams);
+        $baseUrl = current_url() . (empty($queryString) ? '?' : '?' . $queryString . '&');
+
+        // Configuration for link range (e.g., 2 pages before and 2 after)
+        $range = 2; 
+        $startPage = max(1, $currentPage - $range);
+        $endPage = min($totalPages, $currentPage + $range);
+        
+        // 6b. HTML Generation start (Mimics tailwind_full.php structure)
+        $paginationLinks .= '<div class="flex justify-center items-center gap-2 mt-8">';
+        
+        // --- Previous Button ---
+        if ($currentPage > 1) {
+            $prevPage = $currentPage - 1;
+            $prevUrl = $baseUrl . 'page=' . $prevPage;
+            $paginationLinks .= '<a href="' . $prevUrl . '" class="page-btn px-3 py-2 border border-gray-300 rounded-lg transition-colors">';
+            $paginationLinks .= '<i data-lucide="chevron-left" class="h-5 w-5"></i></a>';
+        } else {
+            $paginationLinks .= '<span class="px-3 py-2 border border-gray-200 rounded-lg opacity-50">';
+            $paginationLinks .= '<i data-lucide="chevron-left" class="h-5 w-5"></i></span>';
+        }
+        
+        // --- Page Numbers ---
+        for ($i = $startPage; $i <= $endPage; $i++) {
+            $linkUrl = $baseUrl . 'page=' . $i;
+            if ($i === $currentPage) {
+                // Active link
+                $paginationLinks .= '<span class="page-btn active px-4 py-2 border border-gray-300 rounded-lg bg-gray-200 font-semibold">';
+                $paginationLinks .= $i . '</span>';
+            } else {
+                // Inactive link
+                $paginationLinks .= '<a href="' . $linkUrl . '" class="page-btn px-4 py-2 border border-gray-300 rounded-lg transition-colors">';
+                $paginationLinks .= $i . '</a>';
+            }
+        }
+        
+        // --- Next Button ---
+        if ($currentPage < $totalPages) {
+            $nextPage = $currentPage + 1;
+            $nextUrl = $baseUrl . 'page=' . $nextPage;
+            $paginationLinks .= '<a href="' . $nextUrl . '" class="page-btn px-3 py-2 border border-gray-300 rounded-lg transition-colors">';
+            $paginationLinks .= '<i data-lucide="chevron-right" class="h-5 w-5"></i></a>';
+        } else {
+            $paginationLinks .= '<span class="px-3 py-2 border border-gray-200 rounded-lg opacity-50">';
+            $paginationLinks .= '<i data-lucide="chevron-right" class="h-5 w-5"></i></span>';
+        }
+
+        $paginationLinks .= '</div>';
+    }
+
+
+    // --- 7. Pass Data to View ---
+    $data = [
+        'products'       => $products,
+        
+        // Filter Lists
+        'brands'         => $brands,
+        'acTypes'        => $acTypes,
+        'pkList'         => $pkList,
+        'categories'     => $categories,
+
+        // Current State (for sticky filter forms)
+        'currentFilters' => $activeFilters,
+        'currentSearch'  => $search,
+        'currentSort'    => $sort,
+
+        // Pagination Data
+        'paginationLinks' => $paginationLinks, // The generated HTML string
+        'totalProducts'  => $totalProducts,
+        'currentPage'    => $currentPage,
+        'perPage'        => $limit,
+    ];
+
+    // Safely merge static counts array for wide PHP compatibility
+    $data = array_merge($data, $staticCounts);
 
     return view('toko_kami', $data);
-  }
+}
 }

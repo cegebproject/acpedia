@@ -1,211 +1,38 @@
-<?php
-$controller = class_basename(service('router')->controllerName());
-
-// Controllers that should NOT show ecommerce header
-$nonEcommerceControllers = ['Home', 'About'];
-?>
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ACPEDIA - Solusi AC Terpercaya #1 di Indonesia</title>
+    <title>ACpedia - Solusi AC Terpercaya #1 di Indonesia</title>
     
-    <!-- Google Fonts - Roboto -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <!-- React Icons CDN for TikTok -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <style>
-        * {
-            font-family: 'Roboto', sans-serif;
-        }
-        
-        :root {
-            --primary: #41B8EA;
-            --secondary: #F99C1C;
-            --success: #3EB48A;
-            --destructive: #ED2024;
-            --foreground: #373E51;
-        }
-        
-        html {
-            scroll-behavior: smooth;
-        }
-        
-        body {
-            background-color: #ffffff;
-            color: var(--foreground);
-        }
-        
-        /* Animation Classes */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        @keyframes scaleIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-        
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.5;
-            }
-        }
-        
-        @keyframes ping {
-            75%, 100% {
-                transform: scale(2);
-                opacity: 0;
-            }
-        }
-        
-        @keyframes slideInfinite {
-            from {
-                transform: translateX(0);
-            }
-            to {
-                transform: translateX(-50%);
-            }
-        }
-        
-        .animate-fadeInUp {
-            animation: fadeInUp 0.6s ease-out forwards;
-        }
-        
-        .testimonial-inner-track {
-            display: flex;
-            width: 200%; 
-        }
-        
-        .animate-scaleIn {
-            animation: scaleIn 0.5s ease-out forwards;
-        }
-        
-        .animate-pulse {
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        
-        .animate-ping {
-            animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
-        }
-        
-        .logo-scroll {
-            animation: slideInfinite 40s linear infinite;
-        }
-        
-        /* Intersection Observer Classes */
-        .observe-me {
-            opacity: 0;
-        }
-        
-        .observe-me.animated {
-            animation: fadeInUp 0.6s ease-out forwards;
-        }
-        
-        .observe-scale.animated {
-            animation: scaleIn 0.5s ease-out forwards;
-        }
-        
-        /* Hover Effects */
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-        }
-        
-        /* WhatsApp Float */
-        .whatsapp-pulse {
-            position: relative;
-        }
-        
-        .whatsapp-pulse::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 9999px;
-            background-color: #25D366;
-            animation: ping 2s ease-in-out infinite;
-        }
-        
-        /* Mobile Menu */
-        .mobile-menu {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-        
-        .mobile-menu.active {
-            max-height: 500px;
-        }
-        
-        /* Counter Animation */
-        .counter {
-            display: inline-block;
-        }
-        
-        /* Gradient Text */
-        .gradient-text {
-            background: linear-gradient(to right, #41B8EA, #3EB48A);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Top Bar (Desktop Only) -->
     <div id="topBar" class="bg-white border-b border-gray-200 py-2.5 hidden xl:block relative z-40">
         <div class="container mx-auto px-4">
             <div class="flex items-center justify-between gap-4">
-                <!-- Left - Menu Links -->
                 <div class="flex items-center gap-6 flex-shrink-0">
                     <div class="flex items-center gap-6 text-sm">
-                        <a href="https://acpedia.id/hvac-contact" target="_blank" rel="noopener noreferrer" 
+                        <a href="insertlink" target="_blank" rel="noopener noreferrer" 
                            class="flex items-center gap-1.5 text-gray-700 hover:text-[#41B8EA] transition-colors whitespace-nowrap">
                             <i data-lucide="building-2" class="h-4 w-4"></i>
                             Project HVAC
                         </a>
-                        <a href="https://acpedia.id/pk-calculator" target="_blank" rel="noopener noreferrer"
+                        <a href="insertlink" target="_blank" rel="noopener noreferrer"
                            class="flex items-center gap-1.5 text-gray-700 hover:text-[#41B8EA] transition-colors whitespace-nowrap">
                             <i data-lucide="calculator" class="h-4 w-4"></i>
                             Kalkulator PK
                         </a>
-                        <a href="https://acpedia.id/contact-us" target="_blank" rel="noopener noreferrer"
+                        <a href="insertlink" target="_blank" rel="noopener noreferrer"
                            class="flex items-center gap-1.5 text-gray-700 hover:text-[#41B8EA] transition-colors whitespace-nowrap">
                             <i data-lucide="headphones" class="h-4 w-4"></i>
                             Hubungi Kami
@@ -213,7 +40,6 @@ $nonEcommerceControllers = ['Home', 'About'];
                     </div>
                 </div>
 
-                <!-- Center - Contact Info -->
                 <div class="flex items-center justify-center gap-3 flex-1">
                     <span class="text-sm text-gray-700">Layanan Bantuan Online</span>
                     <div class="flex items-center gap-3 text-sm text-gray-600">
@@ -229,7 +55,6 @@ $nonEcommerceControllers = ['Home', 'About'];
                     </div>
                 </div>
 
-                <!-- Right - Social Media -->
                 <div class="flex items-center gap-6 flex-shrink-0">
                     <div class="flex items-center gap-2">
                         <span class="text-sm text-gray-700 mr-1">Ikuti Kami</span>
@@ -251,84 +76,12 @@ $nonEcommerceControllers = ['Home', 'About'];
         </div>
     </div>
 
-    <!-- Header / Navbar -->
-    
-    
-    <?php if (class_basename(service('router')->controllerName()) !== 'Home'): ?>
-    <header class="bg-white border-b sticky top-0 z-50 transition-all duration-300 shadow-sm border-border">
-        <div class="container mx-auto px-4">
-            <div class="flex items-center justify-between h-14 md:h-16 transition-all duration-300">
-                <a href="#top">
-                    <div class="flex items-center gap-3 cursor-pointer">
-                        <img src="acp.png" alt="ACpedia Logo" class="h-6 md:h-7 w-auto">
-                    </div>
-                </a>
-
-                <nav class="hidden lg:flex items-center gap-8">
-                    <a href="/" class="transition-colors relative group flex items-center gap-2 text-[#373E51] hover:text-[#41B8EA]">
-                        <i data-lucide="home" class="h-4 w-4"></i> Beranda
-                    </a>
-                    <a href="#about" class="transition-colors relative group flex items-center gap-2 text-[#373E51] hover:text-[#41B8EA]">
-                        <i data-lucide="wrench" class="h-4 w-4"></i> Layanan Kami
-                    </a>
-                    <a href="/toko-kami" class="transition-colors relative group flex items-center gap-2 text-[#373E51] hover:text-[#41B8EA]">
-                        <i data-lucide="store" class="h-4 w-4"></i> Toko Kami
-                    </a>
-                    <a href="#contact" class="transition-colors relative group flex items-center gap-2 text-[#373E51] hover:text-[#41B8EA]">
-                        <i data-lucide="mail" class="h-4 w-4"></i> Kontak
-                    </a>
-                </nav>
-
-                <div class="flex items-center gap-4">
-                    <div class="hidden lg:block relative w-[115px] h-[16px] cursor-pointer hover:opacity-80 transition-opacity">
-                        <div class="absolute -left-[56px] top-1/2 -translate-y-1/2 flex items-center gap-3">
-                            <i data-lucide="bell" class="w-4 h-4 text-[#373E51] cursor-pointer hover:text-[#41B8EA] transition-colors"></i>
-                            <i data-lucide="shopping-cart" class="w-4 h-4 text-[#373E51] cursor-pointer hover:text-[#41B8EA] transition-colors"></i>
-                        </div>
-                        <div class="absolute flex flex-col font-['Roboto',sans-serif] h-[15px] justify-center leading-[0] not-italic right-0 text-[#373e51] text-[13px] text-right top-[7.5px] translate-y-[-50%] w-[91.01px]">
-                            <p class="leading-[13px]">Login/Register</p>
-                        </div>
-                        <div class="absolute left-0 size-[14px] top-px">
-                            <i data-lucide="user" class="block size-full text-[#373E51]"></i>
-                        </div>
-                    </div>
-                    
-                    <!-- Mobile Notification & Cart Icons -->
-                    <div class="flex items-center gap-4 lg:hidden">
-                        <i data-lucide="bell" class="w-5 h-5 text-[#373E51] cursor-pointer hover:text-[#41B8EA] transition-colors"></i>
-                        <i data-lucide="shopping-cart" class="w-5 h-5 text-[#373E51] cursor-pointer hover:text-[#41B8EA] transition-colors"></i>
-                    </div>
-
-                    <button id="mobileMenuToggle" class="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                        <i data-lucide="menu" class="h-6 w-6"></i>
-                    </button>
-                </div>
-            </div>
-            <!-- Mobile Menu -->
-            <div id="mobileMenu" class="mobile-menu md:hidden border-t border-gray-100">
-                <div class="flex flex-col py-2">
-                    <a href="/" class="px-4 py-3 text-[#373E51] hover:bg-gray-50 hover:text-[#41B8EA] font-medium transition-colors">Beranda</a>
-                    <a href="#about" class="px-4 py-3 text-[#373E51] hover:bg-gray-50 hover:text-[#41B8EA] font-medium transition-colors">Layanan Kami</a>
-                    <a href="/toko-kami" class="px-4 py-3 text-[#373E51] hover:bg-gray-50 hover:text-[#41B8EA] font-medium transition-colors">Toko Kami</a>
-                    <a href="#contact" class="px-4 py-3 text-[#373E51] hover:bg-gray-50 hover:text-[#41B8EA] font-medium transition-colors">Kontak</a>
-                    <div class="px-4 py-3 border-t border-gray-100 mt-2">
-                        <div class="flex items-center gap-3 text-sm text-gray-600 mb-3">
-                            <a href="#" class="flex items-center gap-2 hover:text-[#41B8EA]">
-                                <i data-lucide="user" class="h-4 w-4"></i> Login / Register
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-<?php else: ?>
     <header id="header" class="bg-white border-b sticky top-0 z-50 shadow-sm transition-all duration-300">
         <div class="container mx-auto px-4">
             <div class="flex items-center justify-between h-14 md:h-16">
                 <a href="#top" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">
                     <div class="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
-                        <img src="assets\acpedialogo.png" 
+                        <img src="\src\assets\acpedialogo.png" 
                              alt="ACpedia Logo" 
                              class="h-6 md:h-7 w-auto">
                     </div>
@@ -340,14 +93,14 @@ $nonEcommerceControllers = ['Home', 'About'];
                         Beranda
                         <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#41B8EA] transition-all group-hover:w-full"></span>
                     </a>
-                    <a href="/toko-kami" class="text-gray-800 hover:text-[#41B8EA] transition-colors flex items-center gap-2 relative group">
-                        <i data-lucide="store" class="h-4 w-4"></i>
-                        Toko Kami
-                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#41B8EA] transition-all group-hover:w-full"></span>
-                    </a>
                     <a href="#about" class="text-gray-800 hover:text-[#41B8EA] transition-colors flex items-center gap-2 relative group">
                         <i data-lucide="wrench" class="h-4 w-4"></i>
                         Layanan Kami
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#41B8EA] transition-all group-hover:w-full"></span>
+                    </a>
+                    <a href="/toko-kami" class="text-gray-800 hover:text-[#41B8EA] transition-colors flex items-center gap-2 relative group">
+                        <i data-lucide="store" class="h-4 w-4"></i>
+                        Toko Kami
                         <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#41B8EA] transition-all group-hover:w-full"></span>
                     </a>
                     <a href="#contact" class="text-gray-800 hover:text-[#41B8EA] transition-colors flex items-center gap-2 relative group">
@@ -356,59 +109,109 @@ $nonEcommerceControllers = ['Home', 'About'];
                         <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#41B8EA] transition-all group-hover:w-full"></span>
                     </a>
                 </nav>
+                
+                <?php
+                    $noCart = ['Main'];
+                    $controller = class_basename(service('router')->controllerName());
+                ?>
 
-                <div class="flex items-center gap-4">
-                    <a href="https://acpedia.id/hvac-contact" target="_blank" rel="noopener noreferrer"
-                       class="hidden lg:flex items-center gap-2 bg-[#F99C1C] hover:bg-[#F99C1C]/90 text-white px-4 py-2 rounded-md transition-all">
-                        <i data-lucide="rocket" class="h-4 w-4"></i>
-                        Mulai Proyek
-                    </a>
-                    <button id="mobileMenuBtn" class="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                        <i data-lucide="menu" class="h-6 w-6"></i>
-                    </button>
-                </div>
-            </div>
+                <?php if (!in_array($controller, $noCart)): ?>
+                    <div class="flex items-center gap-4">
+                        <div class="hidden lg:block relative w-[115px] h-[16px] cursor-pointer">
+                            <div class="absolute -left-[56px] top-1/2 -translate-y-1/2 flex items-center gap-3">
+                                <i data-lucide="bell" class="w-4 h-4 text-[#373E51] cursor-pointer hover:text-[#41B8EA] transition-colors"></i>
+                                <i data-lucide="shopping-cart" class="w-4 h-4 text-[#373E51] cursor-pointer hover:text-[#41B8EA] transition-colors"></i>
+                            </div>
+                            <div class="absolute flex flex-col font-['Roboto',sans-serif] h-[15px] justify-center leading-[0] not-italic right-0 text-[#373e51] text-[13px] text-right top-[7.5px] translate-y-[-50%] w-[91.01px]">
+                                <p class="leading-[13px]">Login/Register</p>
+                            </div>
+                            <div class="absolute left-0 size-[14px] top-px">
+                                <i data-lucide="user" class="block size-full text-[#373E51]"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-4 lg:hidden">
+                            <i data-lucide="bell" class="w-5 h-5 text-[#373E51] cursor-pointer hover:text-[#41B8EA] transition-colors"></i>
+                            <i data-lucide="shopping-cart" class="w-5 h-5 text-[#373E51] cursor-pointer hover:text-[#41B8EA] transition-colors"></i>
+                        </div>
 
-            <!-- Mobile Menu -->
-            <div id="mobileMenu" class="mobile-menu lg:hidden border-t border-gray-200">
-                <div class="py-3 space-y-2">
-                    <a href="/" class="flex items-center gap-2 py-2 px-2 rounded hover:bg-blue-50 text-gray-800 hover:text-[#41B8EA] transition-colors mobile-link">
-                        <i data-lucide="home" class="h-4 w-4"></i>
-                        Beranda
-                    </a>
-                    <a href="#about" class="flex items-center gap-2 py-2 px-2 rounded hover:bg-blue-50 text-gray-800 hover:text-[#41B8EA] transition-colors mobile-link">
-                        <i data-lucide="wrench" class="h-4 w-4"></i>
-                        Layanan Kami
-                    </a>
-                    <a href="#contact" class="flex items-center gap-2 py-2 px-2 rounded hover:bg-blue-50 text-gray-800 hover:text-[#41B8EA] transition-colors mobile-link">
-                        <i data-lucide="mail" class="h-4 w-4"></i>
-                        Kontak
-                    </a>
-                    <div class="pt-2 px-2">
-                        <a href="https://acpedia.id/hvac-contact" target="_blank" rel="noopener noreferrer"
-                           class="flex items-center justify-center gap-2 bg-[#F99C1C] hover:bg-[#F99C1C]/90 text-white px-4 py-2 rounded-md w-full">
+                        <button id="mobileMenuBtn" class="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                            <i data-lucide="menu" class="h-6 w-6"></i>
+                        </button>
+                    </div>
+                <?php else: ?>
+                    <div class="flex items-center gap-4">
+                        <a href="insertlink" target="_blank" rel="noopener noreferrer"
+                           class="hidden lg:flex items-center gap-2 bg-[#F99C1C] hover:bg-[#F99C1C]/90 text-white px-4 py-2 rounded-md transition-all">
                             <i data-lucide="rocket" class="h-4 w-4"></i>
                             Mulai Proyek
                         </a>
+                        <button id="mobileMenuBtn" class="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                            <i data-lucide="menu" class="h-6 w-6"></i>
+                        </button>
+                    </div>
+                <?php endif; ?>
+            </div>
+            
+            <?php if (!in_array($controller, $noCart)): ?>
+                <div id="mobileMenu" class="mobile-menu lg:hidden border-t border-gray-200">
+                    <div class="py-3 space-y-2">
+                        <a href="/" class="flex items-center gap-2 py-2 px-2 rounded hover:bg-blue-50 text-gray-800 hover:text-[#41B8EA] transition-colors mobile-link">
+                            <i data-lucide="home" class="h-4 w-4"></i> Beranda
+                        </a>
+                        <a href="#about" class="flex items-center gap-2 py-2 px-2 rounded hover:bg-blue-50 text-gray-800 hover:text-[#41B8EA] transition-colors mobile-link">
+                            <i data-lucide="wrench" class="h-4 w-4"></i> Layanan Kami
+                        </a>
+                        <a href="/toko-kami" class="flex items-center gap-2 py-2 px-2 rounded hover:bg-blue-50 text-gray-800 hover:text-[#41B8EA] transition-colors mobile-link">
+                            <i data-lucide="store" class="h-4 w-4"></i> Toko Kami
+                        </a>
+                        <a href="#contact" class="flex items-center gap-2 py-2 px-2 rounded hover:bg-blue-50 text-gray-800 hover:text-[#41B8EA] transition-colors mobile-link">
+                            <i data-lucide="mail" class="h-4 w-4"></i> Kontak
+                        </a>
+                        <div class="px-2 py-3 border-t border-gray-100 mt-2">
+                            <a href="#" class="flex items-center gap-2 hover:text-[#41B8EA] text-gray-600 transition-colors">
+                                <i data-lucide="user" class="h-4 w-4"></i> Login / Register
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            <?php else: ?>
+                <div id="mobileMenu" class="mobile-menu lg:hidden border-t border-gray-200">
+                    <div class="py-3 space-y-2">
+                        <a href="/" class="flex items-center gap-2 py-2 px-2 rounded hover:bg-blue-50 text-gray-800 hover:text-[#41B8EA] transition-colors mobile-link">
+                            <i data-lucide="home" class="h-4 w-4"></i> Beranda
+                        </a>
+                        <a href="#about" class="flex items-center gap-2 py-2 px-2 rounded hover:bg-blue-50 text-gray-800 hover:text-[#41B8EA] transition-colors mobile-link">
+                            <i data-lucide="wrench" class="h-4 w-4"></i> Layanan Kami
+                        </a>
+                        <a href="/toko-kami" class="flex items-center gap-2 py-2 px-2 rounded hover:bg-blue-50 text-gray-800 hover:text-[#41B8EA] transition-colors mobile-link">
+                            <i data-lucide="store" class="h-4 w-4"></i> Toko Kami
+                        </a>
+                        <a href="#contact" class="flex items-center gap-2 py-2 px-2 rounded hover:bg-blue-50 text-gray-800 hover:text-[#41B8EA] transition-colors mobile-link">
+                            <i data-lucide="mail" class="h-4 w-4"></i> Kontak
+                        </a>
+                        <div class="pt-2 px-2 border-t border-gray-100">
+                            <a href="insertlink" target="_blank" rel="noopener noreferrer"
+                               class="flex items-center justify-center gap-2 bg-[#F99C1C] hover:bg-[#F99C1C]/90 text-white px-4 py-2 rounded-md w-full">
+                                <i data-lucide="rocket" class="h-4 w-4"></i>
+                                Mulai Proyek
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
     </header>
-<?php endif; ?>
+    
+<?= $this->renderSection('content') ?>
 
-
-  <?= $this->renderSection('content') ?>
-
-    <!-- Footer -->
-    <footer class="text-white" style="background-color: #212529;">
+<footer class="text-white" style="background-color: #212529;">
         <div class="container mx-auto px-4 py-12">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 justify-center">
                 
-                <!-- Column 1 - Logo & Address -->
                 <div class="lg:col-span-4 lg:col-start-2 observe-me">
                     <div class="mb-3">
-                        <img src="assets\acpediawhite.png" 
+                        <img src="https://acpedia.id/static/media/logo-acpedia-footer.9f8e7d6c.png" 
                              alt="ACpedia Logo" 
                              class="h-12 w-auto">
                     </div>
@@ -416,7 +219,6 @@ $nonEcommerceControllers = ['Home', 'About'];
                         Solusi pendingin udara terdepan untuk kenyamanan hidup Anda. Temukan berbagai pilihan AC berkualitas dengan teknologi terkini.
                     </p>
 
-                    <!-- Address -->
                     <div class="mb-6">
                         <div class="flex items-start gap-3">
                             <i data-lucide="map-pin" class="h-5 w-5 text-[#41B8EA] flex-shrink-0 mt-0.5"></i>
@@ -429,7 +231,6 @@ $nonEcommerceControllers = ['Home', 'About'];
                         </div>
                     </div>
 
-                    <!-- Social Media -->
                     <div>
                         <h6 class="text-sm uppercase mb-3">Ikuti Kami</h6>
                         <div class="flex gap-3">
@@ -449,7 +250,6 @@ $nonEcommerceControllers = ['Home', 'About'];
                     </div>
                 </div>
 
-                <!-- Column 2 - Info Perusahaan -->
                 <div class="lg:col-span-2 observe-me" style="animation-delay: 0.1s;">
                     <h6 class="text-sm uppercase mb-4">Info Perusahaan</h6>
                     <ul class="space-y-2">
@@ -461,7 +261,6 @@ $nonEcommerceControllers = ['Home', 'About'];
                     </ul>
                 </div>
 
-                <!-- Column 3 - Layanan -->
                 <div class="lg:col-span-2 observe-me" style="animation-delay: 0.2s;">
                     <h6 class="text-sm uppercase mb-4">Layanan</h6>
                     <ul class="space-y-2">
@@ -473,7 +272,6 @@ $nonEcommerceControllers = ['Home', 'About'];
                     </ul>
                 </div>
 
-                <!-- Column 4 - Produk -->
                 <div class="lg:col-span-2 observe-me" style="animation-delay: 0.3s;">
                     <h6 class="text-sm uppercase mb-4">Produk</h6>
                     <ul class="space-y-2 mb-6">
@@ -483,7 +281,6 @@ $nonEcommerceControllers = ['Home', 'About'];
                         <li><a href="#" class="text-slate-400 hover:text-[#41B8EA] transition-colors">Produk Lainnya</a></li>
                     </ul>
 
-                    <!-- Payment Methods -->
                     <div>
                         <h6 class="text-sm uppercase mb-3">Metode Pembayaran</h6>
                         <div class="bg-white/10 backdrop-blur-sm px-6 py-3 rounded-lg border border-white/20 hover:border-[#41B8EA] transition-colors cursor-pointer">
@@ -497,15 +294,13 @@ $nonEcommerceControllers = ['Home', 'About'];
             </div>
         </div>
 
-        <!-- Copyright -->
         <div class="text-center p-4 bg-black/20 border-t border-white/10">
             <p class="text-sm text-slate-400">
-                © 2026 ACPEDIA. All Rights Reserved.
+                � 2026 ACPEDIA. All Rights Reserved.
             </p>
         </div>
     </footer>
 
-    <!-- Floating WhatsApp Button -->
     <a href="https://wa.me/6285810000684" 
        target="_blank" 
        rel="noopener noreferrer"
@@ -513,7 +308,6 @@ $nonEcommerceControllers = ['Home', 'About'];
         <i data-lucide="message-circle" class="h-7 w-7 relative z-10"></i>
     </a>
 
-    <!-- JavaScript -->
     <script>
         // Initialize Lucide Icons
         lucide.createIcons();
@@ -522,27 +316,31 @@ $nonEcommerceControllers = ['Home', 'About'];
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
         
-        mobileMenuBtn.addEventListener('click', function() {
-            mobileMenu.classList.toggle('active');
-            const icon = this.querySelector('i');
-            if (mobileMenu.classList.contains('active')) {
-                icon.setAttribute('data-lucide', 'x');
-            } else {
-                icon.setAttribute('data-lucide', 'menu');
-            }
-            lucide.createIcons();
-        });
-
-        // Close mobile menu when clicking a link
-        const mobileLinks = document.querySelectorAll('.mobile-link');
-        mobileLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.remove('active');
-                const icon = mobileMenuBtn.querySelector('i');
-                icon.setAttribute('data-lucide', 'menu');
+        // Ensure elements exist before adding listeners
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', function() {
+                mobileMenu.classList.toggle('active');
+                const icon = this.querySelector('i');
+                if (mobileMenu.classList.contains('active')) {
+                    icon.setAttribute('data-lucide', 'x');
+                } else {
+                    icon.setAttribute('data-lucide', 'menu');
+                }
                 lucide.createIcons();
             });
-        });
+
+            // Close mobile menu when clicking a link
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.remove('active');
+                    const icon = mobileMenuBtn.querySelector('i');
+                    icon.setAttribute('data-lucide', 'menu');
+                    lucide.createIcons();
+                });
+            });
+        }
+
 
         // Intersection Observer for Scroll Animations
         const observerOptions = {
@@ -629,89 +427,6 @@ $nonEcommerceControllers = ['Home', 'About'];
             
             lastScroll = currentScroll;
         });
-
-        // Re-initialize Lucide icons after DOM changes
-        window.addEventListener('load', () => {
-            lucide.createIcons();
-        });
-
-        // Periodic icon refresh (for dynamically loaded content)
-        setInterval(() => {
-            lucide.createIcons();
-        }, 1000);
-        
-        function setupContinuousScroll(trackClass, cardWidth, gap) {
-            const track = document.querySelector('.' + trackClass);
-            if (!track) return;
-            
-            const cardElements = Array.from(track.children);
-            if (cardElements.length === 0) return;
-            
-            const contentWidth = (cardWidth + gap) * cardElements.length;
-            
-            // 1. Duplikasi awal konten agar cukup panjang untuk menutupi 2x layar
-            let totalWidth = contentWidth;
-            while (totalWidth < window.innerWidth * 2) { 
-                cardElements.forEach(card => {
-                    const clone = card.cloneNode(true);
-                    track.appendChild(clone);
-                });
-                totalWidth += contentWidth;
-            }
-
-            // 2. Setup Animasi
-            let currentX = 0;
-            const scrollSpeed = 0.5; // Kecepatan scroll (sesuaikan angkanya)
-            
-            // Lebar satu item + gap di sebelahnya
-            const itemUnitWidth = cardWidth + gap; 
-            
-            function animateScroll() {
-                // Geser ke kiri
-                currentX -= scrollSpeed;
-                
-                // Cek apakah kartu pertama sudah melewati batas kiri (sudah keluar viewport)
-                const firstCard = track.firstElementChild;
-
-                if (firstCard && currentX < -itemUnitWidth) {
-                    // Jika sudah keluar: Geser kartu pertama ke akhir track
-                    track.appendChild(firstCard); 
-                    
-                    // Reset posisi X dengan mengurangi lebar kartu yang baru saja dipindah
-                    currentX += itemUnitWidth; 
-                    
-                    // Panggil ulang Lucide Icons untuk ikon di kartu yang baru di-append (jika perlu)
-                    if (window.lucide && window.lucide.createIcons) {
-                        window.lucide.createIcons();
-                    }
-                }
-                
-                // Terapkan pergerakan
-                track.style.transform = `translateX(${currentX}px)`;
-                
-                // Lanjutkan loop
-                requestAnimationFrame(animateScroll);
-            }
-
-            // Atur agar track dapat di-translate
-            track.style.willChange = 'transform';
-            
-            // Mulai animasi
-            window.addEventListener('load', () => {
-                requestAnimationFrame(animateScroll);
-            });
-        }
-
-        // 🔑 INISIASI SCROLLER TESTIMONI
-        // Tailwind gap-6 = 1.5rem. Jika root font size 16px, maka gap = 24px.
-        const TAILWIND_GAP_6_PX = 24; 
-        
-        // Panggil fungsi untuk track testimonial
-        setupContinuousScroll('testimonial-scroll', 380, TAILWIND_GAP_6_PX);
-        
-        // Panggil juga untuk logo runner jika Anda punya (menggunakan class 'logo-scroll')
-        // setupContinuousScroll('logo-scroll', 150, TAILWIND_GAP_6_PX); 
-
 
         // Re-initialize Lucide icons after DOM changes
         window.addEventListener('load', () => {

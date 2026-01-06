@@ -1,11 +1,10 @@
-‎app/Views/main.php‎
-+483
-Lines changed: 483 additions & 0 deletions
-Original file line number	Diff line number	Diff line change
-@@ -0,0 +1,483 @@
+
 <?= $this->extend('template-main') ?>
 <?= $this->section('content') ?>
-  <!-- Hero Section -->
+
+
+
+ <!-- Hero Section -->
     <section id="home" class="relative bg-gradient-to-br from-gray-50 via-white to-cyan-50 pt-4 pb-6 md:pt-8 md:pb-10 overflow-hidden">
         <!-- Background Decorative Elements -->
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
@@ -13,6 +12,7 @@ Original file line number	Diff line number	Diff line change
             <div class="absolute -bottom-20 -left-20 w-96 h-96 bg-cyan-400/10 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
             <div class="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:64px_64px]"></div>
         </div>
+
         <div class="container mx-auto px-4 relative z-10">
             <div class="grid lg:grid-cols-2 gap-6 md:gap-8 items-center">
                 <!-- Left Content -->
@@ -25,6 +25,7 @@ Original file line number	Diff line number	Diff line change
                         </span>
                         <span class="text-sm font-medium text-[#41B8EA]">Solusi AC Terpercaya #1 di Indonesia</span>
                     </div>
+
                     <!-- Main Heading -->
                     <div class="space-y-4">
                         <h1 class="text-3xl md:text-4xl lg:text-5xl font-black leading-tight uppercase">
@@ -40,13 +41,15 @@ Original file line number	Diff line number	Diff line change
                             </span>
                         </h1>
                     </div>
+
                     <!-- Description -->
                     <p class="text-base md:text-lg text-gray-600 max-w-xl leading-relaxed">
                         Kami siap mengerjakan project <span class="font-semibold text-gray-900">Pemasangan, Perawatan, dan Perbaikan</span> unit HVAC Anda. Mudah, Cepat, dan Profesional di seluruh Indonesia.
                     </p>
+
                     <!-- CTA Buttons -->
                     <div class="flex flex-wrap gap-4">
-                        <a href="https://acpedia.id/hvac-contact" target="_blank" rel="noopener noreferrer"
+                        <a href="insertlink" target="_blank" rel="noopener noreferrer"
                            class="inline-flex items-center gap-2 bg-[#41B8EA] hover:bg-[#41B8EA]/90 text-white px-6 py-3 md:py-4 rounded-md shadow-lg hover:shadow-xl transition-all">
                             <i data-lucide="send" class="h-5 w-5"></i>
                             Isi Form & Kirim Penawaran
@@ -56,6 +59,7 @@ Original file line number	Diff line number	Diff line change
                             Lihat Layanan Kami →
                         </a>
                     </div>
+
                     <!-- Trust Badges -->
                     <div class="flex flex-wrap gap-4 pt-4">
                         <div class="flex items-center gap-2 text-sm text-gray-600">
@@ -76,15 +80,17 @@ Original file line number	Diff line number	Diff line change
                         </div>
                     </div>
                 </div>
+
                 <!-- Right Image/Visual -->
                 <div class="relative observe-me" style="animation-delay: 0.2s;">
                     <!-- Main Image -->
                     <div class="relative rounded-3xl overflow-hidden shadow-2xl">
-                        <img src="assets\hero.png"
+                        <img src="\src\assets\hero.png"
                              alt="Nikmati Kenyamanan AC Anda"
                              class="w-full h-[350px] md:h-[400px] object-cover">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent"></div>
                     </div>
+
                     <!-- Floating Stats Card -->
                     <div class="absolute -bottom-8 -left-8 bg-white rounded-2xl p-6 shadow-xl hidden md:block">
                         <div class="grid grid-cols-3 gap-6">
@@ -112,46 +118,59 @@ Original file line number	Diff line number	Diff line change
             </div>
         </div>
     </section>
+
     <!-- Logo Runner - Brand Partners -->
     <section class="py-6 md:py-8 bg-white border-t border-b border-gray-100 overflow-hidden">
         <div class="relative">
             <div class="overflow-hidden">
                 <div class="flex gap-20 items-center logo-scroll" style="width: max-content;">
-                    <!-- Logos repeated 3 times for infinite scroll -->
-                    <img src="assets\samsung.png" alt="Samsung" class="h-10">
-                    <img src="assets\sharp.png" alt="Sharp" class="h-8">
-                    <img src="assets\changhong.png" alt="Changhong" class="h-8">
-                    <img src="assets\daikin.png" alt="Daikin" class="h-6">
-                    <img src="assets\flife.png" alt="FLiFE" class="h-10">
-                    <img src="assets\gree.png" alt="Gree" class="h-10">
-                    <img src="assets\lg.png" alt="LG" class="h-10">
-                    <img src="assets\midea.png" alt="Midea" class="h-10">
-                    <img src="assets\panasonic.png" alt="Panasonic" class="h-10">
-                    <img src="assets\polytron.png" alt="Polytron" class="h-10">
+                    <!-- Logos repeated 4 times for infinite scroll -->
+                    <img src="\src\assets\samsung.png" alt="Samsung" class="h-10">
+                    <img src="\src\assets\sharp.png" alt="Sharp" class="h-8">
+                    <img src="\src\assets\changhong.png" alt="Changhong" class="h-8">
+                    <img src="\src\assets\daikin.png" alt="Daikin" class="h-6">
+                    <img src="\src\assets\flife.png" alt="FLiFE" class="h-10">
+                    <img src="\src\assets\gree.png" alt="Gree" class="h-10">
+                    <img src="\src\assets\lg.png" alt="LG" class="h-10">
+                    <img src="\src\assets\midea.png" alt="Midea" class="h-10">
+                    <img src="\src\assets\panasonic.png" alt="Panasonic" class="h-10">
+                    <img src="\src\assets\polytron.png" alt="Polytron" class="h-10">
                     
                     <!-- Duplicate for seamless loop -->
-                    <img src="assets\samsung.png" alt="Samsung" class="h-10">
-                    <img src="assets\sharp.png" alt="Sharp" class="h-8">
-                    <img src="assets\changhong.png" alt="Changhong" class="h-8">
-                    <img src="assets\daikin.png" alt="Daikin" class="h-6">
-                    <img src="assets\flife.png" alt="FLiFE" class="h-10">
-                    <img src="assets\gree.png" alt="Gree" class="h-10">
-                    <img src="assets\lg.png" alt="LG" class="h-10">
-                    <img src="assets\midea.png" alt="Midea" class="h-10">
-                    <img src="assets\panasonic.png" alt="Panasonic" class="h-10">
-                    <img src="assets\polytron.png" alt="Polytron" class="h-10">
+                    <img src="\src\assets\samsung.png" alt="Samsung" class="h-10">
+                    <img src="\src\assets\sharp.png" alt="Sharp" class="h-8">
+                    <img src="\src\assets\changhong.png" alt="Changhong" class="h-8">
+                    <img src="\src\assets\daikin.png" alt="Daikin" class="h-6">
+                    <img src="\src\assets\flife.png" alt="FLiFE" class="h-10">
+                    <img src="\src\assets\gree.png" alt="Gree" class="h-10">
+                    <img src="\src\assets\lg.png" alt="LG" class="h-10">
+                    <img src="\src\assets\midea.png" alt="Midea" class="h-10">
+                    <img src="\src\assets\panasonic.png" alt="Panasonic" class="h-10">
+                    <img src="\src\assets\polytron.png" alt="Polytron" class="h-10">
                     
                     <!-- Triple for seamless loop -->
-                    <img src="assets\samsung.png" alt="Samsung" class="h-10">
-                    <img src="assets\sharp.png" alt="Sharp" class="h-8">
-                    <img src="assets\changhong.png" alt="Changhong" class="h-8">
-                    <img src="assets\daikin.png" alt="Daikin" class="h-6">
-                    <img src="assets\flife.png" alt="FLiFE" class="h-10">
-                    <img src="assets\gree.png" alt="Gree" class="h-10">
-                    <img src="assets\lg.png" alt="LG" class="h-10">
-                    <img src="assets\midea.png" alt="Midea" class="h-10">
-                    <img src="assets\panasonic.png" alt="Panasonic" class="h-10">
-                    <img src="assets\polytron.png" alt="Polytron" class="h-10">
+                    <img src="\src\assets\samsung.png" alt="Samsung" class="h-10">
+                    <img src="\src\assets\sharp.png" alt="Sharp" class="h-8">
+                    <img src="\src\assets\changhong.png" alt="Changhong" class="h-8">
+                    <img src="\src\assets\daikin.png" alt="Daikin" class="h-6">
+                    <img src="\src\assets\flife.png" alt="FLiFE" class="h-10">
+                    <img src="\src\assets\gree.png" alt="Gree" class="h-10">
+                    <img src="\src\assets\lg.png" alt="LG" class="h-10">
+                    <img src="\src\assets\midea.png" alt="Midea" class="h-10">
+                    <img src="\src\assets\panasonic.png" alt="Panasonic" class="h-10">
+                    <img src="\src\assets\polytron.png" alt="Polytron" class="h-10">
+
+                     <!-- Quadruple for seamless loop -->
+                    <img src="\src\assets\samsung.png" alt="Samsung" class="h-10">
+                    <img src="\src\assets\sharp.png" alt="Sharp" class="h-8">
+                    <img src="\src\assets\changhong.png" alt="Changhong" class="h-8">
+                    <img src="\src\assets\daikin.png" alt="Daikin" class="h-6">
+                    <img src="\src\assets\flife.png" alt="FLiFE" class="h-10">
+                    <img src="\src\assets\gree.png" alt="Gree" class="h-10">
+                    <img src="\src\assets\lg.png" alt="LG" class="h-10">
+                    <img src="\src\assets\midea.png" alt="Midea" class="h-10">
+                    <img src="\src\assets\panasonic.png" alt="Panasonic" class="h-10">
+                    <img src="\src\assets\polytron.png" alt="Polytron" class="h-10">
                 </div>
             </div>
             
@@ -160,6 +179,7 @@ Original file line number	Diff line number	Diff line change
             <div class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent pointer-events-none z-10"></div>
         </div>
     </section>
+
     <!-- About Section - Layanan Kami -->
     <section id="about" class="py-8 md:py-12 bg-white relative overflow-hidden">
         <!-- Background Decorative Elements -->
@@ -167,6 +187,7 @@ Original file line number	Diff line number	Diff line change
             <div class="absolute top-20 right-10 w-64 h-64 bg-[#41B8EA]/5 rounded-full blur-3xl"></div>
             <div class="absolute bottom-20 left-10 w-64 h-64 bg-[#F99C1C]/5 rounded-full blur-3xl"></div>
         </div>
+
         <div class="container mx-auto px-4 relative z-10">
             <!-- Section Header -->
             <div class="text-center mb-10 md:mb-12 observe-me">
@@ -184,6 +205,7 @@ Original file line number	Diff line number	Diff line change
                     Solusi Tata Udara Terlengkap
                 </p>
             </div>
+
             <!-- Services Grid -->
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7 max-w-7xl mx-auto">
                 <!-- Service 1 -->
@@ -191,7 +213,7 @@ Original file line number	Diff line number	Diff line change
                     <div class="bg-white rounded-2xl p-6 md:p-7 shadow-lg border border-gray-100 h-full flex flex-col">
                         <div class="w-16 h-16 rounded-xl flex items-center justify-center relative overflow-hidden mb-6"
                              style="background-color: rgba(249, 156, 28, 0.08);">
-                            <img src="assets\pemasangan.png" 
+                            <img src="\src\assets\pemasangan.png" 
                                  alt="Pemasangan" 
                                  class="w-10 h-10 relative z-10 object-contain">
                         </div>
@@ -209,12 +231,13 @@ Original file line number	Diff line number	Diff line change
                         </div>
                     </div>
                 </div>
+
                 <!-- Service 2 -->
                 <div class="card-hover observe-me" style="animation-delay: 0.1s;">
                     <div class="bg-white rounded-2xl p-6 md:p-7 shadow-lg border border-gray-100 h-full flex flex-col">
                         <div class="w-16 h-16 rounded-xl flex items-center justify-center relative overflow-hidden mb-6"
                              style="background-color: rgba(237, 32, 36, 0.08);">
-                            <img src="assets\perawatan.png" 
+                            <img src="\src\assets\perawatan.png" 
                                  alt="Perawatan" 
                                  class="w-10 h-10 relative z-10 object-contain">
                         </div>
@@ -232,12 +255,13 @@ Original file line number	Diff line number	Diff line change
                         </div>
                     </div>
                 </div>
+
                 <!-- Service 3 -->
                 <div class="card-hover observe-me" style="animation-delay: 0.2s;">
                     <div class="bg-white rounded-2xl p-6 md:p-7 shadow-lg border border-gray-100 h-full flex flex-col">
                         <div class="w-16 h-16 rounded-xl flex items-center justify-center relative overflow-hidden mb-6"
                              style="background-color: rgba(55, 62, 81, 0.08);">
-                            <img src="assets\perbaikan.png" 
+                            <img src="\src\assets\perbaikan.png" 
                                  alt="Perbaikan" 
                                  class="w-10 h-10 relative z-10 object-contain">
                         </div>
@@ -256,6 +280,7 @@ Original file line number	Diff line number	Diff line change
                     </div>
                 </div>
             </div>
+
             <!-- Bottom CTA -->
             <div class="text-center mt-10 md:mt-12 observe-me" style="animation-delay: 0.4s;">
                 <p class="text-gray-600 max-w-3xl mx-auto">
@@ -264,6 +289,7 @@ Original file line number	Diff line number	Diff line change
             </div>
         </div>
     </section>
+
     <!-- Testimonial Section -->
     <section class="py-8 md:py-10 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden">
         <!-- Decorative Elements -->
@@ -271,6 +297,7 @@ Original file line number	Diff line number	Diff line change
             <div class="absolute -top-20 -left-20 w-96 h-96 bg-[#41B8EA]/5 rounded-full blur-3xl"></div>
             <div class="absolute -bottom-20 -right-20 w-96 h-96 bg-[#F99C1C]/5 rounded-full blur-3xl"></div>
         </div>
+
         <div class="container mx-auto px-4 relative z-10 mb-8 md:mb-10">
             <div class="text-center observe-me">
                 <h2 class="text-2xl md:text-3xl font-black text-gray-800">
@@ -278,11 +305,12 @@ Original file line number	Diff line number	Diff line change
                 </h2>
             </div>
         </div>
+
         <!-- Running Cards Container -->
         <div class="relative">
             <div class="overflow-hidden">
-                <div class="flex gap-6 testimonial-scroll" style="width: max-content; animation: slideInfinite 60s linear infinite;">
-                    <!-- Testimonial Cards (repeated 3x for infinite scroll) -->
+                <div class="flex gap-6 items-center testimonial-scroll" style="width: max-content; animation: slideInfinite 60s linear infinite;">
+                    <!-- Testimonial Cards repeated 5 times for infinite scroll -->
                     <!-- Card 1 -->
                     <div class="flex-shrink-0 w-[380px]">
                         <div class="bg-white border border-gray-200 hover:border-[#41B8EA] rounded-lg shadow-md hover:shadow-lg transition-all p-5">
@@ -307,6 +335,7 @@ Original file line number	Diff line number	Diff line change
                             </div>
                         </div>
                     </div>
+
                     <!-- Card 2 -->
                     <div class="flex-shrink-0 w-[380px]">
                         <div class="bg-white border border-gray-200 hover:border-[#41B8EA] rounded-lg shadow-md hover:shadow-lg transition-all p-5">
@@ -331,6 +360,7 @@ Original file line number	Diff line number	Diff line change
                             </div>
                         </div>
                     </div>
+
                     <!-- Card 3 -->
                     <div class="flex-shrink-0 w-[380px]">
                         <div class="bg-white border border-gray-200 hover:border-[#41B8EA] rounded-lg shadow-md hover:shadow-lg transition-all p-5">
@@ -355,7 +385,8 @@ Original file line number	Diff line number	Diff line change
                             </div>
                         </div>
                     </div>
-                    <!-- Duplicate cards for infinite scroll -->
+
+                    <!-- Duplicate for seamless loop -->
                     <div class="flex-shrink-0 w-[380px]">
                         <div class="bg-white border border-gray-200 hover:border-[#41B8EA] rounded-lg shadow-md hover:shadow-lg transition-all p-5">
                             <div class="flex gap-1 mb-3">
@@ -379,6 +410,7 @@ Original file line number	Diff line number	Diff line change
                             </div>
                         </div>
                     </div>
+
                     <div class="flex-shrink-0 w-[380px]">
                         <div class="bg-white border border-gray-200 hover:border-[#41B8EA] rounded-lg shadow-md hover:shadow-lg transition-all p-5">
                             <div class="flex gap-1 mb-3">
@@ -402,6 +434,226 @@ Original file line number	Diff line number	Diff line change
                             </div>
                         </div>
                     </div>
+
+                    <div class="flex-shrink-0 w-[380px]">
+                        <div class="bg-white border border-gray-200 hover:border-[#41B8EA] rounded-lg shadow-md hover:shadow-lg transition-all p-5">
+                            <div class="flex gap-1 mb-3">
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                            </div>
+                            <blockquote class="text-sm text-gray-700 mb-4 leading-relaxed">
+                                "Kami mempercayakan instalasi AC untuk 50+ unit apartemen kepada ACpedia. Hasilnya sangat memuaskan, dikerjakan tepat waktu dengan kualitas terbaik."
+                            </blockquote>
+                            <div class="flex items-center gap-2">
+                                <div class="w-10 h-10 rounded-full bg-[#3EB48A] flex items-center justify-center text-white font-bold">
+                                    AR
+                                </div>
+                                <div>
+                                    <div class="text-sm font-medium text-gray-800">Ahmad Rizki</div>
+                                    <div class="text-xs text-gray-500">Manager Properti</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Triple for seamless loop -->
+                    <div class="flex-shrink-0 w-[380px]">
+                        <div class="bg-white border border-gray-200 hover:border-[#41B8EA] rounded-lg shadow-md hover:shadow-lg transition-all p-5">
+                            <div class="flex gap-1 mb-3">
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                            </div>
+                            <blockquote class="text-sm text-gray-700 mb-4 leading-relaxed">
+                                "ACpedia memasang sistem mini-split baru kami, dan seluruh prosesnya mulus dan profesional. Mereka cepat, bersih, dan tagihan listrik kami turun drastis."
+                            </blockquote>
+                            <div class="flex items-center gap-2">
+                                <div class="w-10 h-10 rounded-full bg-[#41B8EA] flex items-center justify-center text-white font-bold">
+                                    BS
+                                </div>
+                                <div>
+                                    <div class="text-sm font-medium text-gray-800">Budi Santoso</div>
+                                    <div class="text-xs text-gray-500">Pelanggan Puas, Ulasan Bintang 5</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex-shrink-0 w-[380px]">
+                        <div class="bg-white border border-gray-200 hover:border-[#41B8EA] rounded-lg shadow-md hover:shadow-lg transition-all p-5">
+                            <div class="flex gap-1 mb-3">
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                            </div>
+                            <blockquote class="text-sm text-gray-700 mb-4 leading-relaxed">
+                                "Pelayanan yang sangat memuaskan! Tim teknisi sangat profesional dan ramah. AC untuk restoran kami dipasang dengan rapi dan hasilnya luar biasa."
+                            </blockquote>
+                            <div class="flex items-center gap-2">
+                                <div class="w-10 h-10 rounded-full bg-[#F99C1C] flex items-center justify-center text-white font-bold">
+                                    IS
+                                </div>
+                                <div>
+                                    <div class="text-sm font-medium text-gray-800">Ibu Sari</div>
+                                    <div class="text-xs text-gray-500">Pemilik Restoran</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex-shrink-0 w-[380px]">
+                        <div class="bg-white border border-gray-200 hover:border-[#41B8EA] rounded-lg shadow-md hover:shadow-lg transition-all p-5">
+                            <div class="flex gap-1 mb-3">
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                            </div>
+                            <blockquote class="text-sm text-gray-700 mb-4 leading-relaxed">
+                                "Kami mempercayakan instalasi AC untuk 50+ unit apartemen kepada ACpedia. Hasilnya sangat memuaskan, dikerjakan tepat waktu dengan kualitas terbaik."
+                            </blockquote>
+                            <div class="flex items-center gap-2">
+                                <div class="w-10 h-10 rounded-full bg-[#3EB48A] flex items-center justify-center text-white font-bold">
+                                    AR
+                                </div>
+                                <div>
+                                    <div class="text-sm font-medium text-gray-800">Ahmad Rizki</div>
+                                    <div class="text-xs text-gray-500">Manager Properti</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quadruple for seamless loop -->
+                    <div class="flex-shrink-0 w-[380px]">
+                        <div class="bg-white border border-gray-200 hover:border-[#41B8EA] rounded-lg shadow-md hover:shadow-lg transition-all p-5">
+                            <div class="flex gap-1 mb-3">
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                            </div>
+                            <blockquote class="text-sm text-gray-700 mb-4 leading-relaxed">
+                                "ACpedia memasang sistem mini-split baru kami, dan seluruh prosesnya mulus dan profesional. Mereka cepat, bersih, dan tagihan listrik kami turun drastis."
+                            </blockquote>
+                            <div class="flex items-center gap-2">
+                                <div class="w-10 h-10 rounded-full bg-[#41B8EA] flex items-center justify-center text-white font-bold">
+                                    BS
+                                </div>
+                                <div>
+                                    <div class="text-sm font-medium text-gray-800">Budi Santoso</div>
+                                    <div class="text-xs text-gray-500">Pelanggan Puas, Ulasan Bintang 5</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex-shrink-0 w-[380px]">
+                        <div class="bg-white border border-gray-200 hover:border-[#41B8EA] rounded-lg shadow-md hover:shadow-lg transition-all p-5">
+                            <div class="flex gap-1 mb-3">
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                            </div>
+                            <blockquote class="text-sm text-gray-700 mb-4 leading-relaxed">
+                                "Pelayanan yang sangat memuaskan! Tim teknisi sangat profesional dan ramah. AC untuk restoran kami dipasang dengan rapi dan hasilnya luar biasa."
+                            </blockquote>
+                            <div class="flex items-center gap-2">
+                                <div class="w-10 h-10 rounded-full bg-[#F99C1C] flex items-center justify-center text-white font-bold">
+                                    IS
+                                </div>
+                                <div>
+                                    <div class="text-sm font-medium text-gray-800">Ibu Sari</div>
+                                    <div class="text-xs text-gray-500">Pemilik Restoran</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex-shrink-0 w-[380px]">
+                        <div class="bg-white border border-gray-200 hover:border-[#41B8EA] rounded-lg shadow-md hover:shadow-lg transition-all p-5">
+                            <div class="flex gap-1 mb-3">
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                            </div>
+                            <blockquote class="text-sm text-gray-700 mb-4 leading-relaxed">
+                                "Kami mempercayakan instalasi AC untuk 50+ unit apartemen kepada ACpedia. Hasilnya sangat memuaskan, dikerjakan tepat waktu dengan kualitas terbaik."
+                            </blockquote>
+                            <div class="flex items-center gap-2">
+                                <div class="w-10 h-10 rounded-full bg-[#3EB48A] flex items-center justify-center text-white font-bold">
+                                    AR
+                                </div>
+                                <div>
+                                    <div class="text-sm font-medium text-gray-800">Ahmad Rizki</div>
+                                    <div class="text-xs text-gray-500">Manager Properti</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quintuple for seamless loop -->
+                    <div class="flex-shrink-0 w-[380px]">
+                        <div class="bg-white border border-gray-200 hover:border-[#41B8EA] rounded-lg shadow-md hover:shadow-lg transition-all p-5">
+                            <div class="flex gap-1 mb-3">
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                            </div>
+                            <blockquote class="text-sm text-gray-700 mb-4 leading-relaxed">
+                                "ACpedia memasang sistem mini-split baru kami, dan seluruh prosesnya mulus dan profesional. Mereka cepat, bersih, dan tagihan listrik kami turun drastis."
+                            </blockquote>
+                            <div class="flex items-center gap-2">
+                                <div class="w-10 h-10 rounded-full bg-[#41B8EA] flex items-center justify-center text-white font-bold">
+                                    BS
+                                </div>
+                                <div>
+                                    <div class="text-sm font-medium text-gray-800">Budi Santoso</div>
+                                    <div class="text-xs text-gray-500">Pelanggan Puas, Ulasan Bintang 5</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex-shrink-0 w-[380px]">
+                        <div class="bg-white border border-gray-200 hover:border-[#41B8EA] rounded-lg shadow-md hover:shadow-lg transition-all p-5">
+                            <div class="flex gap-1 mb-3">
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                                <i data-lucide="star" class="h-4 w-4 text-[#F99C1C] fill-[#F99C1C]"></i>
+                            </div>
+                            <blockquote class="text-sm text-gray-700 mb-4 leading-relaxed">
+                                "Pelayanan yang sangat memuaskan! Tim teknisi sangat profesional dan ramah. AC untuk restoran kami dipasang dengan rapi dan hasilnya luar biasa."
+                            </blockquote>
+                            <div class="flex items-center gap-2">
+                                <div class="w-10 h-10 rounded-full bg-[#F99C1C] flex items-center justify-center text-white font-bold">
+                                    IS
+                                </div>
+                                <div>
+                                    <div class="text-sm font-medium text-gray-800">Ibu Sari</div>
+                                    <div class="text-xs text-gray-500">Pemilik Restoran</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="flex-shrink-0 w-[380px]">
                         <div class="bg-white border border-gray-200 hover:border-[#41B8EA] rounded-lg shadow-md hover:shadow-lg transition-all p-5">
                             <div class="flex gap-1 mb-3">
@@ -433,11 +685,13 @@ Original file line number	Diff line number	Diff line change
             <div class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-gray-50 to-transparent pointer-events-none z-10"></div>
         </div>
     </section>
+
     <!-- CTA Section -->
     <section id="contact" class="py-8 md:py-12 bg-gradient-to-b from-white to-blue-50 relative overflow-hidden">
         <!-- Floating Shapes -->
         <div class="absolute top-10 left-10 w-20 h-20 bg-blue-200 rounded-full blur-xl opacity-50"></div>
         <div class="absolute bottom-10 right-10 w-32 h-32 bg-cyan-200 rounded-full blur-xl opacity-50"></div>
+
         <div class="container mx-auto px-4 relative z-10">
             <div class="max-w-4xl mx-auto text-center space-y-6 md:space-y-7 observe-me">
                 <div class="space-y-4">
@@ -448,6 +702,7 @@ Original file line number	Diff line number	Diff line change
                         Hubungi kami sekarang untuk konsultasi gratis dan penawaran terbaik
                     </p>
                 </div>
+
                 <div class="flex justify-center">
                     <a href="https://acpedia.id/hvac-contact" target="_blank" rel="noopener noreferrer"
                        class="inline-flex items-center gap-2 bg-[#F99C1C] hover:bg-[#F99C1C]/90 text-white px-6 py-3 md:py-4 rounded-md shadow-lg hover:shadow-xl transition-all">
@@ -458,4 +713,8 @@ Original file line number	Diff line number	Diff line change
             </div>
         </div>
     </section>
+
+
+
+
 <?= $this->endSection() ?>

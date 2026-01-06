@@ -1,4 +1,46 @@
+<?php
+// --- Helper Function for URL Construction (Place this at the very top of your view file) ---
 
+/**
+ * Builds a new URL query string by setting or clearing a single parameter.
+ * Preserves all other active filters (search, sort, other filters).
+ * * @param array $currentParams The array of active filters/params (e.g., $currentFilters, $currentSearch, etc. merged).
+ * @param string $key The parameter key to modify (e.g., 'brand_id').
+ * @param string|int|null $value The new value for the key. If null or same as current, it clears the key.
+ * @return string The new full URL (e.g., 'https://yourstore.com/toko-kami?brand_id=5&search=abc')
+ */
+function buildFilterUrl(array $currentParams, string $key, $value = null): string
+{
+    // Start with the merged parameters from the controller
+    $params = $currentParams;
+    
+    // Check if the parameter is currently active with the same value
+    $isActive = (isset($params[$key]) && (string)$params[$key] === (string)$value);
+    
+    // Clear the current page number on any new filter/sort/search change
+    unset($params['page']);
+
+    if ($isActive || $value === null) {
+        // If the filter is already active (and being clicked again), or if a null value is passed, remove it.
+        unset($params[$key]);
+    } else {
+        // Otherwise, set the new value
+        $params[$key] = $value;
+    }
+    
+    // Remove any empty values that may have resulted (safety check)
+    $params = array_filter($params, fn($v) => $v !== null && $v !== '');
+
+    // Return the new query string
+    return current_url() . (empty($params) ? '' : '?' . http_build_query($params));
+}
+
+// Prepare the comprehensive parameter array for the URL helper (used by all links)
+$currentURLParams = array_merge($currentFilters, [
+    'search' => $currentSearch,
+    'sort' => $currentSort,
+]);
+?>
 
 
 <?php
@@ -77,6 +119,32 @@ function getActiveClass($categoryId, $currentActiveCategory) {
 <?= $this->extend('template-main') ?>
 <?= $this->section('content') ?>
 
+<?php 
+if (!empty($_GET)): 
+    $baseUrl = strtok($_SERVER["REQUEST_URI"], '?'); 
+?>
+<div class="max-w-4xl mx-auto"> <div class="bg-blue-50 border border-blue-200 text-blue-700 p-4 rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 shadow-md" id="activeFilterNotification">
+        
+        <div class="flex items-center space-x-3 mb-3 sm:mb-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            
+            <p class="text-sm font-medium text-gray-800">
+                <strong>Filter Active:</strong> The top menu is hidden to focus on results.
+            </p>
+        </div>
+        
+        <a href="<?= htmlspecialchars($baseUrl) ?>" 
+           class="inline-block bg-red-500 hover:bg-red-600 text-white text-xs font-semibold py-1 px-3 rounded-full transition-colors shadow-md text-center w-full sm:w-auto">
+            Reset Filter
+        </a>
+    </div>
+</div>
+<?php endif; ?>
+
+
+<?php if (empty($_GET)): ?>
 
 
  <!-- Tagline -->
@@ -103,7 +171,7 @@ function getActiveClass($categoryId, $currentActiveCategory) {
                     <!-- PK Calculator -->
                     <button class="service-btn w-full flex items-center gap-3 px-4 py-3 bg-white border border-gray-300 rounded-full hover:shadow-lg hover:border-[#3EB48A] transition-all duration-200">
                         <div class="flex-shrink-0 w-[42px] h-[42px] rounded-full bg-[#3EB48A] flex items-center justify-center relative">
-                            <img src="C:\Users\Dody\Desktop\ACpedia\ACpedia\assets\pkcal.png" alt="PK Calculator" class="w-5 h-5 object-contain brightness-0 invert">
+                            <img src="\src\assets\pkcal.png" alt="PK Calculator" class="w-5 h-5 object-contain brightness-0 invert">
                         </div>
                         <span class="font-semibold text-[#1c1c24]">PK Calculator</span>
                     </button>
@@ -111,7 +179,7 @@ function getActiveClass($categoryId, $currentActiveCategory) {
                     <!-- Proyek HVAC -->
                     <button class="service-btn w-full flex items-center gap-3 px-4 py-3 bg-white border border-gray-300 rounded-full hover:shadow-lg hover:border-[#41B8EA] transition-all duration-200">
                         <div class="flex-shrink-0 w-[42px] h-[42px] rounded-full bg-[#41B8EA] flex items-center justify-center">
-                            <img src="C:\Users\Dody\Desktop\ACpedia\ACpedia\assets\hvac.png" alt="Proyek HVAC" class="w-5 h-5 object-contain brightness-0 invert">
+                            <img src="\src\assets\hvac.png" alt="Proyek HVAC" class="w-5 h-5 object-contain brightness-0 invert">
                         </div>
                         <span class="font-semibold text-[#1c1c24]">Proyek HVAC</span>
                     </button>
@@ -119,7 +187,7 @@ function getActiveClass($categoryId, $currentActiveCategory) {
                     <!-- Pasang unit -->
                     <button class="service-btn w-full flex items-center gap-3 px-4 py-3 bg-white border border-gray-300 rounded-full hover:shadow-lg hover:border-[#F99C1C] transition-all duration-200">
                         <div class="flex-shrink-0 w-[42px] h-[42px] rounded-full bg-[#F99C1C] flex items-center justify-center">
-                            <img src="C:\Users\Dody\Desktop\ACpedia\ACpedia\assets\pasang.png" alt="Pasang Unit" class="w-5 h-5 object-contain brightness-0 invert">
+                            <img src="\src\assets\pasang.png" alt="Pasang Unit" class="w-5 h-5 object-contain brightness-0 invert">
                         </div>
                         <span class="font-semibold text-[#1c1c24]">Pasang unit</span>
                     </button>
@@ -127,7 +195,7 @@ function getActiveClass($categoryId, $currentActiveCategory) {
                     <!-- Perawatan -->
                     <button class="service-btn w-full flex items-center gap-3 px-4 py-3 bg-white border border-gray-300 rounded-full hover:shadow-lg hover:border-[#ED2024] transition-all duration-200">
                         <div class="flex-shrink-0 w-[42px] h-[42px] rounded-full bg-[#ED2024] flex items-center justify-center">
-                            <img src="C:\Users\Dody\Desktop\ACpedia\ACpedia\assets\perawatan2.png" alt="Perawatan" class="w-5 h-5 object-contain brightness-0 invert">
+                            <img src="\src\assets\perawatan2.png" alt="Perawatan" class="w-5 h-5 object-contain brightness-0 invert">
                         </div>
                         <span class="font-semibold text-[#1c1c24]">Perawatan</span>
                     </button>
@@ -135,7 +203,7 @@ function getActiveClass($categoryId, $currentActiveCategory) {
                     <!-- Perbaikan -->
                     <button class="service-btn w-full flex items-center gap-3 px-4 py-3 bg-white border border-gray-300 rounded-full hover:shadow-lg hover:border-[#373E51] transition-all duration-200">
                         <div class="flex-shrink-0 w-[42px] h-[42px] rounded-full bg-[#373E51] flex items-center justify-center">
-                            <img src="C:\Users\Dody\Desktop\ACpedia\ACpedia\assets\perbaikan2.png" alt="Perbaikan" class="w-5 h-5 object-contain brightness-0 invert">
+                            <img src="\src\assets\perbaikan2.png" alt="Perbaikan" class="w-5 h-5 object-contain brightness-0 invert">
                         </div>
                         <span class="font-semibold text-[#1c1c24]">Perbaikan</span>
                     </button>
@@ -144,33 +212,33 @@ function getActiveClass($categoryId, $currentActiveCategory) {
 
             <!-- Desktop Services - Centered -->
             <div class="hidden md:flex justify-center items-center gap-4">
-                <button class="service-btn flex items-center gap-3 px-6 py-3 bg-white border border-gray-300 rounded-full hover:shadow-lg hover:border-[#3EB48A]">
+                <button id="pkCalculatorServiceBtn" class="service-btn flex items-center gap-3 px-6 py-3 bg-white border border-gray-300 rounded-full hover:shadow-lg hover:border-[#3EB48A]">
                     <div class="w-10 h-10 rounded-full bg-[#3EB48A] flex items-center justify-center">
-                        <img src="C:\Users\Dody\Desktop\ACpedia\ACpedia\assets\pkcal.png" alt="PK Calculator" class="h-5 w-5 object-contain brightness-0 invert">
+                        <img src="\src\assets\pkcal.png" alt="PK Calculator" class="h-5 w-5 object-contain brightness-0 invert">
                     </div>
                     <span class="font-semibold text-[#1c1c24]">PK Calculator</span>
                 </button>
                 <button class="service-btn flex items-center gap-3 px-6 py-3 bg-white border border-gray-300 rounded-full hover:shadow-lg hover:border-[#41B8EA]">
                     <div class="w-10 h-10 rounded-full bg-[#41B8EA] flex items-center justify-center">
-                        <img src="C:\Users\Dody\Desktop\ACpedia\ACpedia\assets\hvac.png" alt="Proyek HVAC" class="h-5 w-5 object-contain brightness-0 invert">
+                        <img src="\src\assets\hvac.png" alt="Proyek HVAC" class="h-5 w-5 object-contain brightness-0 invert">
                     </div>
                     <span class="font-semibold text-[#1c1c24]">Proyek HVAC</span>
                 </button>
                 <button class="service-btn flex items-center gap-3 px-6 py-3 bg-white border border-gray-300 rounded-full hover:shadow-lg hover:border-[#F99C1C]">
                     <div class="w-10 h-10 rounded-full bg-[#F99C1C] flex items-center justify-center">
-                        <img src="C:\Users\Dody\Desktop\ACpedia\ACpedia\assets\pasang.png" alt="Pasang Unit" class="h-5 w-5 object-contain brightness-0 invert">
+                        <img src="\src\assets\pasang.png" alt="Pasang Unit" class="h-5 w-5 object-contain brightness-0 invert">
                     </div>
                     <span class="font-semibold text-[#1c1c24]">Pasang unit</span>
                 </button>
                 <button class="service-btn flex items-center gap-3 px-6 py-3 bg-white border border-gray-300 rounded-full hover:shadow-lg hover:border-[#ED2024]">
                     <div class="w-10 h-10 rounded-full bg-[#ED2024] flex items-center justify-center">
-                        <img src="C:\Users\Dody\Desktop\ACpedia\ACpedia\assets\perawatan2.png" alt="Perawatan" class="h-5 w-5 object-contain brightness-0 invert">
+                        <img src="\src\assets\perawatan2.png" alt="Perawatan" class="h-5 w-5 object-contain brightness-0 invert">
                     </div>
                     <span class="font-semibold text-[#1c1c24]">Perawatan</span>
                 </button>
                 <button class="service-btn flex items-center gap-3 px-6 py-3 bg-white border border-gray-300 rounded-full hover:shadow-lg hover:border-[#373E51]">
                     <div class="w-10 h-10 rounded-full bg-[#373E51] flex items-center justify-center">
-                        <img src="C:\Users\Dody\Desktop\ACpedia\ACpedia\assets\perbaikan2.png" alt="Perbaikan" class="h-5 w-5 object-contain brightness-0 invert">
+                        <img src="\src\assets\perbaikan2.png" alt="Perbaikan" class="h-5 w-5 object-contain brightness-0 invert">
                     </div>
                     <span class="font-semibold text-[#1c1c24]">Perbaikan</span>
                 </button>
@@ -767,294 +835,318 @@ function getActiveClass($categoryId, $currentActiveCategory) {
         </div>
     </div>
 
+<?php endif; ?>
 
 
 <div class="container mx-auto px-4 py-8">
-        <div class="flex flex-col lg:flex-row gap-6">
-            
-            <!-- Sidebar -->
-            <aside class="w-full lg:w-64 flex-shrink-0">
-                
-                <!-- PK Calculator -->
-                <div class="bg-white rounded-lg p-4 shadow mb-6">
-                    <h3 class="font-bold mb-4 text-[#373E51]">PK Calculator</h3>
-                    <div class="space-y-3">
-                        <div>
-                            <select id="roomCondition" class="w-full border rounded p-2 text-sm">
-                                <option value="">Pilih Kondisi Ruangan</option>
-                                <option value="terkena-matahari">Ruangan: Terkena Sinar Matahari</option>
-                                <option value="tidak-terkena-matahari">Ruangan: Tidak Terkena Sinar Matahari</option>
-                            </select>
-                        </div>
-                        <div class="bg-gray-100 rounded-lg p-3 text-center">
-                            <div class="text-3xl font-bold text-[#41B8EA]"><span id="m2Display">0</span> m²</div>
-                        </div>
-                        
-                        <!-- Custom Slider -->
-                        <div class="relative w-full h-[50px] mt-0 mb-3">
-                            <!-- Background Track -->
-                            <div class="absolute bg-[#f3f3f3] h-[11px] left-0 rounded-full top-[5px] w-full"></div>
-                            
-                            <!-- Slider Handle -->
-                            <div id="sliderHandle" class="absolute w-[20px] h-[20px] top-0 transition-all duration-150" style="left: 0px;">
-                                <div class="absolute inset-[-35%]">
-                                    <svg class="block w-full h-full" fill="none" preserveAspectRatio="none" viewBox="0 0 34 34">
-                                        <g filter="url(#filter0_d_91_212)">
-                                            <circle cx="17" cy="17" fill="#41B8EA" r="10" />
-                                            <circle cx="17" cy="17" r="11.5" stroke="white" stroke-width="3" />
-                                        </g>
-                                        <defs>
-                                            <filter color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse" height="34" id="filter0_d_91_212" width="34" x="0" y="0">
-                                                <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                                                <feColorMatrix in="SourceAlpha" result="hardAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
-                                                <feOffset />
-                                                <feGaussianBlur stdDeviation="2" />
-                                                <feComposite in2="hardAlpha" operator="out" />
-                                                <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
-                                                <feBlend in2="BackgroundImageFix" mode="normal" result="effect1_dropShadow_91_212" />
-                                                <feBlend in="SourceGraphic" in2="effect1_dropShadow_91_212" mode="normal" result="shape" />
-                                            </filter>
-                                        </defs>
-                                    </svg>
-                                </div>
-                            </div>
-                            
-                            <!-- Labels -->
-                            <p class="absolute font-normal left-0 text-[13px] text-black whitespace-nowrap top-[28px]">0 m²</p>
-                            <p class="absolute font-normal right-0 text-[13px] text-black whitespace-nowrap top-[28px]">250 m²</p>
-                            
-                            <!-- Invisible Range Input -->
-                            <input type="range" id="m2Slider" min="0" max="250" value="0" class="w-full h-[20px]">
-                        </div>
-                        
-                        <div class="text-xs text-gray-600 leading-relaxed">Geser kiri atau kanan slider dibawah ini sesuai ukuran ruangan anda dan klik tombol "Mulai Hitung" dibawah ini</div>
-                        
-                        <button id="calculateBtn" class="w-full bg-[#F99C1C] hover:bg-[#F99C1C]/90 text-white py-2 rounded-lg font-semibold transition-colors">
-                            Mulai Hitung
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Calculation Result -->
-                <div id="calculationResult" class="hidden mb-6">
-                    <div class="bg-[#f3f3f3] rounded-lg p-5 relative">
-                        <div class="mb-4">
-                            <p class="font-semibold text-sm mb-3">Hasil PK Calculator</p>
-                            
-                            <p class="text-base leading-relaxed mb-1">
-                                <span class="font-semibold text-[#222]">Daya:</span>
-                                <span class="font-semibold text-[#41B8EA]" id="btuResult">-</span>
-                                <span class="text-[#222]">Btu/h</span>
-                            </p>
-                            
-                            <p class="text-base leading-relaxed">
-                                <span class="font-semibold text-[#222]">Kebutuhan:</span>
-                                <span class="font-semibold text-[#41B8EA]" id="pkResult">-</span>
-                                <span class="text-[#222]">PK</span>
-                            </p>
-                        </div>
-
-                        <div class="text-xs text-[#626060] space-y-2">
-                            <p>
-                                <span class="font-semibold">Catatan Penting</span><br>
-                                Hitungan diatas dengan asumsi tinggi plafon 2.8m dan kondisi ruangan tertutup.
-                            </p>
-                            
-                            <p>
-                                <span class="font-semibold">Kapan Menggunakan Nilai Minimum ?</span><br>
-                                Untuk kebutuhan ruangan tertutup biasa pada umumnya cukup menggunakan nilai minimum namun perlu berhati-hati jika cuaca Jabodetabek mengalami cuaca ekstrem panas
-                            </p>
-                            
-                            <p>
-                                <span class="font-semibold">Kapan Menggunakan Nilai Maksimum ?</span><br>
-                                Merupakan nilai yang direkomendasikan terutama Apabila ruangan menghadap matahari, Terdapat kaca sehingga terkena panas sinar matahari atau ruangan tersebut padat orang
-                            </p>
-                            
-                            <p>
-                                <span class="font-semibold">Tips & Trick</span><br>
-                                Untuk kebutuhan ruangan High Plafon &gt; 2.8m silahkan nyalakan fitur advanced mode
-                            </p>
-                        </div>
-                        
-                        <button class="w-full bg-[#3EB48A] hover:bg-[#3EB48A]/90 text-white py-2 rounded-lg font-semibold transition-colors mt-3 text-sm">
-                            Lihat Rekomendasi
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Filter Section -->
-                <div class="bg-white rounded-lg p-4 shadow">
-                    <h3 class="font-bold mb-4 text-[#373E51]">Filter</h3>
-                    
-                    <!-- Brands Filter -->
-                    <div class="mb-6">
-                        <button id="brandsFilterToggle" class="w-full flex items-center justify-between mb-3 hover:text-[#41B8EA] transition-colors">
-                            <h4 class="font-semibold text-[#373E51]">Brands</h4>
-                            <i data-lucide="chevron-down" id="brandsFilterChevron" class="h-5 w-5 text-[#41B8EA] transition-transform duration-200"></i>
-                        </button>
-                        <div id="brandsFilterContent" class="dropdown-content open space-y-2">
-                            <button class="brand-filter-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 transition-all" data-brand="Panasonic">
-                                <span class="text-sm">Panasonic</span>
-                            </button>
-                            <button class="brand-filter-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 transition-all" data-brand="Daikin">
-                                <span class="text-sm">Daikin</span>
-                            </button>
-                            <button class="brand-filter-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 transition-all" data-brand="LG">
-                                <span class="text-sm">LG</span>
-                            </button>
-                            <button class="brand-filter-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 transition-all" data-brand="Samsung">
-                                <span class="text-sm">Samsung</span>
-                            </button>
-                            <button class="brand-filter-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 transition-all" data-brand="Gree">
-                                <span class="text-sm">Gree</span>
-                            </button>
-                            <button class="brand-filter-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 transition-all" data-brand="FLiFE">
-                                <span class="text-sm">FLiFE</span>
-                            </button>
-                            <button class="brand-filter-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 transition-all" data-brand="Polytron">
-                                <span class="text-sm">Polytron</span>
-                            </button>
-                            <button class="brand-filter-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 transition-all" data-brand="Changhong">
-                                <span class="text-sm">Changhong</span>
-                            </button>
-                            <button class="brand-filter-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 transition-all" data-brand="Sharp">
-                                <span class="text-sm">Sharp</span>
-                            </button>
-                            <button class="brand-filter-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 transition-all" data-brand="Midea">
-                                <span class="text-sm">Midea</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- PK Capacity Filter -->
-                    <div class="mb-6">
-                        <button id="pkFilterToggle" class="w-full flex items-center justify-between mb-3 hover:text-[#41B8EA] transition-colors">
-                            <h4 class="font-semibold text-[#373E51]">Kapasitas PK</h4>
-                            <i data-lucide="chevron-down" id="pkFilterChevron" class="h-5 w-5 text-[#41B8EA] transition-transform duration-200"></i>
-                        </button>
-                        <div id="pkFilterContent" class="dropdown-content open space-y-2">
-                            <button class="pk-filter-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 transition-all" data-pk="1/2 PK">
-                                <span class="text-sm">1/2 PK</span>
-                            </button>
-                            <button class="pk-filter-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 transition-all" data-pk="3/4 PK">
-                                <span class="text-sm">3/4 PK</span>
-                            </button>
-                            <button class="pk-filter-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 transition-all" data-pk="1 PK">
-                                <span class="text-sm">1 PK</span>
-                            </button>
-                            <button class="pk-filter-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 transition-all" data-pk="1.5 PK">
-                                <span class="text-sm">1.5 PK</span>
-                            </button>
-                            <button class="pk-filter-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 transition-all" data-pk="2 PK">
-                                <span class="text-sm">2 PK</span>
-                            </button>
-                            <button class="pk-filter-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 transition-all" data-pk="2.5 PK">
-                                <span class="text-sm">2.5 PK</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Type Filter -->
-                    <div class="mb-6">
-                        <button id="typeFilterToggle" class="w-full flex items-center justify-between mb-3 hover:text-[#41B8EA] transition-colors">
-                            <h4 class="font-semibold text-[#373E51]">Tipe AC</h4>
-                            <i data-lucide="chevron-down" id="typeFilterChevron" class="h-5 w-5 text-[#41B8EA] transition-transform duration-200"></i>
-                        </button>
-                        <div id="typeFilterContent" class="dropdown-content open space-y-2">
-                            <button id="inverterFilterBtn" class="type-filter-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 transition-all" data-type="Inverter">
-                                <span class="text-sm">Inverter</span>
-                            </button>
-                            <button id="nonInverterFilterBtn" class="type-filter-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 transition-all" data-type="Non Inverter">
-                                <span class="text-sm">Non Inverter</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Produk Lainnya Filter -->
+    <div class="flex flex-col lg:flex-row gap-6">
+        
+        <aside class="w-full lg:w-64 flex-shrink-0">
+            <div class="bg-white rounded-lg p-4 shadow mb-6" style="visibility:hidden">
+    </div>
+            <div class="bg-white rounded-lg p-4 shadow mb-6"  id="pkCalculatorBlock">
+                <h3 class="font-bold mb-4 text-[#373E51]">PK Calculator</h3>
+                <div class="space-y-3">
                     <div>
-                        <button id="otherProductsToggle" class="w-full flex items-center justify-between mb-3 hover:text-[#41B8EA] transition-colors">
-                            <h4 class="font-semibold text-[#373E51]">Produk Lainnya</h4>
-                            <i data-lucide="chevron-down" id="otherProductsChevron" class="h-5 w-5 text-[#41B8EA] transition-transform duration-200"></i>
-                        </button>
-                        <div id="otherProductsContent" class="dropdown-content open space-y-2">
-                            <button class="other-product-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 transition-all" data-product="Air Purifier">
-                                <span class="text-sm">Air Purifier</span>
-                            </button>
-                            <button class="other-product-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 transition-all" data-product="Kipas Angin">
-                                <span class="text-sm">Kipas Angin</span>
-                            </button>
-                            <button class="other-product-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 transition-all" data-product="Kabel Power">
-                                <span class="text-sm">Kabel Power</span>
-                            </button>
-                            <button class="other-product-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 transition-all" data-product="Pipa AC">
-                                <span class="text-sm">Pipa AC</span>
-                            </button>
-                            <button class="other-product-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 transition-all" data-product="Panel">
-                                <span class="text-sm">Panel</span>
-                            </button>
-                            <button class="other-product-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 transition-all" data-product="Ducting">
-                                <span class="text-sm">Ducting</span>
-                            </button>
-                            <button class="other-product-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 transition-all" data-product="Freon">
-                                <span class="text-sm">Freon</span>
-                            </button>
+                        <select id="roomCondition" class="w-full border rounded p-2 text-sm">
+                            <option value="">Pilih Kondisi Ruangan</option>
+                            <option value="terkena-matahari">Ruangan: Terkena Sinar Matahari</option>
+                            <option value="tidak-terkena-matahari">Ruangan: Tidak Terkena Sinar Matahari</option>
+                        </select>
+                    </div>
+                    <div class="bg-gray-100 rounded-lg p-3 text-center">
+                        <div class="text-3xl font-bold text-[#41B8EA]"><span id="m2Display">0</span> m²</div>
+                    </div>
+                    
+                    <div class="relative w-full h-[50px] mt-0 mb-3">
+                        <div class="absolute bg-[#f3f3f3] h-[11px] left-0 rounded-full top-[5px] w-full"></div>
+                        
+                        <div id="sliderHandle" class="absolute w-[20px] h-[20px] top-0 transition-all duration-150" style="left: 0px;">
+                            <div class="absolute inset-[-35%]">
+                                <svg class="block w-full h-full" fill="none" preserveAspectRatio="none" viewBox="0 0 34 34">
+                                    <g filter="url(#filter0_d_91_212)">
+                                        <circle cx="17" cy="17" fill="#41B8EA" r="10" />
+                                        <circle cx="17" cy="17" r="11.5" stroke="white" stroke-width="3" />
+                                    </g>
+                                    <defs>
+                                        <filter color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse" height="34" id="filter0_d_91_212" width="34" x="0" y="0">
+                                            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                                            <feColorMatrix in="SourceAlpha" result="hardAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
+                                            <feOffset />
+                                            <feGaussianBlur stdDeviation="2" />
+                                            <feComposite in2="hardAlpha" operator="out" />
+                                            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
+                                            <feBlend in2="BackgroundImageFix" mode="normal" result="effect1_dropShadow_91_212" />
+                                            <feBlend in="SourceGraphic" in2="effect1_dropShadow_91_212" mode="normal" result="shape" />
+                                        </filter>
+                                    </defs>
+                                </svg>
+                            </div>
                         </div>
+                        
+                        <p class="absolute font-normal left-0 text-[13px] text-black whitespace-nowrap top-[28px]">0 m²</p>
+                        <p class="absolute font-normal right-0 text-[13px] text-black whitespace-nowrap top-[28px]">250 m²</p>
+                        
+                        <input type="range" id="m2Slider" min="0" max="250" value="0" class="w-full h-[20px]">
+                    </div>
+                    
+                    <div class="text-xs text-gray-600 leading-relaxed">Geser kiri atau kanan slider dibawah ini sesuai ukuran ruangan anda dan klik tombol "Mulai Hitung" dibawah ini</div>
+                    
+                    <button id="calculateBtn" class="w-full bg-[#F99C1C] hover:bg-[#F99C1C]/90 text-white py-2 rounded-lg font-semibold transition-colors">
+                        Mulai Hitung
+                    </button>
+                </div>
+            </div>
+
+            <div id="calculationResult" class="hidden mb-6">
+                <div class="bg-[#f3f3f3] rounded-lg p-5 relative">
+                    <div class="mb-4">
+                        <p class="font-semibold text-sm mb-3">Hasil PK Calculator</p>
+                        
+                        <p class="text-base leading-relaxed mb-1">
+                            <span class="font-semibold text-[#222]">Daya:</span>
+                            <span class="font-semibold text-[#41B8EA]" id="btuResult">-</span>
+                            <span class="text-[#222]">Btu/h</span>
+                        </p>
+                        
+                        <p class="text-base leading-relaxed">
+                            <span class="font-semibold text-[#222]">Kebutuhan:</span>
+                            <span class="font-semibold text-[#41B8EA]" id="pkResult">-</span>
+                            <span class="text-[#222]">PK</span>
+                        </p>
+                    </div>
+
+                    <div class="text-xs text-[#626060] space-y-2">
+                        <p>
+                            <span class="font-semibold">Catatan Penting</span><br>
+                            Hitungan diatas dengan asumsi tinggi plafon 2.8m dan kondisi ruangan tertutup.
+                        </p>
+                        
+                        <p>
+                            <span class="font-semibold">Kapan Menggunakan Nilai Minimum ?</span><br>
+                            Untuk kebutuhan ruangan tertutup biasa pada umumnya cukup menggunakan nilai minimum namun perlu berhati-hati jika cuaca Jabodetabek mengalami cuaca ekstrem panas
+                        </p>
+                        
+                        <p>
+                            <span class="font-semibold">Kapan Menggunakan Nilai Maksimum ?</span><br>
+                            Merupakan nilai yang direkomendasikan terutama Apabila ruangan menghadap matahari, Terdapat kaca sehingga terkena panas sinar matahari atau ruangan tersebut padat orang
+                        </p>
+                        
+                        <p>
+                            <span class="font-semibold">Tips & Trick</span><br>
+                            Untuk kebutuhan ruangan High Plafon > 2.8m silahkan nyalakan fitur advanced mode
+                        </p>
+                    </div>
+                    
+                 <button id="recommendationBtn" class="w-full bg-[#3EB48A] hover:bg-[#3EB48A]/90 text-white py-2 rounded-lg font-semibold transition-colors mt-3 text-sm">
+    Lihat Rekomendasi
+</button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg p-4 shadow">
+                <h3 class="font-bold mb-4 text-[#373E51]">Filter</h3>
+                
+                <?php if (!empty($_GET)): ?>
+    <div class="mb-6">
+        <a href="<?= strtok($_SERVER['REQUEST_URI'], '?') ?>" 
+           class="w-full inline-block text-center px-4 py-2 rounded border border-red-500 bg-red-500 text-white hover:bg-red-600 hover:border-red-600 transition-all">
+            Reset Filters
+        </a>
+    </div>
+<?php endif; ?>
+
+
+                
+                <div class="mb-6">
+                    <button id="brandsFilterToggle" class="w-full flex items-center justify-between mb-3 hover:text-[#41B8EA] transition-colors">
+                        <h4 class="font-semibold text-[#373E51]">Brands</h4>
+                        <i data-lucide="chevron-down" id="brandsFilterChevron" class="h-5 w-5 text-[#41B8EA] transition-transform duration-200"></i>
+                    </button>
+                    <div id="brandsFilterContent" class="dropdown-content open space-y-2">
+                        <?php foreach ($brands as $brand): 
+                            // Using the 'id' for the URL parameter and 'name' for display/data attribute
+                            $brandId = $brand['id'] ?? $brand['name'];
+                            $isActive = (string)($currentFilters['brand_id'] ?? null) === (string)$brandId;
+                            $url = buildFilterUrl($currentURLParams, 'brand_id', $brandId);
+                        ?>
+                        
+                       <button 
+    class="brand-filter-btn w-full text-left px-3 py-2 rounded border transition-all 
+           <?= $isActive ? 'bg-[#41B8EA] text-white border-[#41B8EA]' : 'bg-white hover:border-[#41B8EA] hover:bg-gray-50 text-gray-700 border-gray-300' ?>" 
+    data-brand="<?= esc($brand['name'] ?? '') ?>"
+    data-url="<?= esc($url) ?>">
+    <span class="text-sm"><?= esc($brand['name'] ?? 'Unknown Brand') ?></span>
+</button>
+
+                        <?php endforeach; ?>
                     </div>
                 </div>
 
-            </aside>
+                <div class="mb-6">
+                    <button id="pkFilterToggle" class="w-full flex items-center justify-between mb-3 hover:text-[#41B8EA] transition-colors">
+                        <h4 class="font-semibold text-[#373E51]">Kapasitas PK</h4>
+                        <i data-lucide="chevron-down" id="pkFilterChevron" class="h-5 w-5 text-[#41B8EA] transition-transform duration-200"></i>
+                    </button>
+                    <div id="pkFilterContent" class="dropdown-content open space-y-2">
+                        <?php foreach ($pkList as $pk): 
+                            // Using the 'id' for the URL parameter and 'name' for display/data attribute
+                            $pkId = $pk['id'] ?? $pk['name'];
+                            $isActive = (string)($currentFilters['pk_id'] ?? null) === (string)$pkId;
+                            $url = buildFilterUrl($currentURLParams, 'pk_id', $pkId);
+                        ?>
+                        <button 
+    class="pk-filter-btn w-full text-left px-3 py-2 rounded border transition-all 
+           <?= $isActive ? 'bg-[#41B8EA] text-white border-[#41B8EA]' : 'bg-white hover:border-[#41B8EA] hover:bg-gray-50 text-gray-700 border-gray-300' ?>" 
+    data-pk="<?= esc($pk['name'] ?? '') ?>"
+    data-url="<?= esc($url) ?>">
+    <span class="text-sm"><?= esc($pk['name'] ?? 'Unknown PK') ?></span>
+</button>
 
-            <!-- Main Products Area -->
-            <main class="flex-1">
-                
-                <!-- Penjualan Section -->
-                <div class="bg-white rounded-lg p-4 shadow mb-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-xl md:text-2xl font-bold text-[#373E51]">Penjualan</h2>
+                        <?php endforeach; ?>
                     </div>
-                    <div class="flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
-                        <span class="font-semibold hidden md:inline text-[#373E51]">Filter</span>
-                        <div class="flex flex-col md:flex-row gap-3 md:gap-2 md:items-center flex-1">
-                            <div class="flex gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
-                                <button class="tab-btn active px-4 py-2 rounded whitespace-nowrap transition-colors" data-tab="terbaru">
-                                    Terbaru
-                                </button>
-                                <button class="tab-btn px-4 py-2 rounded whitespace-nowrap transition-colors hover:bg-gray-100" data-tab="diskon">
-                                    Diskon
-                                </button>
-                                <button class="tab-btn px-4 py-2 rounded whitespace-nowrap transition-colors hover:bg-gray-100" data-tab="terlaris">
-                                    Terlaris
-                                </button>
-                            </div>
-                            
-                            <!-- Search Box -->
-                            <div class="relative flex-1 md:ml-4">
-                                <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400"></i>
+                </div>
+
+                <div class="mb-6">
+                    <button id="typeFilterToggle" class="w-full flex items-center justify-between mb-3 hover:text-[#41B8EA] transition-colors">
+                        <h4 class="font-semibold text-[#373E51]">Tipe AC</h4>
+                        <i data-lucide="chevron-down" id="typeFilterChevron" class="h-5 w-5 text-[#41B8EA] transition-transform duration-200"></i>
+                    </button>
+                    <div id="typeFilterContent" class="dropdown-content open space-y-2">
+                        <?php
+                        // Hardcoding type options as an example if they are static (adjust if they come from DB)
+                        $acTypes = [
+                            ['id' => 1, 'name' => 'Inverter'],
+                            ['id' => 2, 'name' => 'Non Inverter'],
+                        ];
+
+                        foreach ($acTypes as $type): 
+                            $typeId = $type['id'];
+                            $isActive = (string)($currentFilters['ac_type_id'] ?? null) === (string)$typeId;
+                            $url = buildFilterUrl($currentURLParams, 'ac_type_id', $typeId);
+                        ?>
+                       <button 
+    id="<?= str_replace(' ', '', $type['name']) ?>FilterBtn"
+    class="type-filter-btn w-full text-left px-3 py-2 rounded border transition-all 
+           <?= $isActive ? 'bg-[#41B8EA] text-white border-[#41B8EA]' : 'bg-white hover:border-[#41B8EA] hover:bg-gray-50 text-gray-700 border-gray-300' ?>" 
+    data-type="<?= esc($type['name']) ?>"
+    data-url="<?= esc($url) ?>">
+    <span class="text-sm"><?= esc($type['name']) ?></span>
+</button>
+
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+
+                <div>
+                    <button id="otherProductsToggle" class="w-full flex items-center justify-between mb-3 hover:text-[#41B8EA] transition-colors">
+                        <h4 class="font-semibold text-[#373E51]">Produk Lainnya</h4>
+                        <i data-lucide="chevron-down" id="otherProductsChevron" class="h-5 w-5 text-[#41B8EA] transition-transform duration-200"></i>
+                    </button>
+                    <div id="otherProductsContent" class="dropdown-content open space-y-2">
+                        <?php foreach ($categories as $category): 
+                            // Using the 'id' for the URL parameter and 'name' for display/data attribute
+                            $categoryId = $category['id'] ?? $category['name'];
+                            $isActive = (string)($currentFilters['category_id'] ?? null) === (string)$categoryId;
+                            $url = buildFilterUrl($currentURLParams, 'category_id', $categoryId);
+                        ?>
+                       <button 
+    class="other-product-btn w-full text-left px-3 py-2 rounded border transition-all 
+           <?= $isActive ? 'bg-[#41B8EA] text-white border-[#41B8EA]' : 'bg-white hover:border-[#41B8EA] hover:bg-gray-50 text-gray-700 border-gray-300' ?>" 
+    data-product="<?= esc($category['name'] ?? '') ?>"
+    data-url="<?= esc($url) ?>">
+    <span class="text-sm"><?= esc($category['name'] ?? 'Unknown Product') ?></span>
+</button>
+
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+
+        </aside>
+
+        <main class="flex-1">
+            
+            <div class="bg-white rounded-lg p-4 shadow mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl md:text-2xl font-bold text-[#373E51]">Penjualan</h2>
+                </div>
+                <div class="flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
+                    <span class="font-semibold hidden md:inline text-[#373E51]">Filter</span>
+                    <div class="flex flex-col md:flex-row gap-3 md:gap-2 md:items-center flex-1">
+                        
+                        <div class="flex gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
+                            <?php
+                            $tabs = [
+                                ['label' => 'Terbaru', 'sort_value' => 'latest'],
+                                ['label' => 'Diskon', 'sort_value' => 'discount'],
+                                ['label' => 'Terlaris', 'sort_value' => 'best_seller'],
+                            ];
+                            // Determine the active tab based on the current 'sort' parameter
+                            $activeSort = $currentURLParams['sort'] ?? 'latest'; // Default to 'latest'
+                            ?>
+                            <?php foreach ($tabs as $tab): 
+                                $isActive = $activeSort === $tab['sort_value'];
+                                $url = buildFilterUrl($currentURLParams, 'sort', $tab['sort_value']);
+                            ?>
+                            <a href="<?= $url ?>"
+                               class="tab-btn px-4 py-2 rounded whitespace-nowrap transition-colors <?= $isActive ? 'bg-[#41B8EA] text-white' : 'hover:bg-gray-100' ?>" 
+                               data-tab="<?= esc($tab['sort_value']) ?>">
+                                <?= esc($tab['label']) ?>
+                            </a>
+                            <?php endforeach; ?>
+                        </div>
+                        
+                        <div class="relative flex-1 md:ml-4">
+                            <form method="GET" action="<?= current_url() ?>">
                                 <input
                                     type="text"
+                                    name="search"
                                     id="searchQuery"
                                     placeholder="Cari produk..."
                                     class="w-full border border-gray-300 rounded-lg focus:outline-none focus:border-[#41B8EA] focus:ring-1 focus:ring-[#41B8EA] transition-colors pl-10 pr-4 py-2"
+                                    value="<?= esc($currentSearch) ?? '' ?>"
                                 />
-                            </div>
-
-                            <!-- Harga Dropdown -->
-                            <select id="priceSort" class="border border-gray-300 rounded-lg px-4 py-2 w-full md:w-auto md:ml-auto focus:outline-none focus:border-[#41B8EA] focus:ring-1 focus:ring-[#41B8EA] transition-colors">
-                                <option value="">Harga</option>
-                                <option value="low">Harga: Rendah ke Tinggi</option>
-                                <option value="high">Harga: Tinggi ke Rendah</option>
-                            </select>
+                                <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400"></i>
+                                
+                                <?php foreach ($currentURLParams as $key => $value): ?>
+                                    <?php if ($key !== 'search' && $key !== 'page' && !empty($value)): ?>
+                                        <input type="hidden" name="<?= esc($key) ?>" value="<?= esc($value) ?>">
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                                <button type="submit" class="absolute right-0 top-0 bottom-0 px-3 flex items-center text-gray-500 hover:text-[#41B8EA]">
+                                    <i data-lucide="search" class="w-5 h-5"></i>
+                                </button>
+                            </form>
                         </div>
+
+                        <form id="sortForm" method="GET" action="<?= current_url() ?>" class="w-full md:w-auto md:ml-auto">
+                            <select name="sort" id="priceSort" 
+                                    class="border border-gray-300 rounded-lg px-4 py-2 w-full md:w-auto focus:outline-none focus:border-[#41B8EA] focus:ring-1 focus:ring-[#41B8EA] transition-colors" 
+                                    onchange="document.getElementById('sortForm').submit()">
+                                
+                                <option value="">Harga</option>
+                                <option value="price_asc" <?= ($currentSort == 'price_asc') ? 'selected' : '' ?>>Harga: Rendah ke Tinggi</option>
+                                <option value="price_desc" <?= ($currentSort == 'price_desc') ? 'selected' : '' ?>>Harga: Tinggi ke Rendah</option>
+                                
+                            </select>
+                            
+                            <?php foreach ($currentURLParams as $key => $value): ?>
+                                <?php if ($key !== 'sort' && $key !== 'page' && !empty($value)): ?>
+                                    <input type="hidden" name="<?= esc($key) ?>" value="<?= esc($value) ?>">
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </form>
                     </div>
                 </div>
+            </div>
 
-                <!-- Products Grid -->
-                <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
-                    
-                     <?php foreach ($products as $product): ?>
-                    
-                   <div class="product-card bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden">
-                    <div class="relative">
+            <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
+                
+                 <?php foreach ($products as $product): ?>
+                
+               <div class="product-card bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden">
+                <div class="relative">
 <?php
 $imageUrl = $product['main_image_url'] ?? '';
 
@@ -1072,7 +1164,7 @@ $isAbsoluteUrl = preg_match('/^https?:\/\//i', $imageUrl);
         [Image Placeholder]
     </div>
 <?php endif; ?>
-                       <?php
+                   <?php
 $basePrice = $product['base_price'] ?? 0;
 $salePrice = $product['sale_price'] ?? null;
 
@@ -1088,40 +1180,37 @@ $discountPercent = $isOnSale
     </div>
 <?php endif; ?>
 
+                </div>
+                <div class="p-3">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-xs px-2 py-1 bg-[#41B8EA] text-white rounded"><?= esc($product['category_name'] ?? 'Unknown Category') ?></span>
+                        <span class="text-xs px-2 py-1 bg-[#3EB48A] text-white rounded"><?= esc($product['pk_name'] ?? 'Unknown PK') ?></span>
                     </div>
-                    <div class="p-3">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-xs px-2 py-1 bg-[#41B8EA] text-white rounded"><?= esc($product['category_name'] ?? 'Unknown Category') ?></span>
-                            <span class="text-xs px-2 py-1 bg-[#3EB48A] text-white rounded"><?= esc($product['pk_name'] ?? 'Unknown PK') ?></span>
-                        </div>
-                        <h3 class="font-semibold text-sm mb-2 line-clamp-2"><?= esc($product['name']) ?></h3>
-                        <div class="flex items-center gap-1 mb-2">
-                              <?php
+                    <h3 class="font-semibold text-sm mb-2 line-clamp-2"><?= esc($product['name']) ?></h3>
+                    <div class="flex items-center gap-1 mb-2">
+                          <?php
 $rating = (float) $product['avg_rating'];
 $fullStars = floor($rating);
 $hasHalfStar = ($rating - $fullStars) >= 0.5;
 ?>
 <div class="flex gap-1">
-    <?php for ($i = 1; $i <= 5; $i++): ?>
-        <?php if ($i <= $fullStars): ?>
-            <!-- Full star -->
-            <i data-lucide="star" class="h-3 w-3 fill-yellow-400 text-yellow-400"></i>
+<?php for ($i = 1; $i <= 5; $i++): ?>
+    <?php if ($i <= $fullStars): ?>
+        <i data-lucide="star" class="h-3 w-3 fill-yellow-400 text-yellow-400"></i>
 
-        <?php elseif ($i === $fullStars + 1 && $hasHalfStar): ?>
-            <!-- Half star -->
-            <i data-lucide="star-half" class="h-3 w-3 fill-yellow-400 text-yellow-400"></i>
+    <?php elseif ($i === $fullStars + 1 && $hasHalfStar): ?>
+        <i data-lucide="star-half" class="h-3 w-3 fill-yellow-400 text-yellow-400"></i>
 
-        <?php else: ?>
-            <!-- Empty star -->
-            <i data-lucide="star" class="h-3 w-3 text-gray-300"></i>
-        <?php endif; ?>
-    <?php endfor; ?>
+    <?php else: ?>
+        <i data-lucide="star" class="h-3 w-3 text-gray-300"></i>
+    <?php endif; ?>
+<?php endfor; ?>
 </div>
 
-                            <span class="text-xs text-gray-500 ml-1"><?= $product['review_count'] ?? 0 ?></span>
-                        </div>
-                        <div class="mb-3">
-                            <?php
+                        <span class="text-xs text-gray-500 ml-1"><?= $product['review_count'] ?? 0 ?></span>
+                    </div>
+                    <div class="mb-3">
+                        <?php
 $basePrice = $product['base_price'] ?? 0;
 $salePrice = $product['sale_price'] ?? null;
 $isOnSale  = $salePrice && $salePrice < $basePrice;
@@ -1129,347 +1218,40 @@ $isOnSale  = $salePrice && $salePrice < $basePrice;
 
 <div>
     <?php if ($isOnSale): ?>
-        <!-- Before discount (ONLY show when on sale) -->
         <div class="text-xs text-gray-400 line-through">
             Rp <?= number_format($basePrice, 0, ',', '.') ?>
         </div>
     <?php endif; ?>
 
-    <!-- Final price (always shown) -->
     <div class="text-lg font-bold text-[#ED2024]">
         Rp <?= number_format($isOnSale ? $salePrice : $basePrice, 0, ',', '.') ?>
     </div>
 </div>
 
-                        </div>
-                        <div class="flex gap-2">
-                            <button class="flex-1 text-xs border border-[#41B8EA] text-[#41B8EA] hover:bg-[#41B8EA] hover:text-white py-2 px-3 rounded transition-colors">
-                                Komparasi
-                            </button>
-                            <button class="flex-1 text-xs bg-[#F99C1C] hover:bg-[#F99C1C]/90 text-white py-2 px-3 rounded transition-colors">
-                                Pesan
-                            </button>
-                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="flex-1 text-xs border border-[#41B8EA] text-[#41B8EA] hover:bg-[#41B8EA] hover:text-white py-2 px-3 rounded transition-colors">
+                            Komparasi
+                        </button>
+                        <button class="flex-1 text-xs bg-[#F99C1C] hover:bg-[#F99C1C]/90 text-white py-2 px-3 rounded transition-colors">
+                            Pesan
+                        </button>
                     </div>
                 </div>
-                
-                <?php endforeach; ?>
-                </div>
-
-                <!-- Pagination -->
-                <div class="flex justify-center items-center gap-2 mt-8">
-                    <button class="page-btn px-3 py-2 border border-gray-300 rounded-lg transition-colors" data-page="prev">
-                        <i data-lucide="chevron-left" class="h-5 w-5"></i>
-                    </button>
-                    <button class="page-btn active px-4 py-2 border border-gray-300 rounded-lg transition-colors" data-page="1">1</button>
-                    <button class="page-btn px-4 py-2 border border-gray-300 rounded-lg transition-colors" data-page="2">2</button>
-                    <button class="page-btn px-4 py-2 border border-gray-300 rounded-lg transition-colors" data-page="3">3</button>
-                    <button class="page-btn px-3 py-2 border border-gray-300 rounded-lg transition-colors" data-page="next">
-                        <i data-lucide="chevron-right" class="h-5 w-5"></i>
-                    </button>
-                </div>
-
-            </main>
-
-        </div>
-    </div>
-
-
-
-
-
-
-
-
-
-
-<form id="filterForm" action="<?= url_to('Toko::index') ?>" method="GET">
-    <input type="hidden" name="search" id="input_search" value="<?= esc($currentSearch ?? '') ?>">
-    <input type="hidden" name="brand_id" id="input_brand_id" value="<?= esc($currentFilters['brand_id'] ?? '') ?>">
-    <input type="hidden" name="category_id" id="input_category_id" value="<?= esc($currentFilters['category_id'] ?? '') ?>">
-    <input type="hidden" name="ac_type_id" id="input_ac_type_id" value="<?= esc($currentFilters['ac_type_id'] ?? '') ?>">
-    <input type="hidden" name="pk_id" id="input_pk_id" value="<?= esc($currentFilters['pk_id'] ?? '') ?>">
-    
-    <button type="submit" id="submitFormButton"></button>
-</form>
-
-<div>
-    <div>
-        <h1>Toko Kami</h1>
-        <p>Temukan berbagai pilihan AC berkualitas dengan teknologi terkini untuk kenyamanan Anda</p>
-    </div>
-</div>
-
-<div>
-    <div>
-        <div>
-            <div>
-                <a href="#">
-                    <div>
-                        </div>
-                    <span>PK Calculator</span>
-                </a>
-                </div>
-        </div>
-        <div>
-            <button>PK Calculator</button>
-            <button>Proyek HVAC</button>
-            <button>Pasang unit</button>
-            <button>Perawatan</button>
-            <button>Perbaikan</button>
-        </div>
-    </div>
-</div>
-
-<div>
-    <div>
-        <img src="path/to/samsung.png" alt="SAMSUNG">
-        </div>
-</div>
-
-<div>
-    <div>
-        <div>
-            <div>
-                <span>Kapasitas PK</span>
-            </div>
-            <div>
-                <div>
-                    <?php foreach ($pkList as $pk): 
-                        // Generates the filtering URL (preserves other filters, resets page)
-                        $filterUrl = current_url(true)->setQuery('pk_id', $pk['id'])->setQuery('page', null);
-                        $isActive = (isset($currentFilters['pk_id']) && $currentFilters['pk_id'] == $pk['id']);
-                    ?>
-                        <a href="<?= esc($filterUrl) ?>">
-                            <span style="font-weight: <?= $isActive ? 'bold' : 'normal' ?>"><?= esc($pk['name']) ?></span>
-                        </a>
-                    <?php endforeach; ?>
-                </div>
-
-                <div>
-                    <?php foreach ($acTypes as $acType): 
-                        $filterUrl = current_url(true)->setQuery('ac_type_id', $acType['id'])->setQuery('page', null);
-                        $isActive = (isset($currentFilters['ac_type_id']) && $currentFilters['ac_type_id'] == $acType['id']);
-                    ?>
-                        <a href="<?= esc($filterUrl) ?>">
-                            <span style="font-weight: <?= $isActive ? 'bold' : 'normal' ?>"><?= esc($acType['name']) ?></span>
-                        </a>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-        </div>
-
-        <div>
-            <div>
-                <div>
-                    <?php foreach ($pkList as $pk): 
-                        $filterUrl = current_url(true)->setQuery('pk_id', $pk['id'])->setQuery('page', null);
-                        $isActive = (isset($currentFilters['pk_id']) && $currentFilters['pk_id'] == $pk['id']);
-                    ?>
-                        <a href="<?= esc($filterUrl) ?>">
-                            <span style="font-weight: <?= $isActive ? 'bold' : 'normal' ?>"><?= esc($pk['name']) ?></span>
-                        </a>
-                    <?php endforeach; ?>
-                    
-                    <?php foreach ($acTypes as $acType): 
-                        $filterUrl = current_url(true)->setQuery('ac_type_id', $acType['id'])->setQuery('page', null);
-                        $isActive = (isset($currentFilters['ac_type_id']) && $currentFilters['ac_type_id'] == $acType['id']);
-                    ?>
-                        <a href="<?= esc($filterUrl) ?>">
-                            <span style="font-weight: <?= $isActive ? 'bold' : 'normal' ?>"><?= esc(strtoupper($acType['name'])) ?></span>
-                        </a>
-                    <?php endforeach; ?>
-                    
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div>
-    <div>
-        <?php if (!empty($categories)): ?>
-            <div>
-                <div>
-                    <span>Kategori Produk</span>
-                </div>
-                <div>
-                    <?php foreach ($categories as $category): 
-                        $filterUrl = current_url(true)->setQuery('category_id', $category['id'])->setQuery('page', null);
-                        $isActive = (isset($currentFilters['category_id']) && $currentFilters['category_id'] == $category['id']);
-                    ?>
-                        <a href="<?= esc($filterUrl) ?>">
-                            <span style="font-weight: <?= $isActive ? 'bold' : 'normal' ?>"><?= esc($category['name']) ?></span>
-                        </a>
-                    <?php endforeach; ?>
-                </div>
             </div>
             
-            <div>
-                <h4>Kategori Utama:</h4>
-                <?php foreach ($categories as $category): 
-                    $filterUrl = current_url(true)->setQuery('category_id', $category['id'])->setQuery('page', null);
-                    $isActive = (isset($currentFilters['category_id']) && $currentFilters['category_id'] == $category['id']);
-                ?>
-                    <a href="<?= esc($filterUrl) ?>">
-                        <span style="font-weight: <?= $isActive ? 'bold' : 'normal' ?>"><?= esc($category['name']) ?></span>
-                    </a>
-                <?php endforeach; ?>
+            <?php endforeach; ?>
             </div>
-        <?php endif; ?>
+
+            <?= $paginationLinks ?>
+
+
+        </main>
+
     </div>
 </div>
 
 
-<div>
-    <div>
-        
-        <div>
-            <div>
-                
-                <input type="text" 
-                       id="search_input"
-                       placeholder="Cari nama produk..."
-                       value="<?= esc($currentSearch ?? '') ?>"
-                       onchange="document.getElementById('input_search').value = this.value; document.getElementById('submitFormButton').click();"
-                >
-                
-                <select id="brand_select"
-                        onchange="document.getElementById('input_brand_id').value = this.value; document.getElementById('submitFormButton').click();"
-                >
-                    <option value="">Semua Brand</option>
-                    <?php foreach ($brands as $brand): ?>
-                        <option value="<?= esc($brand['id']) ?>" 
-                            <?= (isset($currentFilters['brand_id']) && $currentFilters['brand_id'] == $brand['id']) ? 'selected' : '' ?>>
-                            <?= esc($brand['name']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-                
-                <select id="category_select"
-                        onchange="document.getElementById('input_category_id').value = this.value; document.getElementById('submitFormButton').click();"
-                >
-                    <option value="">Semua Kategori</option>
-                    <?php foreach ($categories as $category): ?>
-                        <option value="<?= esc($category['id']) ?>"
-                            <?= (isset($currentFilters['category_id']) && $currentFilters['category_id'] == $category['id']) ? 'selected' : '' ?>>
-                            <?= esc($category['name']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-
-                <?php if (!empty($currentSearch) || array_filter($currentFilters)): ?>
-                    <a href="<?= url_to('Toko::index') ?>">
-                        Clear Filters
-                    </a>
-                <?php endif; ?>
-
-            </div>
-        </div>
-
-        <?php if (!empty($products)): ?>
-            <div>
-                
-                <?php foreach ($products as $product): ?>
-                    <div>
-                        
-                        <a href="/product/<?= esc($product['slug']) ?>">
-                            <div>
-                                <?php if (!empty($product['main_image_url'])): ?>
-                                    <img src="<?= base_url($product['main_image_url']) ?>"
-                                         alt="<?= esc($product['name']) ?>">
-                                <?php else: ?>
-                                    <div>[Image Placeholder]</div>
-                                <?php endif; ?>
-
-                                <?php if ($product['is_featured']): ?>
-                                    <div>Featured Tag</div>
-                                <?php endif; ?>
-                            </div>
-                        </a>
-
-                        <div>
-                            <div>
-                                <span><?= esc($product['brand_name'] ?? 'Unknown Brand') ?></span>
-                            </div>
-
-                            <h3>
-                                <a href="/product/<?= esc($product['slug']) ?>">
-                                    <?= esc($product['name']) ?>
-                                </a>
-                            </h3>
-
-                            <div>
-                                <span><?= esc($product['category_name'] ?? 'Unknown Category') ?></span>
-                                <?php if (!empty($product['ac_type_name'])): ?>
-                                    <span>•</span>
-                                    <span><?= esc($product['ac_type_name']) ?> (<?= esc($product['pk_name']) ?>)</span>
-                                <?php endif; ?>
-                            </div>
-
-                            <div>
-                                <?php if ($product['sale_price'] && $product['sale_price'] < $product['base_price']): ?>
-                                    <div>
-                                        <span>Sale Price: Rp <?= number_format($product['sale_price'], 0, ',', '.') ?></span>
-                                        <span style="text-decoration: line-through;">Original Price: Rp <?= number_format($product['base_price'], 0, ',', '.') ?></span>
-                                    </div>
-                                <?php else: ?>
-                                    <span>Price: Rp <?= number_format($product['base_price'] ?? 0, 0, ',', '.') ?></span>
-                                <?php endif; ?>
-                            </div>
-
-                            <?php if (!empty($product['avg_rating'])): ?>
-                                <div>
-                                    <div style="color: gold;">
-                                        <?php for ($i = 1; $i <= 5; $i++): ?>
-                                            <span><?= $i <= $product['avg_rating'] ? '★' : '☆' ?></span>
-                                        <?php endfor; ?>
-                                    </div>
-                                    <span>(<?= $product['review_count'] ?? 0 ?> reviews)</span>
-                                </div>
-                            <?php endif; ?>
-
-                            <a href="/product/<?= esc($product['slug']) ?>">
-                                Lihat Detail
-                            </a>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-            
-            <?php if ($totalProducts > $perPage): ?>
-                <div>
-                    <?= $pagerLinks ?>
-                </div>
-            <?php endif; ?>
-            
-        <?php else: ?>
-            <div>
-                <div>[Icon Placeholder]</div>
-                <h3>Produk Tidak Ditemukan</h3>
-                <p>Belum ada produk yang tersedia saat ini, atau coba ubah filter Anda.</p>
-                <a href="<?= url_to('Toko::index') ?>">
-                    Reset Filters
-                </a>
-            </div>
-        <?php endif; ?>
-    </div>
-</div>
-
-<div>
-    <div>
-        <h2>Butuh Bantuan Memilih AC?</h2>
-        <p>Konsultasikan kebutuhan AC Anda dengan tim ahli kami. Kami siap membantu Anda menemukan solusi terbaik.</p>
-        <div>
-            <a href="https://wa.me/6285810000684">
-                [Icon Placeholder] Hubungi via WhatsApp
-            </a>
-            <a href="/contact">
-                [Icon Placeholder] Kirim Email
-            </a>
-        </div>
-    </div>
-</div>
 
 
 <!-- UNDER CONSTRUCTION GATE -->
@@ -1526,7 +1308,356 @@ $isOnSale  = $salePrice && $salePrice < $basePrice;
     </div>
 </div>
 
+
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+    
+    const MAX_VISIBLE_ITEMS = 5;
+
+    /**
+     * Common navigation handler for all filter buttons with data-url.
+     */
+    function handleNavigationClick() {
+        const url = this.dataset.url; 
+        if (url) {
+            window.location.href = url;
+        }
+    }
+
+    /**
+     * Initializes a filter section with show/hide functionality and navigation.
+     */
+    function initializeFilter(containerId, buttonClass, toggleButtonId, storageKey, showAllText, showAllClassName, useMaxHeight = false) {
+        const content = document.getElementById(containerId);
+        const toggleBtn = document.getElementById(toggleButtonId);
+
+        if (!content) return;
+
+        const filterButtons = content.querySelectorAll(buttonClass);
+
+        // --- Toggle Logic ---
+
+        const openContent = () => {
+            if (useMaxHeight) {
+                content.style.maxHeight = content.scrollHeight + "px"; 
+            } else {
+                content.style.display = 'block';
+            }
+            localStorage.setItem(storageKey, 'true');
+        };
+
+        const closeContent = () => {
+            if (useMaxHeight) {
+                content.style.maxHeight = "0px"; 
+            } else {
+                content.style.display = 'none';
+            }
+            localStorage.setItem(storageKey, 'false');
+        };
+
+        // Initialize state
+        const savedState = localStorage.getItem(storageKey);
+        if (savedState === 'false') {
+            closeContent();
+        } else {
+            openContent(); 
+        }
+
+        // Attach toggle event
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', function() {
+                const isOpen = useMaxHeight 
+                    ? (content.style.maxHeight && content.style.maxHeight !== "0px") 
+                    : content.style.display !== 'none';
+                
+                if (isOpen) {
+                    closeContent();
+                } else {
+                    openContent();
+                }
+            });
+        }
+        
+        // --- Show/Hide Logic for items exceeding MAX_VISIBLE_ITEMS ---
+        if (filterButtons.length > MAX_VISIBLE_ITEMS) {
+            filterButtons.forEach((btn, index) => {
+                if (index >= MAX_VISIBLE_ITEMS) {
+                    btn.style.display = 'none';
+                }
+            });
+
+            const showAllBtn = document.createElement('button');
+            showAllBtn.textContent = showAllText;
+            showAllBtn.className = showAllClassName;
+            
+            content.appendChild(showAllBtn);
+
+            showAllBtn.addEventListener('click', function() {
+                filterButtons.forEach(btn => btn.style.display = 'block');
+                this.style.display = 'none';
+                
+                if (useMaxHeight) {
+                    if (content.style.maxHeight && content.style.maxHeight !== "0px") {
+                         content.style.maxHeight = content.scrollHeight + "px";
+                    }
+                }
+            });
+        }
+
+        // --- Navigation Logic ---
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', handleNavigationClick);
+        });
+
+        // Optional: adjust maxHeight on window resize for the animated filter
+        if (useMaxHeight) {
+            window.addEventListener('resize', () => {
+                const isOpen = content.style.maxHeight && content.style.maxHeight !== "0px";
+                if (isOpen) {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                }
+            });
+        }
+    }
+    
+    // 1. Initialise All Filters
+    
+    // Brand Filter (uses maxHeight for animation)
+    initializeFilter(
+        'brandsFilterContent', 
+        '.brand-filter-btn', 
+        'brandsFilterToggle', 
+        'brandsFilterOpen', 
+        'Show All Brands', 
+        'brand-filter-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 text-gray-700 transition-all',
+        true
+    );
+
+    // PK Filter (uses display)
+    initializeFilter(
+        'pkFilterContent', 
+        '.pk-filter-btn', 
+        'pkFilterToggle', 
+        'pkFilterOpen', 
+        'Show All PK', 
+        'pk-filter-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 text-gray-700 transition-all show-all-pk-btn',
+        false
+    );
+    
+    // Type Filter (uses display)
+    initializeFilter(
+        'typeFilterContent', 
+        '.type-filter-btn', 
+        'typeFilterToggle', 
+        'typeFilterOpen', 
+        'Show All Types', 
+        'type-filter-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 text-gray-700 transition-all',
+        false
+    );
+
+    // Other Products Filter (uses display)
+    initializeFilter(
+        'otherProductsContent', 
+        '.other-product-btn', 
+        'otherProductsToggle', 
+        'otherProductsFilterOpen', 
+        'Show All Products', 
+        'other-product-btn w-full text-left px-3 py-2 rounded border border-gray-300 bg-white hover:border-[#41B8EA] hover:bg-gray-50 text-gray-700 transition-all',
+        false
+    );
+
+
+    // 2. Attach general navigation listener for any other filter buttons
+    document.querySelectorAll('.brand-filter-btn, .pk-filter-btn, .type-filter-btn, .other-product-btn').forEach(button => {
+        button.addEventListener('click', handleNavigationClick);
+    });
+
+});
+
+
+// --- Elemen DOM Umum ---
+const m2Slider = document.getElementById('m2Slider');
+const m2Display = document.getElementById('m2Display');
+const sliderHandle = document.getElementById('sliderHandle');
+const roomCondition = document.getElementById('roomCondition');
+const calculateBtn = document.getElementById('calculateBtn');
+const calculationResult = document.getElementById('calculationResult');
+const btuResult = document.getElementById('btuResult');
+const pkResult = document.getElementById('pkResult');
+
+// --- Elemen Tombol Rekomendasi (Pastikan ID ini ada di HTML) ---
+const recommendationBtn = document.getElementById('recommendationBtn'); 
+
+// --- Variabel Global untuk Menyimpan Hasil PK (Hanya berlaku selama sesi halaman) ---
+let globalPkMin = '';
+
+// --- HARDCODED PK to Filter ID MAP ---
+const pkToFilterIdMap = {
+    '1/2': 2,
+    '3/4': 3,
+    '1': 4,
+    '1.5': 5,
+    '2': 7,
+    '2.5': 8,
+};
+
+// --- Fungsi Helper untuk Update Posisi Slider Handle ---
+function updateSliderVisuals(value) {
+    m2Display.textContent = value;
+    
+    // Hitung posisi handle slider
+    // Ambil lebar penuh container slider
+    const parentWidth = m2Slider.parentElement.offsetWidth;
+    const handleWidth = 20; 
+    const maxWidth = parentWidth - handleWidth; 
+    
+    // Hitung posisi relatif handle (nilai 250 adalah nilai max slider)
+    const position = (value / 250) * maxWidth;
+    sliderHandle.style.left = position + 'px';
+}
+
+// --- 1. PK Slider Interaction (Input) ---
+m2Slider.addEventListener('input', function() {
+    const value = parseInt(this.value);
+    
+    // Update visual
+    updateSliderVisuals(value);
+});
+
+
+// --- 2. PK Conversion Function ---
+const btuToPK = (btu) => {
+    // 
+    if (btu <= 5000) return '1/2';
+    if (btu <= 7000) return '3/4';
+    if (btu <= 9000) return '1';
+    if (btu <= 12000) return '1.5';
+    if (btu <= 18000) return '2';
+    return '2.5'; 
+};
+
+// --- 3. PK Calculation Logic ---
+calculateBtn.addEventListener('click', function() {
+    const m2 = parseInt(m2Slider.value);
+    const condition = roomCondition.value;
+
+    if (m2 === 0 || !condition) {
+        alert('Silakan pilih kondisi ruangan dan geser slider ukuran ruangan!');
+        return;
+    }
+
+    const btuPerM2 = condition === 'terkena-matahari' ? 500 : 400;
+
+    const btuMin = m2 * btuPerM2;
+    const btuMax = m2 * 500; 
+
+    const pkMin = btuToPK(btuMin);
+    const pkMax = btuToPK(btuMax);
+    
+    // Simpan hasil PK minimum untuk navigasi
+    globalPkMin = pkMin; 
+
+    // Format dan tampilkan hasil
+    const btuText = `${btuMin.toLocaleString('id-ID')} - ${btuMax.toLocaleString('id-ID')}`;
+    const pkText = pkMin === pkMax ? `${pkMin}` : `${pkMin} s/d ${pkMax}`;
+    
+    btuResult.textContent = btuText;
+    pkResult.textContent = pkText;
+    
+    // Tampilkan blok hasil
+    calculationResult.classList.remove('hidden');
+});
+
+// --- 4. Tombol "Lihat Rekomendasi" Logic ---
+recommendationBtn.addEventListener('click', function() {
+    const pkToFilter = globalPkMin;
+    
+    if (!pkToFilter) {
+        alert('Mohon hitung kebutuhan PK terlebih dahulu!');
+        return;
+    }
+
+    const filterId = pkToFilterIdMap[pkToFilter];
+
+    if (!filterId) {
+        console.error(`PK value ${pkToFilter} tidak ditemukan di pkToFilterIdMap.`);
+        alert('Terjadi kesalahan dalam menentukan filter PK. Silakan coba lagi.');
+        return;
+    }
+    
+    // Logika untuk menambahkan parameter ke URL saat ini
+    const queryParam = 'pk_id';
+    const currentUrl = new URL(window.location.href);
+
+    currentUrl.searchParams.set(queryParam, filterId);
+
+    // Navigasi ke URL yang dimodifikasi (muat ulang halaman)
+    window.location.href = currentUrl.toString();
+});
+
+</script>
+
+<script>
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Ambil elemen tombol pemicu menggunakan ID unik
+    const pkCalculatorServiceBtn = document.getElementById('pkCalculatorServiceBtn'); 
+    
+    // 2. Ambil blok kalkulator tujuan (pastikan blok kalkulator memiliki ID ini)
+    const targetBlock = document.getElementById('pkCalculatorBlock');
+    
+    // 3. Konstanta Offset
+    const OFFSET_PX = 100; // Offset yang diinginkan (100 pixels dari atas)
+
+    // 4. Tambahkan event listener ke tombol yang spesifik
+    if (pkCalculatorServiceBtn && targetBlock) {
+        pkCalculatorServiceBtn.addEventListener('click', () => {
+            
+            // A. SCROLL DENGAN OFFSET 
+            
+            // Dapatkan posisi vertikal elemen target relatif terhadap viewport
+            const elementPosition = targetBlock.getBoundingClientRect().top;
+            
+            // Dapatkan posisi scroll saat ini
+            const currentScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+            
+            // Hitung posisi scroll akhir:
+            // Posisi Scroll Akhir = Posisi Scroll Saat Ini + Posisi Elemen - OFFSET
+            const targetScrollPosition = currentScrollPosition + elementPosition - OFFSET_PX;
+
+            // Lakukan scrolling halus
+            window.scrollTo({
+                top: targetScrollPosition,
+                behavior: 'smooth'
+            });
+
+
+            // B. HIGHLIGHT BLOCK
+            
+            // Tambahkan kelas CSS untuk highlight
+            // B. HIGHLIGHT BLOCK (SOLUSI INLINE STYLE)
+
+// 1. Terapkan style highlight yang terlihat jelas
+targetBlock.style.border = '3px solid red';
+targetBlock.style.boxShadow = '0 0 20px rgba(255, 0, 0, 0.8)';
+targetBlock.style.transition = 'all 0.5s ease-in-out'; // Tambahkan transisi
+
+// 2. Hapus style setelah 1.5 detik
+setTimeout(() => {
+    targetBlock.style.border = ''; // Hapus border
+    targetBlock.style.boxShadow = ''; // Hapus shadow
+    targetBlock.style.transition = ''; // Hapus transisi
+}, 1000);
+        });
+    }
+});
+
+
+
+
+
+
 (function () {
     // If user already accepted, don't show again
     if (localStorage.getItem('ucAccepted') === 'yes') {
@@ -1546,6 +1677,7 @@ function ucDecline() {
         window.location.href = 'about:blank';
     }
 }
+
 </script>
 
 <?= $this->endSection() ?>
