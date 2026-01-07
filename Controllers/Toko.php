@@ -172,4 +172,101 @@ public function index()
 
     return view('toko_kami', $data);
 }
+
+
+/**
+ * Displays the detail page for a specific product using its slug.
+ */
+public function detail($slug)
+{
+    $productModel = model('ProductModel');
+
+    // 1. Fetch the product by slug
+    // We use where() because getProductDetails() defaults to find() which uses the primary key.
+    $product = $productModel->select('products.*, b.name AS brand_name, c.name AS category_name, ac.name AS ac_type_name, pk.name AS pk_name')
+                            ->join('brands b', 'b.id = products.brand_id', 'left')
+                            ->join('categories c', 'c.id = products.category_id', 'left')
+                            ->join('ac_types ac', 'ac.id = products.ac_type_id', 'left')
+                            ->join('pk_list pk', 'pk.id = products.pk_id', 'left')
+                            ->where('products.slug', $slug)
+                            ->where('products.is_active', 1)
+                            ->first();
+
+    if (!$product) {
+        throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("Produk dengan slug $slug tidak ditemukan.");
+    }
+
+    // 2. Fetch Related Products (same category, excluding current product)
+    $relatedProducts = $productModel->where('category_id', $product['category_id'])
+                                    ->where('id !=', $product['id'])
+                                    ->where('is_active', 1)
+                                    ->limit(4)
+                                    ->findAll();
+                                    
+    if ($product) {
+        // Manually decode if the model hook missed it
+        if (is_string($product['additional_image_urls'])) {
+            $product['additional_image_urls'] = json_decode($product['additional_image_urls'], true) ?: [];
+        }
+        if (is_string($product['specifications'])) {
+            $product['specifications'] = json_decode($product['specifications'], true) ?: [];
+        }
+    }
+
+    $data = [
+        'product'         => $product,
+        'relatedProducts' => $relatedProducts,
+        'meta_title'      => $product['meta_title'] ?: $product['name'],
+        'meta_desc'       => $product['meta_description'],
+    ];
+
+    return view('product_detail', $data);
+}
+
+public function komparasi($slug1 = null, $slug2 = null, $slug3 = null)
+{
+    $productModel = model('ProductModel');
+    
+    $slots = [
+        1 => $slug1,
+        2 => $slug2,
+        3 => $slug3
+    ];
+    
+    $productsBySlot = [1 => null, 2 => null, 3 => null];
+    
+    foreach ($slots as $slotNum => $slug) {
+        if ($slug && $slug !== 'empty') {
+            $productsBySlot[$slotNum] = $productModel->select('products.*, b.name AS brand_name, ac.name AS ac_type_name, pk.name AS pk_name')
+                ->join('brands b', 'b.id = products.brand_id', 'left')
+                ->join('ac_types ac', 'ac.id = products.ac_type_id', 'left')
+                ->join('pk_list pk', 'pk.id = products.pk_id', 'left')
+                ->where('products.slug', $slug)
+                ->where('products.is_active', 1)
+                ->first();
+        }
+    }
+
+    return view('komparasi', [
+        'products' => $productsBySlot,
+        'slug1'    => $slug1,
+        'slug2'    => $slug2,
+        'slug3'    => $slug3
+    ]);
+}
+
+public function searchProducts()
+{
+    $search = $this->request->getGet('q');
+    if (empty($search)) return $this->response->setJSON([]);
+
+    $productModel = model('ProductModel');
+    $results = $productModel->select('name, slug, main_image_url')
+                            ->where('is_active', 1)
+                            ->like('name', $search)
+                            ->limit(5)
+                            ->findAll();
+
+    return $this->response->setJSON($results);
+}
 }

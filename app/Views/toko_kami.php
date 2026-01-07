@@ -1014,16 +1014,15 @@ if (!empty($_GET)):
                     </button>
                     <div id="typeFilterContent" class="dropdown-content open space-y-2">
                         <?php
-                        // Hardcoding type options as an example if they are static (adjust if they come from DB)
                         $acTypes = [
-                            ['id' => 1, 'name' => 'Inverter'],
-                            ['id' => 2, 'name' => 'Non Inverter'],
+                            ['id' => 3, 'name' => 'Inverter'], // category_id = 3 for Inverter
+                            ['id' => 4, 'name' => 'Non Inverter'], // category_id = 4 for Non Inverter
                         ];
 
                         foreach ($acTypes as $type): 
                             $typeId = $type['id'];
                             $isActive = (string)($currentFilters['ac_type_id'] ?? null) === (string)$typeId;
-                            $url = buildFilterUrl($currentURLParams, 'ac_type_id', $typeId);
+                            $url = buildFilterUrl($currentURLParams, 'category_id', $typeId);
                         ?>
                        <button 
     id="<?= str_replace(' ', '', $type['name']) ?>FilterBtn"

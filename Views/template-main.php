@@ -13,9 +13,37 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="\style.css">
+    
+   <style>
+    /* Positioned to the left and increased size */
+    #compare-floating-widget { 
+        z-index: 9999; 
+        transition: all 0.3s ease-in-out;
+    }
+    .compare-item-bubble:hover .remove-bubble { display: flex; }
+    
+    /* Print guard to hide the widget when printing */
+    @media print { .no-print { display: none !important; } }
+</style>
 </head>
 <body>
+    
+    <div id="compare-floating-widget" class="fixed bottom-10 left-10 no-print hidden">
+    <div class="bg-white shadow-[0_10px_50px_rgba(0,0,0,0.2)] rounded-2xl border border-gray-200 p-6 w-80">
+        <div class="flex justify-between items-center mb-4">
+            <h4 class="font-bold text-gray-800 text-lg">Bandingkan Produk</h4>
+            <span id="compare-count" class="bg-[#41B8EA] text-white text-xs px-3 py-1 rounded-full font-semibold">0/3</span>
+        </div>
+        
+        <div id="compare-list-container" class="space-y-3 mb-6">
+            </div>
+
+        <button onclick="goToComparison()" id="btn-go-compare" class="w-full bg-[#41B8EA] hover:bg-[#3aa3d0] text-white text-base font-bold py-3 rounded-xl transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed">
+            Lihat Perbandingan
+        </button>
+    </div>
+</div>
 
     <div id="topBar" class="bg-white border-b border-gray-200 py-2.5 hidden xl:block relative z-40">
         <div class="container mx-auto px-4">
@@ -211,7 +239,7 @@
                 
                 <div class="lg:col-span-4 lg:col-start-2 observe-me">
                     <div class="mb-3">
-                        <img src="/src/assets/acpediawhite.png" 
+                        <img src="https://acpedia.id/static/media/logo-acpedia-footer.9f8e7d6c.png" 
                              alt="ACpedia Logo" 
                              class="h-12 w-auto">
                     </div>
@@ -438,36 +466,91 @@
             lucide.createIcons();
         }, 1000);
         
-     function setupDropdown(toggleId, contentId, chevronId) {
-    // Note: It's also good practice to check if the elements exist inside the function too!
-    const toggle = document.getElementById(toggleId);
-    const content = document.getElementById(contentId);
-    const chevron = document.getElementById(chevronId);
-    
-    // This check prevents the 'Cannot read properties of null' error
-    if (toggle) { 
-        toggle.addEventListener('click', () => {
-            if (content) content.classList.toggle('open');
-            if (chevron) chevron.classList.toggle('rotate-180');
-        });
-    } else {
-        console.warn(`Warning: Toggle element not found for ID: ${toggleId}`);
-    }
-}
-
-// ----------------------------------------------------------------------
-// FIX HERE: Wait for the entire HTML document to be ready
-// ----------------------------------------------------------------------
-document.addEventListener('DOMContentLoaded', () => {
-    // These calls will now only execute AFTER all HTML elements,
-    // including 'productCategoriesToggler', have been loaded and parsed.
-    
-    setupDropdown('servicesToggle', 'servicesContent', 'servicesChevron');
-    setupDropdown('productCategoriesToggler', 'productCategoriesContents', 'productCategoriesChevron');
-});
-        
         
         
     </script>
+    
+    <script>
+const COMPARE_STORAGE_KEY = 'acpedia_compare_list';
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', () => {
+    updateCompareWidget();
+    initCompareListeners();
+});
+
+function getCompareList() {
+    return JSON.parse(localStorage.getItem(COMPARE_STORAGE_KEY)) || [];
+}
+
+function initCompareListeners() {
+    // Event delegation to catch clicks on any current or future compare buttons
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-compare-slug]');
+        if (btn) {
+            const slug = btn.getAttribute('data-compare-slug');
+            const name = btn.getAttribute('data-compare-name');
+            toggleCompareProduct(slug, name);
+        }
+    });
+}
+
+function toggleCompareProduct(slug, name) {
+    let list = getCompareList();
+    const index = list.findIndex(item => item.slug === slug);
+
+    if (index > -1) {
+        // Remove if already exists
+        list.splice(index, 1);
+    } else {
+        // Add if under limit
+        if (list.length >= 3) {
+            alert("Maksimal 3 produk untuk dibandingkan.");
+            return;
+        }
+        list.push({ slug, name });
+    }
+
+    localStorage.setItem(COMPARE_STORAGE_KEY, JSON.stringify(list));
+    updateCompareWidget();
+}
+
+function updateCompareWidget() {
+    const list = getCompareList();
+    const widget = document.getElementById('compare-floating-widget');
+    const container = document.getElementById('compare-list-container');
+    const countLabel = document.getElementById('compare-count');
+    const goBtn = document.getElementById('btn-go-compare');
+
+    if (list.length === 0) {
+        widget.classList.add('hidden');
+        return;
+    }
+
+    widget.classList.remove('hidden');
+    countLabel.innerText = `${list.length}/3`;
+    goBtn.disabled = list.length < 1; // Allow going with 1, though 2 is better
+
+    container.innerHTML = list.map(item => `
+        <div class="compare-item-bubble flex justify-between items-center bg-gray-50 p-2 rounded-lg border border-gray-100 group">
+            <span class="text-xs text-gray-600 truncate flex-1 pr-2">${item.name}</span>
+            <button onclick="toggleCompareProduct('${item.slug}')" class="text-gray-400 hover:text-red-500 transition-colors">
+                <i data-lucide="x-circle" class="w-4 h-4"></i>
+            </button>
+        </div>
+    `).join('');
+
+    // Re-initialize icons for the new HTML
+    if (window.lucide) lucide.createIcons();
+}
+
+function goToComparison() {
+    const list = getCompareList();
+    if (list.length === 0) return;
+    
+    const slugs = list.map(item => item.slug).join('/');
+    window.location.href = `<?= base_url('komparasi') ?>/${slugs}`;
+}
+</script>
 </body>
 </html>

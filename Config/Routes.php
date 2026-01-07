@@ -12,6 +12,17 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('login', 'Auth::login');
 $routes->post('auth/attemptLogin', 'Auth::attemptLogin');
 $routes->get('toko-kami', 'Toko::index');
+$routes->get('produk/(:any)', 'Toko::detail/$1');
+
+
+// Routes for Shareable Comparison
+$routes->get('komparasi/(:any)/(:any)/(:any)', 'Toko::komparasi/$1/$2/$3');
+$routes->get('komparasi/(:any)/(:any)', 'Toko::komparasi/$1/$2');
+$routes->get('komparasi/(:any)', 'Toko::komparasi/$1');
+$routes->get('komparasi', 'Toko::komparasi'); // Base page
+
+$routes->get('toko/searchProducts', 'Toko::searchProducts');
+
 
 // Routes that REQUIRE login
 $routes->group('', ['filter' => 'auth'], function($routes) {

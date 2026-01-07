@@ -87,7 +87,7 @@ class ProductModel extends Model
     /**
      * Fetches products with details, supporting filtering, searching, and pagination.
      */
-    public function getFilteredProducts(array $filters = [], ?string $search = null, int $limit = 12, int $offset = 0)
+    public function getFilteredProducts(array $filters = [], ?string $search = null, int $limit = 12, int $offset = 0, ?string $sort = null)
     {
         $builder = $this->select('products.*, 
                                   b.name AS brand_name, 
@@ -114,9 +114,24 @@ class ProductModel extends Model
             $builder->like('products.name', $search);
         }
         
-        // Default Sorting: CRITICAL FIX APPLIED HERE
-        // Removed 'products.sort_order' to resolve DatabaseException #1054
-        $builder->orderBy('products.created_at', 'DESC'); 
+        // Apply Sorting
+        switch ($sort) {
+            case 'price_asc':
+                $builder->orderBy('products.base_price', 'ASC');
+                break;
+            case 'price_desc':
+                $builder->orderBy('products.base_price', 'DESC');
+                break;
+            case 'name_asc':
+                $builder->orderBy('products.name', 'ASC');
+                break;
+            case 'name_desc':
+                $builder->orderBy('products.name', 'DESC');
+                break;
+            default: // Newest (default)
+                $builder->orderBy('products.created_at', 'DESC');
+                break;
+        } 
 
         // Apply Pagination
         return $builder->findAll($limit, $offset);
@@ -206,16 +221,37 @@ public function countProductsByOtherAcTypes(array $excludedAcTypeIds): int
      * Converts JSON fields to array/object upon retrieval.
      */
     protected function afterFind(array $data)
-    {
-        // ... (JSON decoding logic is unchanged)
-        if (isset($data['data']['additional_image_urls'])) {
-            $data['data']['additional_image_urls'] = json_decode($data['data']['additional_image_urls'], true);
+{
+    // If no data found, return immediately
+    if (empty($data['data'])) return $data;
+
+    // Check if we are dealing with a single row or multiple rows
+    $isSingleRow = isset($data['data']['id']);
+    
+    if ($isSingleRow) {
+        $data['data'] = $this->decodeRow($data['data']);
+    } else {
+        foreach ($data['data'] as $key => $row) {
+            $data['data'][$key] = $this->decodeRow($row);
         }
-        if (isset($data['data']['specifications'])) {
-            $data['data']['specifications'] = json_decode($data['data']['specifications'], true);
-        }
-        return $data;
     }
+
+    return $data;
+}
+
+/**
+ * Helper to decode JSON for a single row
+ */
+private function decodeRow(array $row)
+{
+    if (isset($row['additional_image_urls']) && is_string($row['additional_image_urls'])) {
+        $row['additional_image_urls'] = json_decode($row['additional_image_urls'], true) ?: [];
+    }
+    if (isset($row['specifications']) && is_string($row['specifications'])) {
+        $row['specifications'] = json_decode($row['specifications'], true) ?: [];
+    }
+    return $row;
+}
 
     // --- Existing Before Insert/Update Methods ---
     protected function beforeInsert(array $data)
